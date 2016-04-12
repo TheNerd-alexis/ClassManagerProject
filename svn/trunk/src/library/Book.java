@@ -74,6 +74,7 @@ public class Book implements Serializable {
 		this.author = book.getAuthor();
 		this.genre = book.getGenre();
 		this.borrow = book.isBorrow();
+		this.bid = book.getBid();
 	}
 
 	/**
