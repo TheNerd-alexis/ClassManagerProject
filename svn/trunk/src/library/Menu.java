@@ -241,6 +241,8 @@ public class Menu {
 	 */
 	public static int getBookIndex(String destID) {
 		destID = destID.toUpperCase();
+		if(destID.length()==7) destID = destID.substring(0, 3)+"-"+destID.substring(3, destID.length());
+		
 		int i;
 		for (i = 0; i < bookList.size(); i++) {
 			if (bookList.get(i).getBid().equals(destID)) {
