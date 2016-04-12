@@ -304,7 +304,8 @@ public class Menu {
 			default:
 				printFirstMenu();
 			}
-		} catch (InputMismatchException e) {
+		} catch (Exception e) {
+			printFirstMenu();
 			e.printStackTrace();
 		}
 	}
