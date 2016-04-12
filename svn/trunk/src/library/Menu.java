@@ -162,11 +162,16 @@ public class Menu {
 	public static void removeBook() {
 		System.out.println("출고 화면입니다.");
 		System.out.print("삭제할 책의 고유번호: ");
-
-		int index = getBookIndex(input.nextLine(), bookList);
-		if (bookList.get(index).isBorrow()) {
+		String destIndex = input.nextLine();
+		int index = getBookIndex(destIndex,bookList);
+		
+		if (index == -1) {
+			System.out.println("해당 책이 존재하지 않습니다.");
+		}else if (bookList.get(index).isBorrow()) {
 			System.out.println("현재 대여 중인 책입니다. 삭제할 수 없습니다.");
-		} else if (index >= 0) {
+		} else {
+			printFirstLineOfTable();
+			System.out.println(bookList.get(index).toTempString());
 			System.out.println("삭제하시겠습니까?(Y/N)");
 			System.out.print(">>");
 			char choice;
@@ -180,10 +185,8 @@ public class Menu {
 					System.out.println("삭제를 취소합니다.");
 				}
 			} while ((choice != 'y') && (choice != 'n') && (choice != 'ㅛ') && (choice != 'ㅜ'));
-		}else if(index==-1){
-			System.out.println("해당 책이 존재하지 않습니다.");
-		}
-
+		} 
+		
 		toBeContinue('d');
 	}
 
