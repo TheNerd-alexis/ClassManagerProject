@@ -37,11 +37,11 @@ public class Menu {
 			id = input.nextLine();
 		}
 
-		System.out.println("회원가입이 완료되었습니다.");
-
+		outList(userList, "User");
 		User user = new User(id, true, 0);
-
 		userList.add(user);
+		System.out.println("회원가입이 완료되었습니다.");
+		
 		printFirstMenu();
 	}
 
@@ -109,9 +109,9 @@ public class Menu {
 		System.out.print("검색 키워드: ");
 		String keyword = input.nextLine();
 
-		printFirstLineOfTable();
 		for (int i = 0; i < bookList.size(); i++) {
 			if (bookList.get(i).toString().contains((keyword))) {
+				if(count==0) printFirstLineOfTable();
 				System.out.println(bookList.get(i).toTempString());
 				count++;
 			}
@@ -160,11 +160,11 @@ public class Menu {
 
 		if (index >= 0) {
 			if (userList.get(currentUserIndex).numberOfRentBook > 4) {
-				System.out.println("대여 가능 권 수를 넘겼습니다.");
+				System.out.println(userList.get(currentUserIndex).userID + "님은 대여 가능 권 수를 넘겼습니다.");
 			} else if (bookList.get(index).isBorrow()) {
 				System.out.println("해당 도서는 이미 대여 중입니다.");
 			} else {
-				System.out.println(
+				System.out.println(userList.get(currentUserIndex).userID +"님의 "+
 						"남은 대여 가능 권 수: " + (BorrowLimit - userList.get(currentUserIndex).numberOfRentBook) + "권");
 				System.out.println("대여하시겠습니까?(Y/N)");
 
@@ -199,7 +199,7 @@ public class Menu {
 				bookList.get(index).setBorrow(false);
 				userList.get(currentUserIndex).numberOfRentBook--;
 				System.out.println("반납 되었습니다.");
-				System.out.println(
+				System.out.println(userList.get(currentUserIndex).userID +"님의 "+
 						"남은 대여 가능 권수: " + (BorrowLimit - userList.get(currentUserIndex).numberOfRentBook) + "권");
 			}
 		}
@@ -240,11 +240,11 @@ public class Menu {
 	 * @return 찾는 책의 목록에서의 위치
 	 */
 	public static int getBookIndex(String destID) {
-		printFirstLineOfTable();
-
+		destID = destID.toUpperCase();
 		int i;
 		for (i = 0; i < bookList.size(); i++) {
 			if (bookList.get(i).getBid().equals(destID)) {
+				printFirstLineOfTable();
 				System.out.println(bookList.get(i).toTempString());
 				return i;
 			}
