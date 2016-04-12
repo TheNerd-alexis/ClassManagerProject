@@ -14,9 +14,13 @@ public class Menu {
 	 */
 	static ArrayList<User> userList = new ArrayList<User>();
 	/**
-	 * 사용자 목록에서 현재 로그인한 사용자의 위치
+	 * 현재 로그인한 사용자
 	 */
-	static int currentUserIndex;
+	static User currentUser;
+	/**
+	 * 현재 로그인한 사용자의 대여 책 목록
+	 */
+	static ArrayList<Book> currentList = new ArrayList<Book>();
 
 	/**
 	 * 대여가능한 책 목록
@@ -25,57 +29,65 @@ public class Menu {
 
 	/**
 	 * 가입
+	 * 
 	 * @author 박상현
 	 */
 	public static void join() {
 
-		System.out.println("아이디를 입력하세요: ");
+		System.out.print("아이디: ");
 		String id = input.nextLine();
 
-		while (id.length() > 10 || id.length() <= 0 || sameID(id)) {
-			System.out.println("너무 길어요ㅠ 다시 입력~");
+		while (id.length() > 10 || id.length() <= 0 || sameID(id) >= 0) {
+			System.out.println("허용할 수 없는 아이디 입니다. 다시 입력해주세요. 메뉴로 돌아가기 원하시면 Enter를 입력하세요.");
 			id = input.nextLine();
+
+			if (id.equals(""))
+				printFirstMenu();
 		}
 
 		outList(userList, "User");
 		User user = new User(id, true, 0);
 		userList.add(user);
 		System.out.println("회원가입이 완료되었습니다.");
-		
+
 		printFirstMenu();
 	}
 
 	/**
 	 * 중복 아이디 확인
+	 * 
 	 * @param s
 	 * @return
 	 */
-	public static boolean sameID(String s) {
+	public static int sameID(String s) {
 
 		for (int i = 0; i < userList.size(); i++) {
 			if (userList.get(i).userID.equals(s)) {
-				currentUserIndex = i;
-				return true;
+				return i;
 			}
 		}
 
-		return false;
+		return -1;
 	}
 
 	/**
 	 * 로그인
 	 */
 	public static void logIn() {
-		System.out.println("아이디를 입력하세요: ");
+		System.out.println("아이디: ");
 		String id = input.nextLine();
+		int temp = sameID(id);
 
-		while (!sameID(id)) {
-			System.out.println("아이디가 없습니다. 다시 입력! 메뉴로 돌아가시려면 '0'을 누르세요.");
+		while (temp < 0) {
+			System.out.println("가입되지 않은 회원입니다. 다시 입력해주세요. 메뉴로 돌아가기 원하시면 Enter를 입력하세요.");
 			id = input.nextLine();
-			
-			if(id.equals("0")) printFirstMenu(); 
+			if (id.equals(""))
+				printFirstMenu();
+			temp = sameID(id);
 		}
-		System.out.println("로그인에 성공했습니다!");
+		currentUser = userList.get(temp);
+		currentList = currentUser.getMyBookList();
+		System.out.println("로그인에 성공했습니다.");
 	}
 
 	/**
@@ -111,7 +123,8 @@ public class Menu {
 
 		for (int i = 0; i < bookList.size(); i++) {
 			if (bookList.get(i).toString().contains((keyword))) {
-				if(count==0) printFirstLineOfTable();
+				if (count == 0)
+					printFirstLineOfTable();
 				System.out.println(bookList.get(i).toTempString());
 				count++;
 			}
@@ -119,7 +132,7 @@ public class Menu {
 		if (count == 0) {
 			System.out.println("검색 결과가 없습니다.");
 		} else {
-			System.out.println("검색이 완료되었습니다.");
+			System.out.println("검색이 완료 되었습니다.");
 		}
 
 		toBeContinue('s');
@@ -130,7 +143,7 @@ public class Menu {
 	 */
 	public static void removeBook() {
 		System.out.println("삭제할 책의 고유번호: ");
-		int index = getBookIndex(input.nextLine());
+		int index = getBookIndex(input.nextLine(), bookList);
 
 		if (index >= 0) {
 			System.out.println("삭제하시겠습니까?(Y/N)");
@@ -156,16 +169,23 @@ public class Menu {
 
 		System.out.println("대여할 책의 고유번호: ");
 
-		int index = getBookIndex(input.nextLine());
+		int index = getBookIndex(input.nextLine(), bookList);
+		if (index == -1)
+			System.out.println("해당 책이 존재하지 않습니다.");
+
+		if (isLate(currentUser)) {
+			System.out.println("연체 중입니다. 반납 후 다시 시도해주세요.");
+			toBeContinue('b');
+		}
 
 		if (index >= 0) {
-			if (userList.get(currentUserIndex).numberOfRentBook > 4) {
-				System.out.println(userList.get(currentUserIndex).userID + "님은 대여 가능 권 수를 넘겼습니다.");
+			if (currentUser.numberOfRentBook > BorrowLimit + 1) {
+				System.out.println(currentUser.userID + "님은 대여 가능 권 수를 넘겼습니다.");
 			} else if (bookList.get(index).isBorrow()) {
 				System.out.println("해당 도서는 이미 대여 중입니다.");
 			} else {
-				System.out.println(userList.get(currentUserIndex).userID +"님의 "+
-						"남은 대여 가능 권 수: " + (BorrowLimit - userList.get(currentUserIndex).numberOfRentBook) + "권");
+				System.out.println(currentUser.userID + "님의 " + "남은 대여 가능 권 수: "
+						+ (BorrowLimit - currentUser.numberOfRentBook) + "권");
 				System.out.println("대여하시겠습니까?(Y/N)");
 
 				char choice;
@@ -173,7 +193,9 @@ public class Menu {
 					choice = input.nextLine().toLowerCase().charAt(0);
 					if (choice == 'y') {
 						bookList.get(index).setBorrow(true);
-						userList.get(currentUserIndex).numberOfRentBook++;
+						currentUser.getMyBookList().add(new Book(bookList.get(index)));
+						currentUser.getMyBookList().get(currentUser.getMyBookList().size() - 1).setBorrow(true);
+						currentUser.numberOfRentBook++;
 						System.out.println("대여 되었습니다.");
 					} else if (choice == 'n') {
 						System.out.println("대여를 취소합니다.");
@@ -184,31 +206,55 @@ public class Menu {
 		toBeContinue('b');
 	}
 
+	public static boolean isLate(User user) {
+		User tempUser = user;
+		Date today = new Date();
+
+		long difference;
+		long fastest = 0;
+		for (Book book : tempUser.getMyBookList()) {
+			difference = today.getTime() - book.getBorrowDate().getTime();
+			if (fastest < difference)
+				fastest = book.getBorrowDate().getTime();
+		}
+
+		difference = fastest / (24 * 60 * 60 * 1000);
+		if (difference > 5)
+			return true;
+		else
+			return false;
+	}
+
 	/**
 	 * 책 반납 메뉴
 	 */
 	public static void returnBook() {
 
 		System.out.println("반납할 책의 고유번호: ");
-		int index = getBookIndex(input.nextLine());
-
-		if (index >= 0) {
-			if (!(bookList.get(index).isBorrow())) {
-				System.out.println("대여 되지 않은 책입니다. 반납이 불가합니다.");
+		int MainIndex = getBookIndex(input.nextLine(), bookList);
+		if (MainIndex == -1) {
+			System.out.println("해당 책이 존재하지 않습니다.");
+		} else {
+			int currentIndex = getBookIndex(input.nextLine(), currentList);
+			if (currentIndex == -1) {
+				System.out.println(currentUser.userID + "님이 대여한 책이 아닙니다. 반납이 불가합니다.");
 			} else {
-				bookList.get(index).setBorrow(false);
-				userList.get(currentUserIndex).numberOfRentBook--;
+				bookList.get(MainIndex).setBorrow(false);
+				currentList.get(currentIndex).setBorrow(false);
+				currentUser.numberOfRentBook--;
 				System.out.println("반납 되었습니다.");
-				System.out.println(userList.get(currentUserIndex).userID +"님의 "+
-						"남은 대여 가능 권수: " + (BorrowLimit - userList.get(currentUserIndex).numberOfRentBook) + "권");
+				System.out.println(currentUser.userID + "님의 " + "남은 대여 가능 권수: "
+						+ (BorrowLimit - currentUser.numberOfRentBook) + "권");
 			}
 		}
+
 		toBeContinue('r');
 	}
 
 	/**
-	 * @param destination 이전 메뉴<BR>
-	 * n = 입고, s = 검색, d = 출고, b = 대여, r = 반납
+	 * @param destination
+	 *            이전 메뉴<BR>
+	 *            n = 입고, s = 검색, d = 출고, b = 대여, r = 반납
 	 */
 	public static void toBeContinue(char destination) {
 		char choice;
@@ -236,13 +282,16 @@ public class Menu {
 
 	/**
 	 * 입력 받은 고유번호에 해당하는 책의 위치를 찾는 메소드
-	 * @param destID 찾기 원하는 책 고유번호
+	 * 
+	 * @param destID
+	 *            찾기 원하는 책 고유번호
 	 * @return 찾는 책의 목록에서의 위치
 	 */
-	public static int getBookIndex(String destID) {
+	public static int getBookIndex(String destID, ArrayList<Book> bookList) {
 		destID = destID.toUpperCase();
-		if(destID.length()==7) destID = destID.substring(0, 3)+"-"+destID.substring(3, destID.length());
-		
+		if (destID.length() == 7)
+			destID = destID.substring(0, 3) + "-" + destID.substring(3, destID.length());
+
 		int i;
 		for (i = 0; i < bookList.size(); i++) {
 			if (bookList.get(i).getBid().equals(destID)) {
@@ -251,7 +300,6 @@ public class Menu {
 				return i;
 			}
 		}
-		System.out.println("해당 책이 존재하지 않습니다.");
 		return -1;
 	}
 
@@ -284,7 +332,6 @@ public class Menu {
 			switch (Integer.parseInt(input.nextLine())) {
 			case 1:
 				logIn();
-				// System.out.println("로그인");
 				printSecondMenu();
 				break;
 			case 2:
@@ -341,7 +388,7 @@ public class Menu {
 			}
 		} catch (Exception e) {
 			printSecondMenu();
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -377,15 +424,18 @@ public class Menu {
 	 */
 	public static void printFirstLineOfTable() {
 		System.out.println();
-		System.out.printf("%-24s\t%-14s\t%-10s\t%-10s\t%-10s\t%-10s\n", "제목", "저자", "입고시기", "장르", "고유번호", "대여가능여부");
+		System.out.printf("%-19s\t%-11s\t%-11s\t%-11s\t%-11s\t%-11s\n", "제목", "저자", "입고시기", "장르", "고유번호", "대여가능여부");
 		System.out.printf(
 				"------------------------------------------------------------------------------------------------------------\n");
 	}
 
 	/**
 	 * 저장용 파일 출력
-	 * @param arrayList 출력하고자 하는 목록
-	 * @param objectName 출력 파일 이름
+	 * 
+	 * @param arrayList
+	 *            출력하고자 하는 목록
+	 * @param objectName
+	 *            출력 파일 이름
 	 */
 	public static <T> void outList(ArrayList<T> arrayList, String objectName) {
 		String filename = "lib/" + objectName + ".txt";
@@ -412,8 +462,11 @@ public class Menu {
 
 	/**
 	 * 읽을 수 있는 파일 출력
-	 * @param arrayList 출력하고자 하는 목록
-	 * @param objectName 출력 파일 이름
+	 * 
+	 * @param arrayList
+	 *            출력하고자 하는 목록
+	 * @param objectName
+	 *            출력 파일 이름
 	 */
 	public static <T> void outListFile(ArrayList<T> arrayList, String objectName) {
 		String filename = "lib/" + "readable_" + objectName + ".dat";
@@ -444,7 +497,9 @@ public class Menu {
 
 	/**
 	 * 파일에서 Object를 입력 받아 ArrayList에 저장
-	 * @param objectName 입력하고자 하는 파일 이름
+	 * 
+	 * @param objectName
+	 *            입력하고자 하는 파일 이름
 	 * @return 입력받은 자료를 ArrayList 타입으로 저장
 	 */
 	@SuppressWarnings("unchecked")

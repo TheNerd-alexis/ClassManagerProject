@@ -1,5 +1,6 @@
 package library;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 
@@ -14,17 +15,26 @@ public class User implements Serializable {
 	
 	int numberOfRentBook;
 	
+	ArrayList<Book> myBookList;
+	
 	public User(String s, boolean b, int i)
 	{
 		userID = s;
 		canBorrow = b;
 		numberOfRentBook = i;
+		myBookList = new ArrayList<Book>();
+	}
+
+	public ArrayList<Book> getMyBookList() {
+		return myBookList;
 	}
 
 	@Override
 	public String toString() {
-		return userID +"\t" + canBorrow + "\t" + numberOfRentBook;
+		String str = "";
+		for(Book book:myBookList){
+			if(book.isBorrow()) str+=book.getBid()+"\t"+book.getBorrowDate()+"\t";
+		}
+		return userID + "\t" + canBorrow + "\t" + numberOfRentBook + "\t"+str;
 	}
-	
-	
 }
