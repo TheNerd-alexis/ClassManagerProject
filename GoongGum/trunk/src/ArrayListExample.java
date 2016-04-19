@@ -6,6 +6,7 @@ public static void main(String[] args) {
 	List<String> list = new ArrayList<String>();
 	
 	list.add("hana");
+	list.add("alice");
 	list.add("둘");
 	list.add("set");
 	list.add(0, "영");
