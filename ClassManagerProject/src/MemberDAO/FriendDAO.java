@@ -9,6 +9,8 @@ import java.sql.SQLException;
 public class FriendDAO {
 	private Connection connection;
 
+	public static FriendDAO instance;
+
 	private FriendDAO(Connection connection) {
 		this.connection = connection;
 	}
@@ -18,7 +20,9 @@ public class FriendDAO {
 	 * @return DCHdbDAO
 	 */
 	public static FriendDAO getInstance(Connection connection) {
-		return new FriendDAO(connection);
+		if (instance == null)
+			new FriendDAO(connection);
+		return instance;
 	}
 
 	/**
@@ -41,6 +45,37 @@ public class FriendDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** createFriendDb failed */
+			return 2;
+		} finally {
+			try {
+				if (statement != null || !statement.isClosed())
+					statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * delete friend
+	 * 
+	 * @param MID
+	 *            user ID
+	 * @return 1 = succeed, 2 = failed
+	 */
+	public int deleteFriendDb(String MID) {
+		String sql = "DROP TABLE friend_" + MID;
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.execute();
+			/** deleteFriendDb succeed */
+			return 1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			/** deleteFriendDb failed */
 			return 2;
 		} finally {
 			try {
