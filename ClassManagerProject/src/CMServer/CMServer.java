@@ -20,7 +20,7 @@ public class CMServer {
 	static ArrayList<Client> clientList = new ArrayList<Client>();
 	Connection connection = null;
 	
-	public void DbConnect(){
+	public Connection DbConnect(){
 		final String SQLID = "root";
 		final String PASSWORD = "mysql";
 		final String URL = "jdbc:mysql://localhost:3306/classmanager";
@@ -32,6 +32,7 @@ public class CMServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return connection;
 	}
 	
 	public void ClientConnect() {
