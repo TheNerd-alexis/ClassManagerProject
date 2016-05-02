@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import Join.JoinDao;
 
 public class DchDAO {
-
+	public static DchDAO instance = null;
 	private Connection connection;
 
 	private DchDAO(Connection connection) {
@@ -21,7 +21,9 @@ public class DchDAO {
 	 * @return DCHdbDAO
 	 */
 	public static DchDAO getInstance(Connection connection) {
-		return new DchDAO(connection);
+		if(instance==null)
+			instance = new DchDAO(connection);
+		return instance;
 	}
 
 	/**
@@ -40,6 +42,34 @@ public class DchDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** createDCHdb failed */
+			return 2;
+		} finally {
+			try {
+				if (statement != null || !statement.isClosed())
+					statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param MID
+	 * @return 1 = succeed, 2 = failed
+	 */
+	public int deleteDCHdb(String MID) {
+		String sql = "DROP TABLE " + "dch_" + MID;
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.execute();
+			/** deleteDCHdb succeed */
+			return 1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			/** deleteDCHdb failed */
 			return 2;
 		} finally {
 			try {

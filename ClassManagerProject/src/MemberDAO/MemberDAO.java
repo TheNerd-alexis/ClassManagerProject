@@ -4,28 +4,30 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class MemberDAO {
-	
+
 	private static String DBname = "member";
 
 	private Connection connection;
 
-	DchDAO dchDAO;
-	event.EventDao eventDAO;
-	FriendDAO friendDAO;
+	public DchDAO dchDAO;
+	public EventDao eventDAO;
+	public FriendDAO friendDAO;
+	public static MemberDAO instance = null;
+	
 
 	/**
 	 * @param connection
 	 * @return MemberDAO
 	 */
 	public static MemberDAO getInstance(Connection connection) {
-		return new MemberDAO(connection);
+		if(instance ==null)
+			new MemberDAO(connection);
+		return instance;
 	}
 
 	private MemberDAO(Connection connection) {
@@ -48,8 +50,8 @@ public class MemberDAO {
 	 * @return 1 = succeed, 2 = failed(same ID), 3 = create DCH failed, <br>
 	 *         4 = create friend failed
 	 */
-	public int insertMember(String MID, String PW, String MNAME, String MCL) {
-		String sql = "INSERT INTO " + DBname + " (MID, PW, SALT, MNAME, MCL) " + "VALUES(?,?,?,?,?)";
+	public int insertMember(String MID, String PW, String MNAME, String MCL, int PWQ, String PWA) {
+		String sql = "INSERT INTO " + DBname + " (MID, PW, SALT, MNAME, MCL, PWQ, PWA) " + "VALUES(?,?,?,?,?,?,?)";
 		PreparedStatement statement = null;
 		String[] pw = password(PW);
 		try {
@@ -59,6 +61,8 @@ public class MemberDAO {
 			statement.setString(3, pw[1]);
 			statement.setString(4, MNAME);
 			statement.setString(5, MCL);
+			statement.setInt(6, PWQ);
+			statement.setString(7, PWA);
 			statement.executeUpdate();
 			/** insertMember Succeed */
 			if (dchDAO.createDCHdb(MID) == 2)
@@ -106,6 +110,11 @@ public class MemberDAO {
 				statement.setString(1, MID);
 				statement.setString(2, password(PW, salt));
 				statement.executeUpdate();
+				/** insertMember Succeed */
+				if (dchDAO.deleteDCHdb(MID) == 2)
+					return 3;
+				if (friendDAO.deleteFriendDb(MID) == 2)
+					return 4;
 				return 1;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -186,6 +195,80 @@ public class MemberDAO {
 			}
 		}
 		return salt;
+	}
+
+	/**
+	 * select password question and answer by user ID
+	 * 
+	 * @param MID
+	 *            user ID
+	 * @return [question type, answer]
+	 */
+	public String[] selectPwQAByID(String MID) {
+		String sql = "SELECT PWQ FROM " + DBname + " WHERE MID = ?";
+		int pwqType = -1;
+		String pwAnswer = null;
+
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, MID);
+			ResultSet temp = statement.executeQuery();
+			if (temp.next()) {
+				pwqType = temp.getInt("PWQ");
+				pwAnswer = temp.getString("PWA");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null || !statement.isClosed())
+					statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		String[] result = {String.valueOf(pwqType), pwAnswer};
+		return result;
+	}
+
+	/**
+	 * modify a salt by user ID
+	 * 
+	 * @param MID
+	 *            user ID
+	 * @return 1 = modify password succeed, 2 = failed
+	 */
+	public int modifyPwByID(String MID, String newPW) {
+		String sql = "UPDATE " + DBname + " PW = ?, SALT = ? WHERE MID = ?";
+		String[] pw = password(newPW);
+
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, pw[0]);
+			statement.setString(2, pw[1]);
+			statement.setString(2, MID);
+			statement.executeUpdate();
+			/** modifyPW succeed */
+			return 1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			/** modifyPW failed */
+			return 2;
+		} finally {
+			try {
+				if (statement != null || !statement.isClosed())
+					statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
