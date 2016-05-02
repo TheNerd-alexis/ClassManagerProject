@@ -1,4 +1,5 @@
 package CMServer;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -6,14 +7,36 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import MemberDAO.MemberDAO;
 
 public class CMServer {
 
 	static ArrayList<Client> clientList = new ArrayList<Client>();
+	Connection connection = null;
+	
+	public void DbConnect(){
+		final String SQLID = "root";
+		final String PASSWORD = "mysql";
+		final String URL = "jdbc:mysql://localhost:3306/classmanager";
 
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(URL, SQLID, PASSWORD);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void ClientConnect() {
 		// TODO Auto-generated method stub
+
 		ServerSocket server;
 		try {
 			while (true) {
