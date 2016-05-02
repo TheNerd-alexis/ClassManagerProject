@@ -8,17 +8,11 @@ import java.sql.SQLException;
 
 import Join.JoinDao;
 
-public class DCHdbDAO {
+public class DchDAO {
 
 	private Connection connection;
 
-	private static String SQLID;
-	private static String PASSWORD;
-	private static String URL;
-	private static JoinDao instance;
-	private static String DBname = "member";
-
-	public DCHdbDAO(Connection connection) {
+	private DchDAO(Connection connection) {
 		this.connection = connection;
 	}
 
@@ -26,16 +20,19 @@ public class DCHdbDAO {
 	 * @param connection
 	 * @return DCHdbDAO
 	 */
-	public DCHdbDAO getInstance(Connection connection) {
-		return new DCHdbDAO(connection);
+	public static DchDAO getInstance(Connection connection) {
+		return new DchDAO(connection);
 	}
 
+	/**
+	 * @param MID
+	 * @return 1 = succeed, 2 = failed
+	 */
 	public int createDCHdb(String MID) {
-		String sql = "CREATE TABLE IF NOT EXISTS ?(ATTENDDATE DATE PRIMARY KEY, ATTENDANCE BOOLEAN);";
+		String sql = "CREATE TABLE " + "dch_" + MID + " (ATTENDDATE DATE PRIMARY KEY, ATTENDANCE BOOLEAN)";
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, "dch_" + MID);
 			statement.execute();
 			/** createDCHdb succeed */
 			return 1;
@@ -55,6 +52,12 @@ public class DCHdbDAO {
 		}
 	}
 
+	/**
+	 * @param MID
+	 * @param date
+	 * @param attendance
+	 * @return 1 = succeed, 2 = failed
+	 */
 	public int insertDCH(String MID, String date, Boolean attendance) {
 		String sql = "INSERT INTO " + "dch_" + MID + " VALUES (?,?);";
 		Date dchdate = Date.valueOf(date);
@@ -82,6 +85,12 @@ public class DCHdbDAO {
 		}
 	}
 
+	/**
+	 * @param MID
+	 * @param date
+	 * @param attendance
+	 * @return 1 = succeed, 2 = failed
+	 */
 	public int modifiedDCH(String MID, String date, Boolean attendance) {
 		String sql = "UPDATE " + "dch_" + MID + " ATTENDANCE = ? WHERE ATTENDDATE = ?;";
 		Date dchdate = Date.valueOf(date);

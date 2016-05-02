@@ -4,31 +4,34 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import Join.JoinDao;
+import java.util.Scanner;
 
 public class MemberDAO {
+	
+	private static String DBname = "member";
+
 	private Connection connection;
 
-	private static String SQLID;
-	private static String PASSWORD;
-	private static String URL;
-	private static JoinDao instance;
-	private static String DBname = "member";
+	DchDAO dchDAO;
+	event.EventDao eventDAO;
+	FriendDAO friendDAO;
 
 	/**
 	 * @param connection
 	 * @return MemberDAO
 	 */
-	public MemberDAO getInstance(Connection connection) {
+	public static MemberDAO getInstance(Connection connection) {
 		return new MemberDAO(connection);
 	}
 
 	private MemberDAO(Connection connection) {
 		this.connection = connection;
+		dchDAO = DchDAO.getInstance(connection);
+		friendDAO = friendDAO.getInstance(connection);
 	}
 
 	/**
@@ -42,10 +45,11 @@ public class MemberDAO {
 	 *            user name
 	 * @param MCL
 	 *            user class
-	 * @return 1 = succeed, 2 = failed(same ID)
+	 * @return 1 = succeed, 2 = failed(same ID), 3 = create DCH failed, <br>
+	 *         4 = create friend failed
 	 */
 	public int insertMember(String MID, String PW, String MNAME, String MCL) {
-		String sql = "INSERT INTO " + DBname + " (MID, PW, SALT, MNAME, MCL) VALUES(?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO " + DBname + " (MID, PW, SALT, MNAME, MCL) " + "VALUES(?,?,?,?,?)";
 		PreparedStatement statement = null;
 		String[] pw = password(PW);
 		try {
@@ -57,6 +61,10 @@ public class MemberDAO {
 			statement.setString(5, MCL);
 			statement.executeUpdate();
 			/** insertMember Succeed */
+			if (dchDAO.createDCHdb(MID) == 2)
+				return 3;
+			if (friendDAO.createFriendDb(MID) == 2)
+				return 4;
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -264,12 +272,6 @@ public class MemberDAO {
 		return sb.toString();
 	}
 
-	public static void main(String[] args) {
-		String[] pass = password("name");
-		System.out.println(pass[0] + "  " + pass[1]);
-		String pass1 = password("name", pass[1]);
-		System.out.println(pass1);
-	}
 }
 
 class Member {
