@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import MemberDAO.MemberDAO;
+import DAO.MemberDAO;
 
 public class CMServer {
 
