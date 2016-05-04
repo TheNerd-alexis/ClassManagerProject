@@ -1,5 +1,5 @@
 import CMServer.CMServer;
-import MemberDAO.MemberDAO;
+import DAO.MemberDAO;
 
 public class ClassManagerMain {
 	public static void main(String[] args) {
