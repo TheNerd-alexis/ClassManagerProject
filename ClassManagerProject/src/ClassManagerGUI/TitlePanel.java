@@ -42,13 +42,8 @@ public class TitlePanel extends JPanel {
 		btnTitle.setFont(font);
 		add(btnTitle);
 	}
-	
-	public JButton getBtnTitle() {
-		return btnTitle;
-	}
 
-	class TitleButton extends JButton {
-		
+	class TitleButton extends JButton {	
 		public TitleButton(String text) {
 			super(text);
 			setText(text);
