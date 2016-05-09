@@ -17,6 +17,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JoinPanel extends JPanel {
 	JTextField textUserID;
@@ -43,7 +45,7 @@ public class JoinPanel extends JPanel {
 		setBackground(bgColor);
 		setLayout(new BorderLayout(0, 0));
 
-		titlePanel = new TitlePanel("ClassManager", "회원가입", "닫기");
+		titlePanel = new TitlePanel("CM", "회원가입", "닫기");
 		add(titlePanel, BorderLayout.NORTH);
 
 		JPanel joinContentPanel = new JPanel();
@@ -145,10 +147,11 @@ public class JoinPanel extends JPanel {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-//				if (String)passwordField1.getPassword()) {
-//					passwordField1.setEchoChar((char) 0);
-//					passwordField1.setText("비밀번호 입력");
-//				}
+				if (String.valueOf(passwordField1.getPassword()).equals("")); 
+				{
+					passwordField1.setEchoChar((char) 0);
+					passwordField1.setText("비밀번호 입력");
+				}
 			}
 		});
 		passwordField1.setText("비밀번호 입력");
@@ -178,6 +181,7 @@ public class JoinPanel extends JPanel {
 		lblTextField2.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
 		PWPanel2.add(lblTextField2, BorderLayout.CENTER);
 		JComboBox pwHintCombo = new JComboBox(PWQ);
+		
 		pwHintCombo.setBorder(new LineBorder(borderColor));
 		pwHintCombo.setBackground(bgColor);
 		pwHintCombo.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
