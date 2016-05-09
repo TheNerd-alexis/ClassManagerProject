@@ -23,10 +23,12 @@ public class LoginPanel extends JPanel {
 	JButton btnJoin = new MyButton("회원가입");
 	JButton btnFindIdPw = new MyButton();
 	JButton btnLogin = new MyButton("로그인");
+	private Color background = new Color(255, 254, 239);
+	private Color foreground = new Color(108, 108, 108);
 
 	public LoginPanel() {
 		this.setSize(400 - 10, 750 - 10);
-		setBackground(new Color(255, 250, 240));
+		setBackground(background);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 60, 280, 60, 0 };
 		gridBagLayout.rowHeights = new int[] { 500, 70, 70, 0 };
@@ -35,7 +37,7 @@ public class LoginPanel extends JPanel {
 		setLayout(gridBagLayout);
 
 		JPanel loginTitlePanel = new JPanel();
-		loginTitlePanel.setBackground(new Color(255, 250, 240));
+		loginTitlePanel.setBackground(background);
 		GridBagConstraints gbc_loginTitlePanel = new GridBagConstraints();
 		gbc_loginTitlePanel.fill = GridBagConstraints.BOTH;
 		gbc_loginTitlePanel.insets = new Insets(0, 0, 5, 5);
@@ -57,13 +59,14 @@ public class LoginPanel extends JPanel {
 		loginTitlePanel.add(lblManager);
 
 		JPanel loginIdPwpanel = new JPanel();
-		loginIdPwpanel.setBackground(new Color(255, 250, 240));
+		loginIdPwpanel.setBackground(background);
 		GridBagConstraints gbc_loginIdPwpanel = new GridBagConstraints();
 		gbc_loginIdPwpanel.fill = GridBagConstraints.BOTH;
 		gbc_loginIdPwpanel.insets = new Insets(0, 0, 5, 5);
 		gbc_loginIdPwpanel.gridx = 1;
 		gbc_loginIdPwpanel.gridy = 1;
 		add(loginIdPwpanel, gbc_loginIdPwpanel);
+		btnLogin.setBorderPainted(true);
 
 		btnLogin.setFont(new Font("나눔고딕코딩", Font.BOLD, 18));
 		loginIdPwpanel.setLayout(new GridLayout(0, 2, 0, 0));
@@ -81,6 +84,7 @@ public class LoginPanel extends JPanel {
 		txtId.setColumns(10);
 
 		passwordField = new JPasswordField();
+		passwordField.setAutoscrolls(false);
 		passwordField.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
 		passwordField.setBorder(new LineBorder(new Color(255, 222, 173)));
 		panelIdPw.add(passwordField);
@@ -88,7 +92,7 @@ public class LoginPanel extends JPanel {
 		passwordField.setToolTipText("password");
 
 		JPanel loginBtnPanel = new JPanel();
-		loginBtnPanel.setBackground(new Color(255, 250, 240));
+		loginBtnPanel.setBackground(background);
 		GridBagConstraints gbc_loginBtnPanel = new GridBagConstraints();
 		gbc_loginBtnPanel.insets = new Insets(0, 0, 0, 5);
 		gbc_loginBtnPanel.fill = GridBagConstraints.BOTH;
@@ -107,7 +111,7 @@ public class LoginPanel extends JPanel {
 		label_1.setVerticalAlignment(SwingConstants.BOTTOM);
 		label_1.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel label_2 = new JLabel("패스워드 찾기");
-		label_2.setForeground(new Color(105, 105, 105));
+		label_2.setForeground(foreground);
 		label_2.setVerticalAlignment(SwingConstants.TOP);
 		label_2.setHorizontalAlignment(SwingConstants.CENTER);
 		label_1.setFont(new Font("나눔고딕코딩", Font.BOLD, 17));

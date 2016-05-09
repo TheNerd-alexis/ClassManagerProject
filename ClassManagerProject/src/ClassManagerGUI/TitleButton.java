@@ -11,8 +11,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class TitleButton extends JButton {
-	private Color normalColor = new Color(105, 105, 105);
-	private Color fontColor = Color.WHITE;
+	private Color normalColor = new Color(108, 108, 108);
+	private Color fontColor = new Color(239,239,239);
 
 	public TitleButton() {
 		super();
