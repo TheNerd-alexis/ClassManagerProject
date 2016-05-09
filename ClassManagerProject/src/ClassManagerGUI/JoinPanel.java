@@ -6,8 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,17 +16,18 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class JoinPanel extends JPanel {
-	private JTextField textUserID;
-	private JTextField textUserName;
-	private JPasswordField passwordField1;
-	private JPasswordField passwordField2;
-	private JTextField pwAnsField;
-	JButton btnTitleClose;
+	JTextField textUserID;
+	JTextField textUserName;
+	JPasswordField passwordField1;
+	JPasswordField passwordField2;
+	JTextField pwAnsField;
+	JComboBox classCombo;
 	JButton btnJoin;
+	JPanel titlePanel;
+	
 	private Color bgColor = new Color(255, 254, 239);
 	private Color fontColor = new Color(108, 108, 108);
 	private Color borderColor = new Color(234,232,222);
@@ -42,27 +43,8 @@ public class JoinPanel extends JPanel {
 		setBackground(bgColor);
 		setLayout(new BorderLayout(0, 0));
 
-		JPanel joinTitlePanel = new JPanel();
-		add(joinTitlePanel, BorderLayout.NORTH);
-		joinTitlePanel.setLayout(new BorderLayout(0, 0));
-
-		JLabel btnTitleCM = new JLabel("CM");
-		btnTitleCM.setBorder(new EmptyBorder(10, 5, 10, 5));
-		btnTitleCM.setFont(new Font("나눔고딕코딩", Font.BOLD, 15));
-		btnTitleCM.setForeground(whiteColor);
-		btnTitleCM.setBackground(fontColor);
-		joinTitlePanel.add(btnTitleCM, BorderLayout.WEST);
-
-		JLabel lblTitleJoin = new JLabel("회원가입");
-		lblTitleJoin.setFont(new Font("나눔고딕코딩", Font.BOLD, 15));
-		lblTitleJoin.setForeground(whiteColor);
-		lblTitleJoin.setHorizontalAlignment(SwingConstants.CENTER);
-		joinTitlePanel.add(lblTitleJoin, BorderLayout.CENTER);
-
-		btnTitleClose = new TitleButton("닫기");
-		btnTitleClose.setBorder(new EmptyBorder(10, 0, 10, 10));
-		btnTitleClose.setFont(new Font("나눔고딕코딩", Font.BOLD, 15));
-		joinTitlePanel.add(btnTitleClose, BorderLayout.EAST);
+		titlePanel = new TitlePanel("CM","회원가입","닫기");
+		add(titlePanel, BorderLayout.NORTH);
 
 		JPanel joinContentPanel = new JPanel();
 		joinContentPanel.setBackground(bgColor);
@@ -157,6 +139,14 @@ public class JoinPanel extends JPanel {
 		PWPanel1.add(passwordField1);
 
 		JTextField lblTextField1 = new JTextField("비밀번호 입력");
+		lblTextField1.setEditable(false);
+		lblTextField1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				
+			}
+		});
+		
 		lblTextField1.setForeground(fontColor);
 		lblTextField1.setBorder(new LineBorder(borderColor));
 		lblTextField1.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
@@ -203,7 +193,7 @@ public class JoinPanel extends JPanel {
 		joinContentPanel.add(pwAnsField, gbc_pwAnsField);
 		pwAnsField.setColumns(10);
 
-		JComboBox classCombo = new JComboBox(BAN);
+		classCombo = new JComboBox(BAN);
 		classCombo.setBorder(new LineBorder(borderColor));
 		classCombo.setBackground(bgColor);
 		classCombo.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
