@@ -25,7 +25,8 @@ public class LoginPanel extends JPanel {
 	JButton btnLogin = new MyButton("로그인");
 	private Color background = new Color(255, 254, 239);
 	private Color foreground = new Color(108, 108, 108);
-
+	private Color borderColor = new Color(234,232,222);
+	
 	public LoginPanel() {
 		this.setSize(400 - 10, 750 - 10);
 		setBackground(background);
@@ -78,7 +79,7 @@ public class LoginPanel extends JPanel {
 
 		txtId = new JTextField();
 		txtId.setFont(new Font("나눔고딕코딩", Font.PLAIN, 20));
-		txtId.setBorder(new LineBorder(new Color(255, 222, 173)));
+		txtId.setBorder(new LineBorder(borderColor));
 		panelIdPw.add(txtId);
 		txtId.setToolTipText("user ID");
 		txtId.setColumns(10);
@@ -86,7 +87,7 @@ public class LoginPanel extends JPanel {
 		passwordField = new JPasswordField();
 		passwordField.setAutoscrolls(false);
 		passwordField.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
-		passwordField.setBorder(new LineBorder(new Color(255, 222, 173)));
+		passwordField.setBorder(new LineBorder(borderColor));
 		panelIdPw.add(passwordField);
 		passwordField.setColumns(10);
 		passwordField.setToolTipText("password");
