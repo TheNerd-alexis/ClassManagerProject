@@ -26,12 +26,12 @@ public class JoinPanel extends JPanel {
 	JTextField pwAnsField;
 	JComboBox classCombo;
 	JButton btnJoin;
-	JPanel titlePanel;
-	
+	TitlePanel titlePanel;
+
 	private Color bgColor = new Color(255, 254, 239);
 	private Color fontColor = new Color(108, 108, 108);
-	private Color borderColor = new Color(234,232,222);
-	private Color whiteColor = new Color(239,239,239);
+	private Color borderColor = new Color(234, 232, 222);
+	private Color whiteColor = new Color(239, 239, 239);
 
 	private String[] PWQ = { "비밀번호 힌트 질문", "당신의 이름은 무엇입니까?", "당신의 고향은 어디입니까?", "당신의 출신 초등학교는 어디입니까?",
 			"가장 선호하는 색깔은 무엇입니까?" };
@@ -43,7 +43,7 @@ public class JoinPanel extends JPanel {
 		setBackground(bgColor);
 		setLayout(new BorderLayout(0, 0));
 
-		titlePanel = new TitlePanel("CM","회원가입","닫기");
+		titlePanel = new TitlePanel("ClassManager", "회원가입", "닫기");
 		add(titlePanel, BorderLayout.NORTH);
 
 		JPanel joinContentPanel = new JPanel();
@@ -136,21 +136,29 @@ public class JoinPanel extends JPanel {
 		PWPanel1.setLayout(new BorderLayout(0, 0));
 
 		passwordField1 = new JPasswordField();
-		PWPanel1.add(passwordField1);
-
-		JTextField lblTextField1 = new JTextField("비밀번호 입력");
-		lblTextField1.setEditable(false);
-		lblTextField1.addFocusListener(new FocusAdapter() {
+		passwordField1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				
+				passwordField1.setText("");
+				passwordField1.setEchoChar('*');
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+//				if (String)passwordField1.getPassword()) {
+//					passwordField1.setEchoChar((char) 0);
+//					passwordField1.setText("비밀번호 입력");
+//				}
 			}
 		});
-		
-		lblTextField1.setForeground(fontColor);
-		lblTextField1.setBorder(new LineBorder(borderColor));
-		lblTextField1.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
-		PWPanel1.add(lblTextField1, BorderLayout.CENTER);
+		passwordField1.setText("비밀번호 입력");
+		passwordField1.setEchoChar((char) 0);
+		PWPanel1.add(passwordField1);
+
+		passwordField1.setForeground(fontColor);
+		passwordField1.setBorder(new LineBorder(borderColor));
+		passwordField1.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
+		PWPanel1.add(passwordField1, BorderLayout.CENTER);
 
 		JPanel PWPanel2 = new JPanel();
 		GridBagConstraints gbc_PWPanel2 = new GridBagConstraints();
