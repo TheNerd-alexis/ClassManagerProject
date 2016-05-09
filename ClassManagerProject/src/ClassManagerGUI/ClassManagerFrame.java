@@ -24,7 +24,7 @@ public class ClassManagerFrame extends JFrame {
 		
 		basePanel.add(joinPanel, "joinPanel");
 		basePanel.add(loginPanel, "loginPanel");
-		//joinPanel.btnTitleClose.addActionListener(new PanelConverter("loginPanel"));
+		joinPanel.titlePanel.btnTitle.addActionListener(new PanelConverter("loginPanel"));
 		loginPanel.btnJoin.addActionListener(new PanelConverter("joinPanel"));
 		joinPanel.btnJoin.addActionListener(new PanelConverter("loginPanel"));
 //		getContentPane().add(new MainPanel(), "mainPanel");
