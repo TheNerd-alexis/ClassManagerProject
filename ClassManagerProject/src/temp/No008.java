@@ -1,141 +1,124 @@
-package temp;
-import java.awt.Color;
+package nam;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JTextField;
-import javax.swing.JTabbedPane;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.JMenuBar;
-import java.awt.Panel;
-import java.awt.Canvas;
-import javax.swing.Box;
-import java.awt.CardLayout;
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
-import java.awt.GridBagLayout;
-import javax.swing.JList;
-import javax.swing.JCheckBox;
-import java.awt.SystemColor;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import javax.swing.BoxLayout;
 import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import javax.swing.border.LineBorder;
 
-public class No008 extends JFrame{
-	private final JPanel panel_invite = new JPanel();
-	private final JTextField textField = new JTextField();
-	private JTextField textField_1;
-	private final JList list = new JList();
+public class No008 extends JPanel{
 	private Color background = new Color(255, 254, 239);
 	private Color foreground = new Color(108, 108, 108);
 	private Color borderColor = new Color(234,232,222);
+	private final JTextField textField = new JTextField();
+	private JTextField textField_1;
+	JListForm list;
 	
-	public No008() {
-		
+	No008(){
+		setBackground(background);
 		setVisible(true);
-		setSize(450, 700);
-		
-		JPanel panel_base = new JPanel();
-		panel_base.setSize(450,700);
-		panel_base.setLayout(new BorderLayout(0, 0));
-		getContentPane().add(panel_base);	
-		panel_base.setBackground(background);
-		
-		
-		
-		TitlePanel titlePanel = new TitlePanel("CM","이벤트알림","닫기");
-		
-		panel_base.add(titlePanel, BorderLayout.NORTH); //
-		
-		
-		
+		setSize(390, 740);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{403, 0};
+		gridBagLayout.rowHeights = new int[]{58, 11, 48, 53, 541, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(background);	
-		panel_base.add(panel, BorderLayout.WEST); //
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 0;
+		add(panel, gbc_panel);
 		
+		panel.setBackground(background);
 		
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{52, 343, 86, 0};
-		gbl_panel.rowHeights = new int[]{25, 56, 61, 408, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		JPanel panel_base = new JPanel();
+		panel_base.setSize(400-10,750-10);
+		panel_base.setBackground(background);
+		panel.setLayout(new BorderLayout(0, 0));
 		
-		panel.setLayout(gbl_panel);
-		
-		
-		
-		
-		
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new LineBorder(borderColor));
-		panel_1.setLayout(null);
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.gridx = 1;
-		gbc_panel_1.gridy = 1;
-		panel.add(panel_1, gbc_panel_1);
-		panel_1.setBackground(background);
-		
-		JTextArea textArea = new JTextArea();
-		textArea.setText("개설할 채팅방의 제목입력");
-		textArea.setBounds(12, 18, 229, 24);
-		panel_1.add(textArea);
-		
-		JButton btnNewButton = new MyButton("+초대");
-		btnNewButton.setBounds(240, 10, 66, 38);
-		panel_1.add(btnNewButton);
+		TitlePanel titlepanel = new TitlePanel("CM", "채팅방개설", "나가기");
+		panel.add(titlepanel);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setLayout(null);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
-		gbc_panel_2.gridx = 1;
+		gbc_panel_2.gridx = 0;
 		gbc_panel_2.gridy = 2;
-		panel.add(panel_2, gbc_panel_2);
+		add(panel_2, gbc_panel_2);
+		textField.setBounds(12, 10, 264, 28);
+		panel_2.add(textField);
+		textField.setColumns(10);
+		
 		panel_2.setBackground(background);
+		
+		
+		JButton btnNewButton = new MyButton("+초대");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton.setBounds(291, 12, 87, 23);
+		panel_2.add(btnNewButton);
+		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new LineBorder(borderColor));
 		panel_3.setLayout(null);
-		panel_3.setBounds(0, 0, 318, 68);
-		panel_2.add(panel_3);
+		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+		gbc_panel_3.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
+		gbc_panel_3.gridx = 0;
+		gbc_panel_3.gridy = 3;
+		add(panel_3, gbc_panel_3);
 		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setText("아이디 이메일주소 검색");
-		textArea_1.setBounds(12, 18, 211, 38);
-		panel_3.add(textArea_1);
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(12, 12, 264, 31);
+		panel_3.add(textField_1);
+		
 		panel_3.setBackground(background);
-		JButton button = new MyButton("검색아이콘");
-		button.setBounds(235, 6, 66, 46);
-		panel_3.add(button);
 		
-		JPanel panel_4 = new JPanel();
-		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
-		gbc_panel_4.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_4.fill = GridBagConstraints.BOTH;
-		gbc_panel_4.gridx = 1;
-		gbc_panel_4.gridy = 3;
-		panel.add(panel_4, gbc_panel_4);
-		panel_4.setBackground(background);
-		panel_4.setLayout(new BorderLayout(0, 0));
+		MyButton myButton = new MyButton("+초대");
+		myButton.setText("찾기");
+		myButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		myButton.setBounds(291, 12, 87, 23);
+		panel_3.add(myButton);
 		
-		
-		panel_4.add( new EventPanel(0, "123123") );
-		panel_4.setVisible(true);
-		
+		list = new JListForm();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 4;
+		add(list, gbc_panel_1);
+		list.setBackground(background);
+	}
+	
+	public static void main(String[] args) {
+		JFrame temp = new JFrame();
+		temp.setVisible(true);
+		temp.setSize(400, 750);
+		No008 testpanel = new No008();
+		testpanel.list.add(new NameCheckPanel("남궁훤"));
+		testpanel.list.add(new NameCheckPanel("최새롬"));
+		testpanel.list.add(new NameCheckPanel("최새롬"));
+		testpanel.list.add(new NameCheckPanel("최새롬"));
+		testpanel.list.add(new NameCheckPanel("최새롬"));
+		temp.getContentPane().add(testpanel);
 	}
 }
