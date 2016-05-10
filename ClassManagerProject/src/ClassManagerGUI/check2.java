@@ -1,4 +1,4 @@
-package lastgui;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,11 +47,11 @@ public class check2 extends JPanel{
 	private JPanel panel_11;
 	private JPanel panel_12;
 	private JLabel label_3;
-	private JPanel panel_13;
 	private MyButton myButton_1;
 	private MyButton myButton_2;
 	private MyButton myButton_3;
-	private MyButton myButton;
+	private JPanel panel_13;
+	private JButton btnNewButton;
 	
 
 	public check2(){
@@ -64,10 +64,10 @@ public class check2 extends JPanel{
 		body = new JPanel();
 		add(body, BorderLayout.CENTER);
 		GridBagLayout gbl_body = new GridBagLayout();
-		gbl_body.columnWidths = new int[]{20, 360, -7, 0};
-		gbl_body.rowHeights = new int[]{40, 75, 54, 100, 306, 0, 0};
-		gbl_body.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_body.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_body.columnWidths = new int[]{20, 314, -7, 0};
+		gbl_body.rowHeights = new int[]{46, 75, 54, 100, 306, 0, 0};
+		gbl_body.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_body.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		body.setLayout(gbl_body);
 		body.setBackground(bgColor);
 		
@@ -81,9 +81,9 @@ public class check2 extends JPanel{
 		gbc_panel_1.gridy = 0;
 		body.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{116, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{36, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_1.columnWidths = new int[]{116, 206, 0};
+		gbl_panel_1.rowHeights = new int[]{30, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_1.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
@@ -99,7 +99,7 @@ public class check2 extends JPanel{
 		panel_2.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		panel_3 = new JPanel();
-		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_3.setBorder(new LineBorder(borderColor));
 		panel_3.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
 		gbc_panel_3.fill = GridBagConstraints.BOTH;
@@ -108,7 +108,7 @@ public class check2 extends JPanel{
 		panel_1.add(panel_3, gbc_panel_3);
 		
 		panel_4 = new JPanel();
-		panel_4.setBorder(new LineBorder(new Color(234, 232, 222), 2));
+		panel_4.setBorder(new LineBorder(borderColor,2));
 		panel_4.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
 		gbc_panel_4.fill = GridBagConstraints.BOTH;
@@ -117,9 +117,9 @@ public class check2 extends JPanel{
 		gbc_panel_4.gridy = 1;
 		body.add(panel_4, gbc_panel_4);
 		GridBagLayout gbl_panel_4 = new GridBagLayout();
-		gbl_panel_4.columnWidths = new int[]{116, 244, 0};
+		gbl_panel_4.columnWidths = new int[]{116, 206, 0};
 		gbl_panel_4.rowHeights = new int[]{93, 0};
-		gbl_panel_4.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_4.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_4.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		panel_4.setLayout(gbl_panel_4);
 		
@@ -131,7 +131,7 @@ public class check2 extends JPanel{
 		panel_4.add(label, gbc_label);
 		
 		panel_5 = new JPanel();
-		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_5.setBorder(new LineBorder(borderColor));
 		panel_5.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
 		gbc_panel_5.fill = GridBagConstraints.BOTH;
@@ -140,7 +140,7 @@ public class check2 extends JPanel{
 		panel_4.add(panel_5, gbc_panel_5);
 		
 		panel_6 = new JPanel();
-		panel_6.setBorder(new LineBorder(new Color(234, 232, 222), 2));
+		panel_6.setBorder(new LineBorder(borderColor, 2));
 		panel_6.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
 		gbc_panel_6.insets = new Insets(0, 0, 5, 5);
@@ -149,9 +149,9 @@ public class check2 extends JPanel{
 		gbc_panel_6.gridy = 2;
 		body.add(panel_6, gbc_panel_6);
 		GridBagLayout gbl_panel_6 = new GridBagLayout();
-		gbl_panel_6.columnWidths = new int[]{115, 137, 0};
+		gbl_panel_6.columnWidths = new int[]{115, 208, 0};
 		gbl_panel_6.rowHeights = new int[]{0, 0};
-		gbl_panel_6.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_6.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_6.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		panel_6.setLayout(gbl_panel_6);
 		
@@ -164,7 +164,7 @@ public class check2 extends JPanel{
 		panel_6.add(label_1, gbc_label_1);
 		
 		panel_7 = new JPanel();
-		panel_7.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_7.setBorder(new LineBorder(borderColor));
 		panel_7.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_7 = new GridBagConstraints();
 		gbc_panel_7.fill = GridBagConstraints.BOTH;
@@ -173,7 +173,7 @@ public class check2 extends JPanel{
 		panel_6.add(panel_7, gbc_panel_7);
 		
 		panel_8 = new JPanel();
-		panel_8.setBorder(new LineBorder(new Color(234, 232, 222), 2));
+		panel_8.setBorder(new LineBorder(borderColor, 2));
 		panel_8.setBackground(new Color(255, 254, 239));
 		GridBagConstraints gbc_panel_8 = new GridBagConstraints();
 		gbc_panel_8.insets = new Insets(0, 0, 5, 5);
@@ -182,9 +182,9 @@ public class check2 extends JPanel{
 		gbc_panel_8.gridy = 3;
 		body.add(panel_8, gbc_panel_8);
 		GridBagLayout gbl_panel_8 = new GridBagLayout();
-		gbl_panel_8.columnWidths = new int[]{100, 187, 0};
+		gbl_panel_8.columnWidths = new int[]{100, 223, 0};
 		gbl_panel_8.rowHeights = new int[]{45, 33, 58, 0};
-		gbl_panel_8.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_8.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_8.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panel_8.setLayout(gbl_panel_8);
 		
@@ -197,7 +197,7 @@ public class check2 extends JPanel{
 		panel_8.add(label_2, gbc_label_2);
 		
 		panel_9 = new JPanel();
-		panel_9.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_9.setBorder(new LineBorder(borderColor));
 		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
 		gbc_panel_9.fill = GridBagConstraints.BOTH;
 		gbc_panel_9.insets = new Insets(0, 0, 5, 0);
@@ -210,7 +210,7 @@ public class check2 extends JPanel{
 		panel_9.add(myButton_1, BorderLayout.CENTER);
 		
 		panel_10 = new JPanel();
-		panel_10.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_10.setBorder(new LineBorder(borderColor));
 		GridBagConstraints gbc_panel_10 = new GridBagConstraints();
 		gbc_panel_10.fill = GridBagConstraints.BOTH;
 		gbc_panel_10.insets = new Insets(0, 0, 5, 0);
@@ -227,7 +227,7 @@ public class check2 extends JPanel{
 		panel_10.add(myButton_2, BorderLayout.CENTER);
 		
 		panel_11 = new JPanel();
-		panel_11.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_11.setBorder(new LineBorder(borderColor));
 		GridBagConstraints gbc_panel_11 = new GridBagConstraints();
 		gbc_panel_11.fill = GridBagConstraints.BOTH;
 		gbc_panel_11.gridx = 1;
@@ -239,7 +239,7 @@ public class check2 extends JPanel{
 		panel_11.add(myButton_3, BorderLayout.CENTER);
 		
 		panel_12 = new JPanel();
-		panel_12.setBorder(new LineBorder(new Color(234, 232, 222), 2));
+		panel_12.setBorder(new LineBorder(borderColor, 2));
 		GridBagConstraints gbc_panel_12 = new GridBagConstraints();
 		gbc_panel_12.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_12.fill = GridBagConstraints.BOTH;
@@ -247,10 +247,10 @@ public class check2 extends JPanel{
 		gbc_panel_12.gridy = 4;
 		body.add(panel_12, gbc_panel_12);
 		GridBagLayout gbl_panel_12 = new GridBagLayout();
-		gbl_panel_12.columnWidths = new int[]{265, 0};
-		gbl_panel_12.rowHeights = new int[]{0, 240, 0};
-		gbl_panel_12.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel_12.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_12.columnWidths = new int[]{324, 0};
+		gbl_panel_12.rowHeights = new int[]{0, 278, 0};
+		gbl_panel_12.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_12.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panel_12.setLayout(gbl_panel_12);
 		panel_12.setBackground(bgColor);
 		
@@ -266,26 +266,24 @@ public class check2 extends JPanel{
 		panel_12.add(label_3, gbc_label_3);
 		
 		panel_13 = new JPanel();
-		panel_13.setBorder(new LineBorder(new Color(0, 0, 0)));
 		GridBagConstraints gbc_panel_13 = new GridBagConstraints();
 		gbc_panel_13.fill = GridBagConstraints.BOTH;
 		gbc_panel_13.gridx = 0;
 		gbc_panel_13.gridy = 1;
 		panel_12.add(panel_13, gbc_panel_13);
 		GridBagLayout gbl_panel_13 = new GridBagLayout();
-		gbl_panel_13.columnWidths = new int[]{0, 382, 0, 0, -69, 0};
-		gbl_panel_13.rowHeights = new int[]{201, 0};
-		gbl_panel_13.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_13.columnWidths = new int[]{324, 0};
+		gbl_panel_13.rowHeights = new int[]{274, 0};
+		gbl_panel_13.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_panel_13.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel_13.setLayout(gbl_panel_13);
-		panel_13.setBackground(bgColor);
 		
-		myButton = new MyButton("멀티캠퍼스 메뉴");
-		GridBagConstraints gbc_myButton = new GridBagConstraints();
-		gbc_myButton.insets = new Insets(0, 0, 0, 5);
-		gbc_myButton.gridx = 1;
-		gbc_myButton.gridy = 0;
-		panel_13.add(myButton, gbc_myButton);
+		btnNewButton = new MyButton("멀티 캠퍼스 메뉴");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton.gridx = 0;
+		gbc_btnNewButton.gridy = 0;
+		panel_13.add(btnNewButton, gbc_btnNewButton);
 		
 		
 		
