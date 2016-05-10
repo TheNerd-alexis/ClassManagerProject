@@ -1,4 +1,4 @@
-package nam;
+package ClassManagerGUI;
 
 import java.awt.Component;
 import java.awt.GridLayout;
