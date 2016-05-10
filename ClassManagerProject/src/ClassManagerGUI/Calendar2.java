@@ -26,9 +26,10 @@ import javax.swing.JRadioButton;
 import java.awt.CardLayout;
 
 
-public class Calendar2 extends JFrame{
+public class Calendar2 extends JPanel{
 
-		
+	TitlePanel titlepanel= new TitlePanel("CM", "캘린더", "닫기");
+
 	
 	private Color bgColor = new Color(255, 254, 239);
 	private Color fontColor = new Color(108, 108, 108);
@@ -50,32 +51,41 @@ public class Calendar2 extends JFrame{
 	private JLabel addmemo;
 	private JButton addingmemo;
 	private JTextArea contents;
+	private JPanel panel;
 	
 	
 	
 	Calendar2(){
 		
-		setBackground(bgColor);
-		setSize(400, 750);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("캘린더2");
+		this.setBackground(bgColor);
+		this.setSize(400, 750);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{381, 0};
-		gridBagLayout.rowHeights = new int[]{170, 482, 0};
+		gridBagLayout.columnWidths = new int[]{390, 0};
+		gridBagLayout.rowHeights = new int[]{0, 170, 482, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		getContentPane().setLayout(gridBagLayout);
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		
+		panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 0;
+		add(panel, gbc_panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		panel.add(titlepanel);
 		
 		setting = new JPanel();
 		GridBagConstraints gbc_setting = new GridBagConstraints();
 		gbc_setting.insets = new Insets(0, 0, 5, 0);
 		gbc_setting.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setting.gridx = 0;
-		gbc_setting.gridy = 0;
+		gbc_setting.gridy = 1;
 		setting.setBackground(bgColor);
-		getContentPane().add(setting, gbc_setting);
+		add(setting, gbc_setting);
 		GridBagLayout gbl_setting = new GridBagLayout();
-		gbl_setting.columnWidths = new int[]{400, 0};
+		gbl_setting.columnWidths = new int[]{366, 0};
 		gbl_setting.rowHeights = new int[]{45, 48, 25, 0};
 		gbl_setting.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_setting.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -90,7 +100,7 @@ public class Calendar2 extends JFrame{
 		setting.add(title, gbc_title);
 		title.setBackground(bgColor);
 		GridBagLayout gbl_title = new GridBagLayout();
-		gbl_title.columnWidths = new int[]{400, 0};
+		gbl_title.columnWidths = new int[]{374, 0};
 		gbl_title.rowHeights = new int[]{42, 0};
 		gbl_title.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_title.rowWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -98,7 +108,7 @@ public class Calendar2 extends JFrame{
 		
 		memotitle = new JTextField();
 		memotitle.setFont(new Font("굴림", Font.BOLD, 15));
-		memotitle.setText(" 재목입력");
+		memotitle.setText(" 제목입력");
 		GridBagConstraints gbc_memotitle = new GridBagConstraints();
 		gbc_memotitle.fill = GridBagConstraints.BOTH;
 		gbc_memotitle.gridx = 0;
@@ -115,7 +125,7 @@ public class Calendar2 extends JFrame{
 		gbc_setime.gridy = 1;
 		setting.add(setime, gbc_setime);
 		GridBagLayout gbl_setime = new GridBagLayout();
-		gbl_setime.columnWidths = new int[]{130, 124, 127, 0};
+		gbl_setime.columnWidths = new int[]{130, 124, 119, 0};
 		gbl_setime.rowHeights = new int[]{39, 0};
 		gbl_setime.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_setime.rowWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -158,7 +168,7 @@ public class Calendar2 extends JFrame{
 		gbc_invitation.gridy = 2;
 		setting.add(invitation, gbc_invitation);
 		GridBagLayout gbl_invitation = new GridBagLayout();
-		gbl_invitation.columnWidths = new int[]{288, 85, 0};
+		gbl_invitation.columnWidths = new int[]{288, 84, 0};
 		gbl_invitation.rowHeights = new int[]{46, 0};
 		gbl_invitation.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_invitation.rowWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -189,10 +199,10 @@ public class Calendar2 extends JFrame{
 		GridBagConstraints gbc_memo = new GridBagConstraints();
 		gbc_memo.fill = GridBagConstraints.BOTH;
 		gbc_memo.gridx = 0;
-		gbc_memo.gridy = 1;
-		getContentPane().add(memo, gbc_memo);
+		gbc_memo.gridy = 2;
+		add(memo, gbc_memo);
 		GridBagLayout gbl_memo = new GridBagLayout();
-		gbl_memo.columnWidths = new int[]{314, 68, 0};
+		gbl_memo.columnWidths = new int[]{301, 68, 0};
 		gbl_memo.rowHeights = new int[]{33, 502, 0};
 		gbl_memo.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_memo.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
@@ -228,8 +238,12 @@ public class Calendar2 extends JFrame{
 		contents.setBackground(bgColor);
 		
 	}
+
 	public static void main(String[] args) {
-		new Calendar2();
+	JFrame temp = new JFrame();
+	temp.getContentPane().add(new Calendar2());
+	temp.setVisible(true);
 	}
+	
 }
 	
