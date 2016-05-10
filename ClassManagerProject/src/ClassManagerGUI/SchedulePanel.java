@@ -49,8 +49,8 @@ public class SchedulePanel extends JPanel {
 		basePanel.setBackground(bgColor);
 		add(basePanel, BorderLayout.CENTER);
 		GridBagLayout gbl_basePanel = new GridBagLayout();
-		gbl_basePanel.columnWidths = new int[] { 30, 150, 30, 0 };
-		gbl_basePanel.rowHeights = new int[] { 30, 40, 53, 53, 30, 0 };
+		gbl_basePanel.columnWidths = new int[] { 20, 150, 20, 0 };
+		gbl_basePanel.rowHeights = new int[] { 20, 40, 53, 53, 20, 0 };
 		gbl_basePanel.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_basePanel.rowWeights = new double[] { 0.0, 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		basePanel.setLayout(gbl_basePanel);
@@ -196,7 +196,6 @@ public class SchedulePanel extends JPanel {
 				super();
 				setBorder(emptyBorder);
 				setFocusPainted(false);
-				setContentAreaFilled(false);
 				setOpaque(true);
 				setForeground(titleColor);
 				setBackground(bgColor);
