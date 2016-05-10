@@ -1,4 +1,4 @@
-package temp;
+package nam;
 import java.awt.Color;
 
 import javax.swing.JFrame;
@@ -102,6 +102,7 @@ JFrame frame = new JFrame();
 			panel_2.setBackground(background);
 			JTextArea textArea = new JTextArea();
 			panel_2.add(textArea);
+			textArea.setBackground(new Color(253, 245, 230));
 			
 			JPanel panel_3 = new JPanel();
 			panel_3.setLayout(null);
@@ -116,6 +117,7 @@ JFrame frame = new JFrame();
 			textField.setBounds(0, 10, 252, 33);
 			panel_3.add(textField);
 			textField.setColumns(10);
+			textArea.setEditable(false);
 			
 			JButton btnNewButton_1 = new MyButton("전송");
 			btnNewButton_1.setBounds(288, 10, 62, 33);
