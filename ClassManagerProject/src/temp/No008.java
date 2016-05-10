@@ -1,4 +1,6 @@
-package nam;
+package temp;
+
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;

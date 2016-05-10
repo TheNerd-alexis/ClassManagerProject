@@ -1,4 +1,4 @@
-package nam;
+package temp;
 import java.awt.Color;
 
 import javax.swing.JFrame;

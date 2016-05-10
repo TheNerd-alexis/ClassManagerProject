@@ -1,4 +1,4 @@
-package nam;
+package temp;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
