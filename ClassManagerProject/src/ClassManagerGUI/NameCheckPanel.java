@@ -1,4 +1,4 @@
-package nam;
+package ClassManagerGUI;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
