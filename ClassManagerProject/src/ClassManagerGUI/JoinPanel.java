@@ -138,22 +138,6 @@ public class JoinPanel extends JPanel {
 		PWPanel1.setLayout(new BorderLayout(0, 0));
 
 		passwordField1 = new JPasswordField();
-		passwordField1.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				passwordField1.setText("");
-				passwordField1.setEchoChar('*');
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (String.valueOf(passwordField1.getPassword()).equals("")); 
-				{
-					passwordField1.setEchoChar((char) 0);
-					passwordField1.setText("비밀번호 입력");
-				}
-			}
-		});
 		passwordField1.setText("비밀번호 입력");
 		passwordField1.setEchoChar((char) 0);
 		PWPanel1.add(passwordField1);
@@ -172,16 +156,51 @@ public class JoinPanel extends JPanel {
 		joinContentPanel.add(PWPanel2, gbc_PWPanel2);
 		PWPanel2.setLayout(new BorderLayout(0, 0));
 
-		passwordField2 = new JPasswordField();
+		passwordField2 = new JPasswordField("비밀번호 재입력");
+		passwordField2.setForeground(fontColor);
+		passwordField2.setEchoChar((char) 0);
+		passwordField2.setBorder(new LineBorder(borderColor));
+		passwordField2.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
 		PWPanel2.add(passwordField2, BorderLayout.CENTER);
-
-		JTextField lblTextField2 = new JTextField("비밀번호 재입력");
-		lblTextField2.setForeground(fontColor);
-		lblTextField2.setBorder(new LineBorder(borderColor));
-		lblTextField2.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
-		PWPanel2.add(lblTextField2, BorderLayout.CENTER);
-		JComboBox pwHintCombo = new JComboBox(PWQ);
 		
+
+		passwordField1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (!passwordField1.getPassword().equals("비밀번호 입력")) {
+					passwordField1.setText("");
+					passwordField1.setEchoChar('*');
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (passwordField1.getPassword().length < 1) {
+					passwordField1.setText("비밀번호 입력");
+					passwordField1.setEchoChar((char) 0);
+				}
+			}
+		});
+		
+		passwordField2.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (!passwordField2.getPassword().equals("비밀번호 재입력")) {
+					passwordField2.setText("");
+					passwordField2.setEchoChar('*');
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (passwordField2.getPassword().length < 1) {
+					passwordField2.setText("비밀번호 재입력");
+					passwordField2.setEchoChar((char) 0);
+				}
+			}
+		});
+		
+		JComboBox pwHintCombo = new JComboBox(PWQ);
 		pwHintCombo.setBorder(new LineBorder(borderColor));
 		pwHintCombo.setBackground(bgColor);
 		pwHintCombo.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
