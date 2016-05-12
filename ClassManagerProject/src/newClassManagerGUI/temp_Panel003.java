@@ -51,9 +51,14 @@ public class temp_Panel003 extends JPanel {
 		TemperaturePanel.setLayout(null);
 		bgPanel.add(TemperaturePanel);
 		
-		eventNoticeLabel = new JLabel("이벤트 알림 00");
+		eventNoticeLabel = new JLabel("이벤트 알림");
 		eventNoticeLabel.setBounds(18,181,112,34);
 		eventNoticeLabel.setHorizontalAlignment(JLabel.CENTER);
+		bgPanel.add(eventNoticeLabel);
+		
+		eventNoticeLabel = new JLabel("00");
+		eventNoticeLabel.setBounds(110,181,112,34);
+		eventNoticeLabel.setHorizontalAlignment(JLabel.LEFT);
 		bgPanel.add(eventNoticeLabel);
 		
 		eventListBtn01 = new CMButton("오늘 저녁 치맥 콜 ?");
@@ -67,17 +72,17 @@ public class temp_Panel003 extends JPanel {
 		bgPanel.add(calendarTitleLabel);
 		
 		calendarListBtn01 = new CMButton("- 정보처리 기사 시험 D-4");
-		calendarListBtn01.setBounds(141,247,229,20);
+		calendarListBtn01.setBounds(141,245,229,17);
 		calendarListBtn01.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn01);
 		
 		calendarListBtn02 = new CMButton("- 프로젝트 스토리보드 작성 D-3 남았습니다.");
-		calendarListBtn02.setBounds(141,267,229,20);
+		calendarListBtn02.setBounds(141,265,229,17);
 		calendarListBtn02.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn02);
 	
 		calendarListBtn03 = new CMButton("- GUI 제작 예정");
-		calendarListBtn03.setBounds(141,287,229,20);
+		calendarListBtn03.setBounds(141,285,229,17);
 		calendarListBtn03.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn03);
 		
@@ -111,7 +116,6 @@ public class temp_Panel003 extends JPanel {
 		foodMenuPanel.setBounds(32,600,338,120);
 		foodMenuPanel.setLayout(null);
 		bgPanel.add(foodMenuPanel);
-		
 		
 
 	}
