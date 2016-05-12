@@ -61,7 +61,7 @@ public class temp_Panel003 extends JPanel {
 		bgPanel.add(eventNoticeLabel);
 		
 		eventListBtn01 = new CMButton("오늘 저녁 치맥 콜 ?");
-		eventListBtn01.setBounds(148,182,233,33);
+		eventListBtn01.setBounds(137,178,255,45);
 		eventListBtn01.setHorizontalAlignment(JButton.CENTER);
 		bgPanel.add(eventListBtn01);
 		
@@ -93,19 +93,22 @@ public class temp_Panel003 extends JPanel {
 		
 		
 		communityChatListBtn01 = new CMButton("우리반 IOT");
-		communityChatListBtn01.setBounds(144,349,204,45);
+		communityChatListBtn01.setBounds(136,343,241,58);
+		//setBounds(144,349,227,48);
 		communityChatListBtn01.setVerticalAlignment(JButton.CENTER);
 		communityChatListBtn01.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(communityChatListBtn01);
 		
 		communityChatListBtn02 = new CMButton("웹 클래스 친구네 방");
-		communityChatListBtn02.setBounds(144,414,204,45);
+		communityChatListBtn02.setBounds(136,410,241,58);
+		//setBounds(144,415,227,48);
 		communityChatListBtn02.setVerticalAlignment(JButton.CENTER);
 		communityChatListBtn02.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(communityChatListBtn02);
 		
 		newCreateChatRoomBtn = new CMButton("+ 새로운 채팅방 개설");
-		newCreateChatRoomBtn.setBounds(145,482,225,48);
+		newCreateChatRoomBtn.setBounds(136,478,241,58);
+		//setBounds(144,484,227,48);
 		newCreateChatRoomBtn.setVerticalAlignment(JButton.CENTER);
 		newCreateChatRoomBtn.setHorizontalAlignment(JButton.CENTER);
 		bgPanel.add(newCreateChatRoomBtn);
