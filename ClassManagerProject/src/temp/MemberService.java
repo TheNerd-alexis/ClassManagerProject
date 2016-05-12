@@ -2,11 +2,17 @@ package temp;
 
 import java.util.List;
 
-public class Service {
-	String id;
-	String pw;
-	MemberDAO  memberDAO = MemberDAO.getInstance();
-	Member member;
+public class MemberService {
+	private MemberDAO  memberDAO = MemberDAO.getInstance();
+	private static MemberService instance;
+	private Member member;
+		
+	public static MemberService getInstance() {
+		
+		if (instance == null)
+			instance = new MemberService();
+		return instance;
+	}
 	
 	public boolean loginProcess(String id, String pw){
 		boolean isLogin = false;
@@ -42,7 +48,8 @@ public class Service {
 
 	public boolean joinProecess(Member member){
 		boolean isJoin = false;
-		Member memberInDAO = memberDAO.selectMemberByID(member.getId());
+		Member memberInDAO = null;
+		memberInDAO = memberDAO.selectMemberByID(member.getId());
 		if(memberInDAO == null){
 			memberDAO.insertMember(member);
 			isJoin = true;
