@@ -71,17 +71,17 @@ public class temp_Panel003 extends JPanel {
 		bgPanel.add(calendarTitleLabel);
 		
 		calendarListBtn01 = new CMButton("- 정보처리 기사 시험 D-4");
-		calendarListBtn01.setBounds(141,245,229,17);
+		calendarListBtn01.setBounds(137,248,240,17);
 		calendarListBtn01.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn01);
 		
 		calendarListBtn02 = new CMButton("- 프로젝트 스토리보드 작성 D-3 남았습니다.");
-		calendarListBtn02.setBounds(141,265,229,17);
+		calendarListBtn02.setBounds(137,265,240,17);
 		calendarListBtn02.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn02);
 	
 		calendarListBtn03 = new CMButton("- GUI 제작 예정");
-		calendarListBtn03.setBounds(141,285,229,17);
+		calendarListBtn03.setBounds(137,282,240,17);
 		calendarListBtn03.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(calendarListBtn03);
 		
