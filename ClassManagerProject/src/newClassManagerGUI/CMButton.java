@@ -21,7 +21,7 @@ public class CMButton extends JButton{
 		setFont(defaultFont);
 		setForeground(defaultColor);
 		
-		addActionListener(new MouseAdapter() {
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				setOpaque(true);
