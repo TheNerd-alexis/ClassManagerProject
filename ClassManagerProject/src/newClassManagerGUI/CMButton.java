@@ -1,14 +1,11 @@
 package newClassManagerGUI;
 
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
 
 public class CMButton extends JButton{
 	
@@ -23,6 +20,20 @@ public class CMButton extends JButton{
 		setContentAreaFilled(false);
 		setFont(defaultFont);
 		setForeground(defaultColor);
+		
+		addActionListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				setOpaque(true);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+				setOpaque(false);
+			}
+		});
 	}
 	
 	CMButton(String text){
