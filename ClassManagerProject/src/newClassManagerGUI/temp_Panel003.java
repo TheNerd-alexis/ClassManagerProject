@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class temp_Panel003 extends JPanel {
-	
 	ImageIcon img = new ImageIcon("img/003_resize.jpg");
 	
 	JPanel todayWeatherPanel; // out
@@ -30,7 +29,7 @@ public class temp_Panel003 extends JPanel {
 	CMButton communityChatListBtn02; // out
 	CMButton communityChatListBtn03; // out
 	
-	CMButton createChatRoomBtn; // in
+	CMButton newCreateChatRoomBtn; // in
 	
 	JPanel foodMenuPanel; // out
 	
@@ -105,11 +104,11 @@ public class temp_Panel003 extends JPanel {
 		communityChatListBtn02.setHorizontalAlignment(JButton.LEFT);
 		bgPanel.add(communityChatListBtn02);
 		
-		createChatRoomBtn = new CMButton("+ 새로운 채팅방 개설");
-		createChatRoomBtn.setBounds(145,482,225,48);
-		createChatRoomBtn.setVerticalAlignment(JButton.CENTER);
-		createChatRoomBtn.setHorizontalAlignment(JButton.CENTER);
-		bgPanel.add(createChatRoomBtn);
+		newCreateChatRoomBtn = new CMButton("+ 새로운 채팅방 개설");
+		newCreateChatRoomBtn.setBounds(145,482,225,48);
+		newCreateChatRoomBtn.setVerticalAlignment(JButton.CENTER);
+		newCreateChatRoomBtn.setHorizontalAlignment(JButton.CENTER);
+		bgPanel.add(newCreateChatRoomBtn);
 		
 		
 		foodMenuPanel = new JPanel();
