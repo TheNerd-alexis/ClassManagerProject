@@ -9,9 +9,11 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import newClassManagerGUI.CMListPanel;
+
 public class EventMainPanel extends JPanel {
 	TitlePanel titlePanel;
-	JListForm eventListPanel;
+	CMListPanel eventListPanel;
 	
 	EventMainPanel(){
 		setLayout(new BorderLayout(0, 0));		
@@ -27,7 +29,7 @@ public class EventMainPanel extends JPanel {
 		gbl_basePanel.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		basePanel.setLayout(gbl_basePanel);
 		
-		eventListPanel = new JListForm();
+		eventListPanel = new CMListPanel();
 		GridBagConstraints gbc_eventListPanel = new GridBagConstraints();
 		gbc_eventListPanel.fill = GridBagConstraints.BOTH;
 		gbc_eventListPanel.insets = new Insets(0, 0, 5, 5);

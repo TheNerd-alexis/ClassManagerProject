@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+
+import newClassManagerGUI.CMListPanel;
+
 import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import java.awt.Component;
@@ -54,7 +57,7 @@ public class EventPanel extends JPanel {
 		temp.setSize(400, 750);
 		TitlePanel titlePanel = new TitlePanel("CM", "이벤트 알림", "닫기");
 		temp.getContentPane().add(titlePanel,BorderLayout.NORTH);
-		JListForm eventListPanel = new JListForm();
+		CMListPanel eventListPanel = new CMListPanel();
 		eventListPanel.add(new EventPanel(1,"오늘 수업끝나고 치맥??"));
 		eventListPanel.add(new EventPanel(0,"19일 임재현 생일"));
 		eventListPanel.add(new EventPanel(0,"19일 임재현 생일"));

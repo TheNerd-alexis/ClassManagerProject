@@ -16,9 +16,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import newClassManagerGUI.CMListPanel;
+
 public class EventSearchPanel extends JPanel {
 	private JTextField textField;
-	JListForm listPanel;
+	CMListPanel listPanel;
 
 	public EventSearchPanel() {
 		setMaximumSize(new Dimension(400-10, 750-10));
@@ -67,7 +69,7 @@ public class EventSearchPanel extends JPanel {
 		panel_2.add(textField);
 		textField.setColumns(24);
 		
-		listPanel = new JListForm();
+		listPanel = new CMListPanel();
 		panel_1.add(listPanel, BorderLayout.CENTER);
 	}
 	

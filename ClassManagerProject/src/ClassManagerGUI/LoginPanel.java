@@ -86,11 +86,12 @@ public class LoginPanel extends JPanel {
 
 		passwordField = new JPasswordField();
 		passwordField.setAutoscrolls(false);
-		passwordField.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
+		passwordField.setFont(new Font("나눔고딕코딩", Font.PLAIN, 20));
 		passwordField.setBorder(new LineBorder(borderColor));
 		panelIdPw.add(passwordField);
 		passwordField.setColumns(10);
 		passwordField.setToolTipText("password");
+		passwordField.setEchoChar('*');
 
 		JPanel loginBtnPanel = new JPanel();
 		loginBtnPanel.setBackground(background);

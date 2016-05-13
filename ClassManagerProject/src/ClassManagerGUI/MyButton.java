@@ -1,12 +1,9 @@
 package ClassManagerGUI;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class MyButton extends JButton {
 	private Color bgColor = new Color(255, 254, 239);

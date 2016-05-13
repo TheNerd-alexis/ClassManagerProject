@@ -5,6 +5,9 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import newClassManagerGUI.CMListPanel;
+
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -12,7 +15,7 @@ import java.awt.Insets;
 
 public class ClassBoxMainPanel extends JPanel{
 	TitlePanel titlePanel;
-	JListForm classBoxListPanel;
+	CMListPanel classBoxListPanel;
 	
 	ClassBoxMainPanel(){
 		setLayout(new BorderLayout(0, 0));		
@@ -28,7 +31,7 @@ public class ClassBoxMainPanel extends JPanel{
 		gbl_basePanel.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		basePanel.setLayout(gbl_basePanel);
 		
-		classBoxListPanel = new JListForm();
+		classBoxListPanel = new CMListPanel();
 		GridBagConstraints gbc_classBoxListPanel = new GridBagConstraints();
 		gbc_classBoxListPanel.fill = GridBagConstraints.BOTH;
 		gbc_classBoxListPanel.insets = new Insets(0, 0, 5, 5);
