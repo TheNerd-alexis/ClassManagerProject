@@ -3,16 +3,18 @@ package newClassManagerGUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class ClassManagerPanel extends JPanel {
 
-	ImageIcon img;
+	private ImageIcon orgimg;
+	public ImageIcon img;
 
 	public ClassManagerPanel(ImageIcon img) {
 		addMouseListener(new MouseAdapter() {
@@ -42,6 +44,7 @@ public class ClassManagerPanel extends JPanel {
 			}
 
 		});
+		this.orgimg = img;
 		this.img = img;
 		Dimension imgsize = new Dimension(img.getIconWidth(), img.getIconHeight());
 		this.setLayout(null);
@@ -56,15 +59,30 @@ public class ClassManagerPanel extends JPanel {
 		arg0.drawImage(img.getImage(), 0, 0, null);
 		super.paintComponent(arg0);
 	}
-
-	public static void main(String[] args) {
-		ImageIcon img = new ImageIcon("img/001_resize.jpg");
-		JFrame temp = new JFrame();
-		temp.add(new ClassManagerPanel(img), BorderLayout.CENTER);
-		temp.setVisible(true);
-		temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		temp.pack();
-		temp.setLocationRelativeTo(null);
+	
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		Image resultImg = orgimg.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+		img = new ImageIcon(resultImg); //Image로 ImageIcon 생성
+		super.setBounds(x, y, width, height);
+		repaint();
 	}
 
+	public static void constructGUI(JPanel bgPanel) {
+        JFrame frame = new JFrame("TestFrame");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        bgPanel.setPreferredSize(new Dimension(400, 750));
+        frame.add(bgPanel, BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    }
+	
+	public static void main(String[] args) {
+		ImageIcon img = new ImageIcon("img/001_resize.jpg");
+		ClassManagerPanel test = new ClassManagerPanel(img);
+		test.setBounds(0,0,300,500);
+		ClassManagerPanel.constructGUI(test); 
+	}
 }
