@@ -1,12 +1,13 @@
 package DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import Model.Chat;
 
 public class ChatDao {
 	private Connection conn;
@@ -23,21 +24,21 @@ public class ChatDao {
 		this.conn = connection;
 	}
 
-	public int insertChat(String RTITLE, String JID, String COME) {
-		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?);";
+	public int insertChat(Chat chat) {
+		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?)";
 		PreparedStatement psm = null;
 		try {
 			psm = conn.prepareStatement(sql);
-			psm.setString(1, RTITLE);
-			psm.setString(2, JID);
-			psm.setDate(3, Date.valueOf(COME));
+			psm.setString(1, chat.getRtitle());
+			psm.setString(2, chat.getJid());
+			psm.setDate(3, chat.getCome());
 			psm.executeUpdate();
-			/** insertChat succeed */
+			/** DB chat 추가 성공 */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** insertChat failed */
+			/** DB chat 추가 실패 */
 			return 2;
 		} finally {
 			try {
@@ -50,133 +51,65 @@ public class ChatDao {
 		}
 	}
 
-	public int deleteChat(String RTITLE) {
-		String sql = "DELETE FROM " + DBName + " WHERE RTITLE = ?";
-		PreparedStatement psm = null;
-
-		try {
-			psm = conn.prepareStatement(sql);
-			psm.setString(1, RTITLE);
-			psm.executeUpdate();
-			/** deleteChat succeed */
-			return 1;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			/** deleteChat failed */
-			return 2;
-		}
-	}
-
-	public int deleteJidChat(String RTITLE, String JID) {
+	public int deleteChat(Chat chat) {
 		String sql = "DELETE FROM " + DBName + " WHERE RTITLE = ? AND JID = ?";
 		PreparedStatement psm = null;
 
 		try {
 			psm = conn.prepareStatement(sql);
-			psm.setString(1, RTITLE);
-			psm.setString(2, JID);
+			psm.setString(1, chat.getRtitle());
+			psm.setString(2, chat.getJid());
 			psm.executeUpdate();
-			/** deleteJidChat succeed */
+			/** DB chat 삭제 성공 */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** deleteJidChat failed */
+			/** DB chat 삭제 실패 */
 			return 2;
+		} finally {
+			try {
+				if (psm != null && !psm.isClosed())
+					psm.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public List<Chat> selectJid(String RTITLE) {
-		String sql = "SELECT * from " + DBName + " WHERE RTITLE = ?";
+	public List<Chat> selectChat(Chat chat) {
+		String sql = "SELECT * from " + DBName + " WHERE RTITLE LIKE ? AND JID LIKE ?";
 		PreparedStatement psm = null;
 		ResultSet rs = null;
 		List<Chat> chatList = new ArrayList<Chat>();
 
 		try {
 			psm = conn.prepareStatement(sql);
-			psm.setString(1, RTITLE);
+			psm.setString(1, chat.getRtitle() == null ? "%" : chat.getRtitle());
+			psm.setString(2, chat.getJid() == null ? "%" : chat.getJid());
 			rs = psm.executeQuery();
 			while (rs.next()) {
-				Chat chat = new Chat();
-				chat.setRtitle(rs.getString("RTITLE"));
-				chat.setJid(rs.getString("JID"));
-				chat.setCome(rs.getDate("COME"));
-				chatList.add(chat);
+				Chat temp = new Chat();
+				temp.setRtitle(rs.getString("RTITLE"));
+				temp.setJid(rs.getString("JID"));
+				temp.setCome(rs.getDate("COME"));
+				chatList.add(temp);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return chatList;
-	}
-
-	public List<String> selectAllRtitle() {
-		String sql = "SELECT RTITLE from " + DBName;
-		PreparedStatement psm = null;
-		ResultSet rs = null;
-		List<String> chatList = new ArrayList<String>();
-
-		try {
-			psm = conn.prepareStatement(sql);
-			rs = psm.executeQuery();
-			while (rs.next()) {
-				chatList.add(rs.getString("RTITLE"));
+		} finally {
+			try {
+				if (psm != null && !psm.isClosed())
+					psm.close();
+				if (rs != null && !rs.isClosed())
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return chatList;
-	}
-	
-	public List<String> selectJidRtitle(String JID) {
-		String sql = "SELECT RTITLE from " + DBName + "WHERE JID = ?";
-		PreparedStatement psm = null;
-		ResultSet rs = null;
-		List<String> chatList = new ArrayList<String>();
-
-		try {
-			psm = conn.prepareStatement(sql);
-			psm.setString(1, JID);
-			rs = psm.executeQuery();
-			while (rs.next()) {
-				chatList.add(rs.getString("RTITLE"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return chatList;
-	}
-}
-
-class Chat {
-	private String RTITLE;
-	private String JID;
-	private Date COME;
-
-	public String getJid() {
-		return JID;
-	}
-
-	String getRtitle() {
-		return RTITLE;
-	}
-
-	void setRtitle(String RTITLE) {
-		this.RTITLE = RTITLE;
-	}
-
-	public void setJid(String JID) {
-		this.JID = JID;
-	}
-
-	public Date getCome() {
-		return COME;
-	}
-
-	public void setCome(Date COME) {
-		this.COME = COME;
 	}
 }
