@@ -124,11 +124,6 @@ public class Panel002 extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		JFrame temp = new JFrame();
-		temp.getContentPane().add(new Panel002(), BorderLayout.CENTER);
-		temp.setVisible(true);
-		temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		temp.pack();
-		temp.setLocationRelativeTo(null);
+		ClassManagerPanel.constructGUI(new Panel002());
 	}
 }
