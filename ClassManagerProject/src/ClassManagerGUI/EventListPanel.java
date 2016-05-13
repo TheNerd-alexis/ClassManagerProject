@@ -2,15 +2,18 @@ package ClassManagerGUI;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import newClassManagerGUI.CMListPanel;
+
 import java.awt.BorderLayout;
 
 public class EventListPanel extends JPanel {
-	JListForm<EventPanel> eventList;
+	CMListPanel<EventPanel> eventList;
 	EventListPanel() {
 		setLayout(new BorderLayout(0, 0));
 		TitlePanel titlePanel = new TitlePanel("CM","이벤트알림","닫기");
 		add(titlePanel,BorderLayout.NORTH);
-		eventList = new JListForm<EventPanel>();
+		eventList = new CMListPanel<EventPanel>();
 		add(eventList);
 	}
 
