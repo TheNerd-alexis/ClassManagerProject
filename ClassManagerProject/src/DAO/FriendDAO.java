@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Friend;
+
 public class FriendDAO {
 	private Connection connection;
 
@@ -26,28 +28,27 @@ public class FriendDAO {
 			new FriendDAO(connection);
 		return instance;
 	}
-
 	/**
-	 * MID의 친구로 FID를 추가
+	 * friend DB 자료 추가
 	 * 
-	 * @param MID
-	 * @param FID
-	 * @return 1 = insert friend succeed, 2 = not existed friend
+	 * @param friend
+	 * @return 1 = 친구 정보 추가 성공<br>
+	 *         2 = 친구 정보 추가 실패<br>
 	 */
-	public int insertFriend(String MID, String FID) {
+	public int insertFriend(Friend friend) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?);";
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, MID);
-			statement.setString(2, FID);
+			statement.setString(1, friend.getMID());
+			statement.setString(2, friend.getFID());
 			statement.executeUpdate();
-			/** insertFriend succeed */
+			/** 친구 정보 입력 성공 */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** insertFriend failed */
+			/** 친구 정보 입력 실패 */
 			return 2;
 		} finally {
 			try {
@@ -60,27 +61,18 @@ public class FriendDAO {
 		}
 	}
 
-	/**
-	 * MID의 친구 중 FID를 삭제
-	 * 
-	 * @param MID
-	 * @param FID
-	 * @return 1 = delete friend succeed, 2 = failed
-	 */
-	public int deleteFriend(String MID, String FID) {
+	public int deleteFriend(Friend friend) {
 		String sql = "DELETE FROM " + DBName + " WHERE MID = ? AND FID = ?;";
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, MID);
-			statement.setString(2, FID);
+			statement.setString(1, friend.getMID());
+			statement.setString(2, friend.getFID());
 			statement.executeUpdate();
-			/** delete friend succeed */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** delete friend failed */
 			return 2;
 		} finally {
 			try {
@@ -93,56 +85,23 @@ public class FriendDAO {
 		}
 	}
 
-	/**
-	 * MID의 친구 중 FID가 있는지 확인
-	 * @param MID
-	 * @param FID
-	 * @return true = FID is MID's friend, false = is not
-	 */
-	public Boolean isFriend(String MID, String FID) {
-		String sql = "SELECT FID FROM " + DBName + " WHERE MID = ? AND FID = ?;";
+	
+	public List<Friend> selectFriend(Friend friend) {
+		String sql = "SELECT FID FROM " + DBName + "WHERE MID LIKE ? AND FID LIKE ?";
 		PreparedStatement statement = null;
 		ResultSet temp = null;
-		Boolean isFriend = false;
+		List<Friend> friendList = new ArrayList<Friend>();
 
 		try {
-			statement.setString(1, MID);
-			statement.setString(2, FID);
-			temp = statement.executeQuery();
-			if (temp.next())
-				isFriend = true;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (statement != null || !statement.isClosed())
-					statement.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return isFriend;
-	}
-	
-	/**
-	 * MID의 친구 목록을 출력
-	 * @param MID
-	 * @return List<String>
-	 */
-	public List<String> selectAllFriends(String MID){
-		String sql = "SELECT FID FROM "+DBName + "WHERE MID = ?";
-		PreparedStatement statement = null;
-		ResultSet temp = null;
-		List<String> friendList = new ArrayList<String>();
-		
-		try {
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, MID);
+			statement.setString(1, friend.getMID() == null ? "%" : friend.getFID());
+			statement.setString(2, friend.getFID() == null ? "%" : friend.getMID());
 			temp = statement.executeQuery();
-			while(temp.next()){
-				friendList.add(temp.getString("FID"));
+			while (temp.next()) {
+				Friend tempFriend = new Friend();
+				tempFriend.setMID(temp.getString("MID"));
+				tempFriend.setFID(temp.getString("FID"));
+				friendList.add(tempFriend);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

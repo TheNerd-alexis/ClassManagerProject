@@ -5,8 +5,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import Model.Dch;
 
 public class DchDAO {
 	public static DchDAO instance = null;
@@ -19,7 +22,7 @@ public class DchDAO {
 
 	/**
 	 * @param connection
-	 * @return DCHdbDAO
+	 * @return DchdbDAO
 	 */
 	public static DchDAO getInstance(Connection connection) {
 		if (instance == null)
@@ -28,33 +31,32 @@ public class DchDAO {
 	}
 
 	/**
-	 * MID의 date attendance를 수정
+	 * dch DB 자료 추가
 	 * 
-	 * @param MID
-	 * @param date
-	 * @param attendance
-	 * @return 1 = insert DCH succeed, 2 = failed
+	 * @see {@link Dch}
+	 * @param dch
+	 * @return 1 = 출석 정보 추가 성공<br>
+	 *         2 = 출석 정보 추가 실패<br>
 	 */
-	public int insertDCH(String MID, String date, Boolean attendance) {
+	public int insertDch(Dch dch) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?);";
-		Date dchdate = Date.valueOf(date);
 		PreparedStatement statement = null;
 
 		try {
-			statement.setString(1, MID);
-			statement.setDate(2, dchdate);
-			statement.setBoolean(3, attendance);
+			statement.setString(1, dch.getMID());
+			statement.setDate(2, dch.getATTENDDATE());
+			statement.setInt(3, dch.getATTENDANCE());
 			statement.executeUpdate();
-			/** insertDCH succeed */
+			/** 출석 정보 입력 성공 */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** insertDCH failed */
+			/** 출석 정보 입력 실패 */
 			return 2;
 		} finally {
 			try {
-				if (statement != null || !statement.isClosed())
+				if (statement != null && !statement.isClosed())
 					statement.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -63,34 +65,26 @@ public class DchDAO {
 		}
 	}
 
-	/**
-	 * MID의 date attendance를 수정
-	 * 
-	 * @param MID
-	 * @param date
-	 * @param attendance
-	 * @return 1 = modify DCH state succeed, 2 = failed
-	 */
-	public int modifiedDCH(String MID, String date, Boolean attendance) {
-		String sql = "UPDATE " + DBName + " ATTENDANCE = ? WHERE MID = ? AND ATTENDDATE = ?;";
-		Date dchdate = Date.valueOf(date);
+	public int updateDch(Dch newDch, Dch dch) {
+		String sql = "UPDATE " + DBName + " SET ATTENDANCE = ?, ATTENDDATE = ?, MID = ? "
+				+ "WHERE MID = ? AND ATTENDDATE = ?";
 		PreparedStatement statement = null;
 
 		try {
-			statement.setBoolean(1, attendance);
-			statement.setString(2, MID);
-			statement.setDate(3, dchdate);
+			statement.setInt(1, newDch.getATTENDANCE());
+			statement.setDate(2, newDch.getATTENDDATE());
+			statement.setString(3, newDch.getMID());
+			statement.setString(4, dch.getMID());
+			statement.setDate(5, dch.getATTENDDATE());
 			statement.executeUpdate();
-			/** insertDCH succeed */
 			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			/** insertDCH failed */
 			return 2;
 		} finally {
 			try {
-				if (statement != null || !statement.isClosed())
+				if (statement != null && !statement.isClosed())
 					statement.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -99,81 +93,33 @@ public class DchDAO {
 		}
 	}
 
-	/**
-	 * MID의 date 출석 여부 출력
-	 * 
-	 * @param MID
-	 * @param date
-	 * @return true = 출석, false = 결석
-	 */
-	public DCH selectDCH(String MID, String date) {
-		String sql = "SELECT ATTENDANCE FROM " + DBName + " WHERE MID = ? AND ATTENDDATE = ?;";
-		Date dchdate = Date.valueOf(date);
+	public List<Dch> selectDch(Dch dch) {
+		String sql = "SELECT * FROM " + DBName + " WHERE MID LIKE ?";
+		if (dch.getATTENDDATE() != null)
+			sql += " AND ATTENDDATE = ?";
 		PreparedStatement statement = null;
 		ResultSet temp = null;
-		DCH dch = null;
+		List<Dch> result = new ArrayList<Dch>();
 
 		try {
-			statement.setString(1, MID);
-			statement.setDate(2, dchdate);
+			statement.setString(1, dch.getMID());
+			if (dch.getATTENDDATE() != null)
+				statement.setDate(1, dch.getATTENDDATE());
 			temp = statement.executeQuery();
-			/** selectDCH succeed */
+
 			if (temp.next()) {
-				dch = new DCH();
-				dch.setMID(temp.getString("MID"));
-				dch.setATTENDDATE(temp.getDate("ATTENDDATE"));
-				dch.setATTENDANCE(temp.getBoolean("ATTENDANCE"));
+				Dch tempDch = new Dch();
+				tempDch.setMID(temp.getString("MID"));
+				tempDch.setATTENDDATE(temp.getDate("ATTENDDATE"));
+				tempDch.setATTENDANCE(temp.getInt("ATTENDANCE"));
+				result.add(tempDch);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
-				if (statement != null || !statement.isClosed())
-					statement.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return dch;
-	}
-
-	/**
-	 * MID의 startDate부터 endDate까지의 출석여부
-	 * @param MID
-	 * @param startDate
-	 * @param endDate
-	 * @return true = 출석, false = 결석
-	 */
-	public List<DCH> selectDCH(String MID, String startDate, String endDate) {
-		String sql = "SELECT * FROM " + DBName + " WHERE MID = ? AND ATTENDDATE > ? AND ATTENDDATE <?;";
-		Date start = Date.valueOf(startDate);
-		Date end = Date.valueOf(endDate);
-
-		PreparedStatement statement = null;
-		ResultSet temp = null;
-		List<DCH> result = new ArrayList<DCH>();
-
-		try {
-			statement.setString(1, MID);
-			statement.setDate(2, start);
-			statement.setDate(3, end);
-			temp = statement.executeQuery();
-			/** selectDCH succeed */
-			while (temp.next()) {
-				DCH dch = new DCH();
-				dch.setMID(temp.getString("MID"));
-				dch.setATTENDANCE(temp.getBoolean("ATTENDANCE"));
-				dch.setATTENDDATE(temp.getDate("ATTENDDATE"));
-				result.add(dch);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (statement != null || !statement.isClosed())
+				if (statement != null && !statement.isClosed())
 					statement.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -182,38 +128,94 @@ public class DchDAO {
 		}
 		return result;
 	}
-}
 
-/**
- * Daily Check class <br>
- * [String MID, Date ATTENDDATE, Boolean ATTENDANCE]
- */
-class DCH {
-	private String MID;
-	private Date ATTENDDATE;
-	private Boolean ATTENDANCE;
+	public List<Dch> selectDch(Dch dch, Date startDate, Date endDate) {
+		String sql = "SELECT * FROM " + DBName + " WHERE MID LIKE ? AND ATTENDDATE > ? AND ATTENDDATE <?";
 
-	String getMID() {
-		return MID;
+		if (startDate == null) {
+			startDate = Date.valueOf("2016-01-01");
+		}
+		if (endDate == null) {
+			endDate = Date.valueOf(LocalDate.now());
+		}
+
+		PreparedStatement statement = null;
+		ResultSet temp = null;
+		List<Dch> result = new ArrayList<Dch>();
+
+		try {
+			statement.setString(1, dch.getMID() == null ? "%" : dch.getMID());
+			statement.setDate(2, startDate);
+			statement.setDate(3, endDate);
+			temp = statement.executeQuery();
+			while (temp.next()) {
+				Dch tempDch = new Dch();
+				tempDch.setMID(temp.getString("MID"));
+				tempDch.setATTENDANCE(temp.getInt("ATTENDANCE"));
+				tempDch.setATTENDDATE(temp.getDate("ATTENDDATE"));
+				result.add(tempDch);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null && !statement.isClosed())
+					statement.close();
+				if (temp != null && !temp.isClosed())
+					temp.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
-	void setMID(String mID) {
-		MID = mID;
-	}
+	public List<Dch> selectDchByDate(Dch dch, Date startDate, Date endDate) {
+		String sql = "SELECT * FROM " + DBName + " WHERE MID LIKE ? AND ATTENDDATE > ? AND ATTENDDATE <?";
+		if (dch.getATTENDANCE() != null)
+			sql += " AND ATTENDANCE = ?";
 
-	Date getATTENDDATE() {
-		return ATTENDDATE;
-	}
+		if (startDate == null) {
+			startDate = Date.valueOf("2016-01-01");
+		}
+		if (endDate == null) {
+			endDate = Date.valueOf(LocalDate.now());
+		}
 
-	void setATTENDDATE(Date aTTENDDATE) {
-		ATTENDDATE = aTTENDDATE;
-	}
+		PreparedStatement statement = null;
+		ResultSet temp = null;
+		List<Dch> result = new ArrayList<Dch>();
 
-	Boolean getATTENDANCE() {
-		return ATTENDANCE;
-	}
-
-	void setATTENDANCE(Boolean aTTENDANCE) {
-		ATTENDANCE = aTTENDANCE;
+		try {
+			statement.setString(1, dch.getMID() == null ? "%" : dch.getMID());
+			statement.setDate(2, startDate);
+			statement.setDate(3, endDate);
+			if (dch.getATTENDANCE() != null)
+				statement.setInt(4, dch.getATTENDANCE());
+			temp = statement.executeQuery();
+			while (temp.next()) {
+				Dch tempDch = new Dch();
+				tempDch.setMID(temp.getString("MID"));
+				tempDch.setATTENDANCE(temp.getInt("ATTENDANCE"));
+				tempDch.setATTENDDATE(temp.getDate("ATTENDDATE"));
+				result.add(tempDch);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null && !statement.isClosed())
+					statement.close();
+				if (temp != null && !temp.isClosed())
+					temp.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }
