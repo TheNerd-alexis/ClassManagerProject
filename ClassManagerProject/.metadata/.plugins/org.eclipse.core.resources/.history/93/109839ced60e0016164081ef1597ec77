@@ -1,0 +1,10 @@
+package MBTI;
+
+
+public class MBTI {
+public static void main(String[] args) {
+	
+	
+IE ie = new IE();
+}
+}
