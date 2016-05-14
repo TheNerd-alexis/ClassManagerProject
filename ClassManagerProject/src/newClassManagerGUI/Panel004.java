@@ -9,15 +9,15 @@ public class Panel004 extends JPanel {
 	ImageIcon img = new ImageIcon("img/004_resize.jpg");
 	Panel004(){
 		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
-//		setSize(img.getIconWidth(),img.getIconHeight());
+		setLayout(new BorderLayout(0,0));
 		add(bgPanel,BorderLayout.CENTER);
 		CMButton friendbtn = new CMButton("친구");
 		friendbtn.setBounds(8,61,190,49);
 		bgPanel.add(friendbtn);
 		CMListPanel list = new CMListPanel();
-		list.setBounds(9,123,386,617);
+		list.setBounds(8,122,393,613);
 		ClassManagerPanel temp = new ClassManagerPanel(new ImageIcon("img/7-1.jpg"));
-		list.addComponent(temp);
+		list.addComponent(new ClassManagerPanel(new ImageIcon("img/7-1.jpg")));
 		bgPanel.add(list);
 	}
 	
