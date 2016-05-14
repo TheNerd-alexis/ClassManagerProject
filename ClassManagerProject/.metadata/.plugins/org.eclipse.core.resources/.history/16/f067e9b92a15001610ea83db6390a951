@@ -1,0 +1,6 @@
+
+public class GuiTest {
+public static void main(String[] args) {
+	No008 no008 = new No008();
+}
+}

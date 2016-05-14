@@ -1,0 +1,62 @@
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JTextField;
+import javax.swing.JTabbedPane;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.JMenuBar;
+import java.awt.Panel;
+import java.awt.Canvas;
+import javax.swing.Box;
+import java.awt.CardLayout;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class No008 extends JFrame{
+	private final JPanel panel_1 = new JPanel();
+	private final JButton btnNewButton = new JButton("나가기");
+	private final JLabel lblNewLabel = new JLabel("채팅방개설");
+	private final JLabel lblNewLabel_1 = new JLabel("CM");
+	public No008() {
+		getContentPane().setBackground(new Color(255, 250, 240));
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 250, 240));
+		getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		panel_1.setBackground(new Color(105, 105, 105));
+		panel_1.setBounds(0, 0, 400, 29);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
+		btnNewButton.setForeground(new Color(105, 105, 105));
+		btnNewButton.setBackground(new Color(0, 0, 0));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(316, 0, 84, 29);
+		panel_1.add(btnNewButton);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBounds(136, 0, 99, 29);
+		panel_1.add(lblNewLabel);
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setBounds(0, 0, 99, 29);
+		panel_1.add(lblNewLabel_1);
+		setSize(400, 750);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setVisible(true);
+		setBackground(new Color(255, 250, 240));
+		setBackground(new Color(255, 250, 240));
+	}
+}

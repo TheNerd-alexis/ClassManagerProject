@@ -1,0 +1,19 @@
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+
+public class No008 extends JFrame{
+	public No008() {
+		setSize(400, 750);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setVisible(true);
+		setBackground(new Color(255, 250, 240));
+		
+	}
+
+	
+	
+}
