@@ -31,7 +31,6 @@ public class temp_Panel004 extends JPanel {
 		bgPanel.add(createChatRoomBtn);
 		
 		// insert img ..
-		// list
 		chatListPanel = new JPanel();
 		chatListPanel.setBounds(9,130,381,610);
 		chatListPanel.setLayout(null);
@@ -41,11 +40,6 @@ public class temp_Panel004 extends JPanel {
 	}
 	
 	public static void main(String[] args) {
-		JFrame temp = new JFrame();
-		temp.getContentPane().add(new temp_Panel004(), BorderLayout.CENTER);
-		temp.setVisible(true);
-		temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		temp.pack();
-		temp.setLocationRelativeTo(null);
+		ClassManagerPanel.constructGUI(new temp_Panel004());
 	}
 }
