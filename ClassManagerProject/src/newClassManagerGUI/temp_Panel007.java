@@ -9,8 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class temp_Panel007 extends JPanel {
-	ImageIcon img = new ImageIcon("img/007_resize.jpg"); // in
-	ImageIcon listImg = new ImageIcon("img/7-1.jpg"); // in // need resize img 7-1.jpg
 	
 	CMTextField inputFriendTextField; // out
 	CMButton searFriendListBtn; // in
@@ -21,8 +19,7 @@ public class temp_Panel007 extends JPanel {
 
 	public temp_Panel007() {
 		setLayout(new BorderLayout(0, 0));
-		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
-		setSize(img.getIconWidth(),img.getIconHeight());
+		ClassManagerPanel bgPanel = new ClassManagerPanel( new ImageIcon("img/007_resize.jpg") );
 		add(bgPanel, BorderLayout.CENTER);
 		
 		inputFriendTextField = new CMTextField("아이디, 이메일 주소 검 색");
@@ -30,7 +27,7 @@ public class temp_Panel007 extends JPanel {
 		inputFriendTextField.setHorizontalAlignment(JTextField.LEFT);
 		bgPanel.add(inputFriendTextField);
 		
-		searFriendListBtn = new CMButton("");
+		searFriendListBtn = new CMButton(null);
 		searFriendListBtn.setBounds(268,59,52,33);
 		bgPanel.add(searFriendListBtn);
 		
@@ -39,13 +36,13 @@ public class temp_Panel007 extends JPanel {
 //		friendListPanel.setBounds(20,118,359,610);
 //		friendListPanel.setLayout(null);
 //		bgPanel.add(friendListPanel);
-		
+//		
 //		searchFriendListPanel = new JPanel();
 //		searchFriendListPanel.setBounds(20,118,359,610);
 //		searchFriendListPanel.setLayout(null);
 //		bgPanel.add(searchFriendListPanel);
 		
-		listPanel = new ClassManagerPanel(listImg);
+		listPanel = new ClassManagerPanel( new ImageIcon("img/7-1.jpg") );
 		listPanel.setBounds(20,118,359,65);
 		bgPanel.add(listPanel);
 		
@@ -53,12 +50,6 @@ public class temp_Panel007 extends JPanel {
 	}
 	
 	public static void main(String[] args) {
-		JFrame temp = new JFrame();
-		temp.getContentPane().add(new temp_Panel007(), BorderLayout.CENTER);
-		temp.setVisible(true);
-		temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		temp.pack();
-		temp.setLocationRelativeTo(null);
+		ClassManagerPanel.constructGUI(new temp_Panel007());
 	}
-
 }
