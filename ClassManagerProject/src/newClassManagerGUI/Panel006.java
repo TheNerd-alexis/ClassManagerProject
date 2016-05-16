@@ -22,7 +22,7 @@ public class Panel006 extends JPanel {
 	CMTextField searchTextField; // out
 	JPanel resultFriendPanel; // out
 
-	CMListPanel listPanel;
+	CMListPanel listPanel006;
 
 	public Panel006() {
 		setLayout(new BorderLayout(0, 0));
@@ -39,13 +39,19 @@ public class Panel006 extends JPanel {
 		// resultFriendPanel.setLayout(null);
 		// bgPanel.add(resultFriendPanel);
 
-		listPanel = new CMListPanel();
-		listPanel.setBounds(31, 118, 340, 587);
+		listPanel006 = new CMListPanel();
+		listPanel006.setBounds(31, 118, 340, 587);
 
-		listPanel.addComponent(new miniPanel006("김현우 천재"));
-		listPanel.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김현우 천재"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		listPanel006.addComponent(new miniPanel006("김진호 빈수레"));
+		
 
-		bgPanel.add(listPanel);
+		bgPanel.add(listPanel006);
 
 		// listPanel = new ClassManagerPanel(listImg);
 		// listPanel.setBounds(20,118,359,65);
@@ -71,7 +77,7 @@ public class Panel006 extends JPanel {
 			ImageIcon checkBoxSelectImg = new ImageIcon(resizeImg02);
 			
 			nameLabel = new JLabel();
-			nameLabel.setBounds(1, 0, 337, 57);
+			nameLabel.setBounds(10, 0, 337, 57);
 			add(nameLabel);
 
 			checkBox = new JCheckBox();
