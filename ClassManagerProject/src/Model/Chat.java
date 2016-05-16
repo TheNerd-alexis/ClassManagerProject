@@ -1,17 +1,24 @@
 package Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Chat {
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class Chat implements AbstractModel,Serializable{
 	private String RTITLE;
 	private String JID;
 	private Date COME;
-
+	
 	public String getJid() {
 		return JID;
 	}
 	public String getRtitle() {
 		return RTITLE;
+	}
+	public Date getCome() {
+		return COME;
 	}
 	public void setRtitle(String RTITLE) {
 		this.RTITLE = RTITLE;
@@ -19,10 +26,25 @@ public class Chat {
 	public void setJid(String JID) {
 		this.JID = JID;
 	}
-	public Date getCome() {
-		return COME;
-	}
 	public void setCome(Date COME) {
 		this.COME = COME;
+	}
+	@Override
+	public AbstractModel toModel(JSONObject json){
+		Chat chat = new Chat();
+		chat.setRtitle((String) json.get("RTITLE"));
+		chat.setJid((String) json.get("JID"));
+		chat.setCome((Date) json.get("COME"));
+
+		return chat;
+	}
+	@Override
+	public JSONObject toJson(){
+		JSONObject json = new JSONObject();
+		json.put("RTITLE", this.getRtitle());
+		json.put("JID", this.getJid());
+		json.put("COME", this.getCome());
+		
+		return json;
 	}
 }
