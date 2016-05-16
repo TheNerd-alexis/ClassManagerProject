@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 public class ClassManagerPanel extends JPanel {
 
 	private ImageIcon orgimg;
-	public ImageIcon img;
+	private ImageIcon img;
 
 	public ClassManagerPanel(ImageIcon img) {
 		addMouseListener(new MouseAdapter() {
@@ -42,15 +42,24 @@ public class ClassManagerPanel extends JPanel {
 
 				System.out.printf("setBounds(%d,%d,%d,%d)\n",bounds[0],bounds[1],bounds[2],bounds[3]);
 			}
-
 		});
 		this.orgimg = img;
 		this.img = img;
-		Dimension imgsize = new Dimension(img.getIconWidth(), img.getIconHeight());
 		this.setLayout(null);
-		this.setPreferredSize(imgsize);
-		this.setMinimumSize(imgsize);
 		this.setOpaque(false);
+	}
+	
+	public ImageIcon getOrgimg() {
+		return orgimg;
+	}
+	public void setOrgimg(ImageIcon orgimg) {
+		this.orgimg = orgimg;
+	}
+	public ImageIcon getImg() {
+		return img;
+	}
+	public void setImg(ImageIcon img) {
+		this.img = img;
 	}
 
 	@Override
@@ -77,6 +86,7 @@ public class ClassManagerPanel extends JPanel {
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
     }
 	
 	public static void main(String[] args) {
