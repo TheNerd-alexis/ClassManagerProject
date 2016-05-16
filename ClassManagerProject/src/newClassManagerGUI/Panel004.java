@@ -17,6 +17,11 @@ public class Panel004 extends JPanel {
 		CMListPanel list = new CMListPanel();
 		list.setBounds(8,122,393,613);
 		ClassManagerPanel temp = new ClassManagerPanel(new ImageIcon("img/7-1.jpg"));
+		list.addComponent(temp);
+		CMButton chatOutBtn = new CMButton("나가기");
+		temp.add(chatOutBtn);
+		chatOutBtn.setBounds(316,13,64,32);
+		list.addComponent(new ClassManagerPanel(new ImageIcon("img/7-1.jpg")));
 		list.addComponent(new ClassManagerPanel(new ImageIcon("img/7-1.jpg")));
 		bgPanel.add(list);
 	}
