@@ -15,6 +15,10 @@ public class temp_Panel006 extends JPanel {
 	
 	CMTextField searchTextField; // out
 	JPanel resultFriendPanel; // out
+	
+	
+	CMListPanel listPanel;
+	
 
 	public temp_Panel006() {
 		setLayout(new BorderLayout(0, 0));
@@ -27,10 +31,19 @@ public class temp_Panel006 extends JPanel {
 		bgPanel.add(searchTextField);
 		
 		
-		resultFriendPanel = new JPanel();
-		resultFriendPanel.setBounds(44,120,317,587);
-		resultFriendPanel.setLayout(null);
-		bgPanel.add(resultFriendPanel);
+//		resultFriendPanel = new JPanel();
+//		resultFriendPanel.setBounds(44,120,317,587);
+//		resultFriendPanel.setLayout(null);
+//		bgPanel.add(resultFriendPanel);
+		
+		
+		listPanel = new CMListPanel();
+		listPanel.setBounds(31,118,340,587);
+		listPanel.addComponent( new ClassManagerPanel( new ImageIcon("img/CheckBoxList.jpg")));
+		listPanel.addComponent( new ClassManagerPanel( new ImageIcon("img/CheckBoxList.jpg")));
+		listPanel.addComponent( new ClassManagerPanel( new ImageIcon("img/CheckBoxList.jpg")));
+		listPanel.addComponent( new ClassManagerPanel( new ImageIcon("img/CheckBoxList.jpg")));
+		bgPanel.add(listPanel);
 
 		
 //		listPanel = new ClassManagerPanel(listImg);
