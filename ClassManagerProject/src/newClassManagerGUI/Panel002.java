@@ -35,7 +35,7 @@ public class Panel002 extends JPanel {
 
 		idField = new CMTextField();
 		idField.setText("ID 또는 이메일 입력");
-		idField.setBounds(35, 158, 242, 37);
+		idField.setBounds(34,134,248,40);
 		idField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -56,7 +56,7 @@ public class Panel002 extends JPanel {
 
 		passwordField1 = new CMPasswordField();
 		passwordField1.setEchoChar((char) 0);
-		passwordField1.setBounds(125, 285, 240, 35);
+		passwordField1.setBounds(128,269,247,29);
 		passwordField1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -82,7 +82,7 @@ public class Panel002 extends JPanel {
 
 		passwordField2 = new CMPasswordField();
 		passwordField2.setEchoChar((char) 0);
-		passwordField2.setBounds(125, 338, 240, 35);
+		passwordField2.setBounds(124,323,248,26);
 		passwordField2.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -107,19 +107,19 @@ public class Panel002 extends JPanel {
 		bgPanel.add(passwordField2);
 
 		pwCombo = new CMComboBox(PWQ);
-		pwCombo.setBounds(69, 471, 292, 29);
+		pwCombo.setBounds(73,453,298,30);
 		bgPanel.add(pwCombo);
 
 		pwaField = new CMTextField();
-		pwaField.setBounds(75, 550, 292, 28);
+		pwaField.setBounds(73,532,295,28);
 		bgPanel.add(pwaField);
 
 		classCombo = new CMComboBox(BAN);
-		classCombo.setBounds(112, 630, 251, 33);
+		classCombo.setBounds(116,616,257,32);
 		bgPanel.add(classCombo);
 		
 		confirmBtn = new CMButton("등록완료");
-		confirmBtn.setBounds(145,700,109,29);
+		confirmBtn.setBounds(137,687,134,44);
 		bgPanel.add(confirmBtn);
 	}
 

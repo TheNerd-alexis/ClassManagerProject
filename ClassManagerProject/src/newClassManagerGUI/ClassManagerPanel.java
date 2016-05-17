@@ -47,6 +47,11 @@ public class ClassManagerPanel extends JPanel {
 		this.img = img;
 		this.setLayout(null);
 		this.setOpaque(false);
+		Dimension d = new Dimension(400,750);
+		this.setSize(d);
+		this.setPreferredSize(d);
+		this.setMinimumSize(d);
+		this.setMaximumSize(d);
 	}
 	
 	public ImageIcon getOrgimg() {
@@ -81,18 +86,10 @@ public class ClassManagerPanel extends JPanel {
         JFrame frame = new JFrame("TestFrame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        bgPanel.setPreferredSize(new Dimension(400, 750));
         frame.add(bgPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
     }
-	
-	public static void main(String[] args) {
-		ImageIcon img = new ImageIcon("img/001_resize.jpg");
-		ClassManagerPanel test = new ClassManagerPanel(img);
-		test.setBounds(0,0,300,500);
-		ClassManagerPanel.constructGUI(test); 
-	}
 }
