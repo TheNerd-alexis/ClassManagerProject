@@ -11,6 +11,7 @@ public class Panel014 extends JPanel{
 	
 	ImageIcon img = new ImageIcon("img/014_resize.jpg");
 	private JTextField msgTextField;
+	private CMButton add1
 	
 	public Panel014(){
 		setLayout(new BorderLayout(0, 0));
@@ -30,7 +31,7 @@ public class Panel014 extends JPanel{
 		addfriendLable.setBounds(20,179,369,58);
 		bgPanel.add(addfriendLable);
 		
-		CMButton add1 = new CMButton("추가");
+		add1 = new CMButton("추가");
 		add1.setBounds(301,134,61,29);
 		addfriendLable.add(add1);
 		
