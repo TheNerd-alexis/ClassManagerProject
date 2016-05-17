@@ -55,14 +55,13 @@ public class MemberDAO {
 			statement.setInt(5, member.getMCL());
 			statement.setInt(6, member.getPWQ());
 			statement.setString(7, member.getPWA());
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			/** 회원 정보 입력 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 회원 정보 입력 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null && !statement.isClosed())
@@ -96,14 +95,13 @@ public class MemberDAO {
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, member.getMID());
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			/** member 자료 삭제 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** member 자료 삭제 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null && !statement.isClosed())
@@ -169,14 +167,13 @@ public class MemberDAO {
 			statement.setString(7, newMember.getPWA() == null ? member.getPWA() : newMember.getPWA());
 			statement.setString(8, member.getMID());
 
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			/** member 자료 수정 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** member 자료 수정 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (!statement.isClosed() && statement != null) {

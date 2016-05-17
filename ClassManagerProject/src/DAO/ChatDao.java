@@ -32,14 +32,13 @@ public class ChatDao {
 			psm.setString(1, chat.getRtitle());
 			psm.setString(2, chat.getJid());
 			psm.setDate(3, chat.getCome());
-			psm.executeUpdate();
+			return psm.executeUpdate();
 			/** DB chat 추가 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** DB chat 추가 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (psm != null && !psm.isClosed())
@@ -59,14 +58,13 @@ public class ChatDao {
 			psm = conn.prepareStatement(sql);
 			psm.setString(1, chat.getRtitle());
 			psm.setString(2, chat.getJid());
-			psm.executeUpdate();
+			return psm.executeUpdate();
 			/** DB chat 삭제 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** DB chat 삭제 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (psm != null && !psm.isClosed())

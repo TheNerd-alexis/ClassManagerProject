@@ -32,8 +32,8 @@ public class FriendDAO {
 	 * friend DB 자료 추가
 	 * 
 	 * @param friend
-	 * @return 1 = 친구 정보 추가 성공<br>
-	 *         2 = 친구 정보 추가 실패<br>
+	 * @return + = 친구 정보 추가 성공<br>
+	 *         - = 친구 정보 추가 실패<br>
 	 */
 	public int insertFriend(Friend friend) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?);";
@@ -42,14 +42,13 @@ public class FriendDAO {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, friend.getMID());
 			statement.setString(2, friend.getFID());
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			/** 친구 정보 입력 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 친구 정보 입력 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null || !statement.isClosed())
@@ -68,12 +67,11 @@ public class FriendDAO {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, friend.getMID());
 			statement.setString(2, friend.getFID());
-			statement.executeUpdate();
-			return 1;
+			return statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null || !statement.isClosed())

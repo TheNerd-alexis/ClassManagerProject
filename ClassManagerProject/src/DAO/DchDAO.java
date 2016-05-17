@@ -35,8 +35,8 @@ public class DchDAO {
 	 * 
 	 * @see {@link Dch}
 	 * @param dch
-	 * @return 1 = 출석 정보 추가 성공<br>
-	 *         2 = 출석 정보 추가 실패<br>
+	 * @return + = 출석 정보 추가 성공<br>
+	 *         - = 출석 정보 추가 실패<br>
 	 */
 	public int insertDch(Dch dch) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?);";
@@ -46,14 +46,13 @@ public class DchDAO {
 			statement.setString(1, dch.getMID());
 			statement.setDate(2, dch.getATTENDDATE());
 			statement.setInt(3, dch.getATTENDANCE());
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			/** 출석 정보 입력 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 출석 정보 입력 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null && !statement.isClosed())
@@ -76,12 +75,11 @@ public class DchDAO {
 			statement.setString(3, newDch.getMID());
 			statement.setString(4, dch.getMID());
 			statement.setDate(5, dch.getATTENDDATE());
-			statement.executeUpdate();
-			return 1;
+			return statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (statement != null && !statement.isClosed())

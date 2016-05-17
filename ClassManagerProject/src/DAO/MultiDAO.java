@@ -36,8 +36,8 @@ public class MultiDAO {
 	 * multi DB 자료 추가
 	 * 
 	 * @param multi
-	 * @return 1 = 멀티캠퍼스 식단 추가 성공<br>
-	 *         2 = 멀티캠퍼스 식단 추가 실패<br>
+	 * @return + = 멀티캠퍼스 식단 추가 성공<br>
+	 *         - = 멀티캠퍼스 식단 추가 실패<br>
 	 */
 	public int insertMulti(Multi multi) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?, ?)";
@@ -49,12 +49,11 @@ public class MultiDAO {
 			psm.setString(2, multi.getFCOURSE());
 			psm.setString(3, multi.getFTYPE());
 			psm.setString(4, multi.getFMENU());
-			psm.executeUpdate();
-			return 1;
+			return psm.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		}
 	}
 
@@ -72,13 +71,12 @@ public class MultiDAO {
 			psm.setInt(5, multi.getDAY());
 			psm.setString(6, multi.getFCOURSE());
 			psm.setString(7, multi.getFTYPE());
-			psm.executeUpdate();
+			return psm.executeUpdate();
 
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (psm != null && !psm.isClosed())
@@ -99,11 +97,10 @@ public class MultiDAO {
 			psm.setInt(1, multi.getDAY());
 			psm.setString(2, multi.getFCOURSE());
 			psm.setString(3, multi.getFTYPE());
-			psm.executeUpdate();
-			return 1;
+			return psm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (psm != null && !psm.isClosed())
