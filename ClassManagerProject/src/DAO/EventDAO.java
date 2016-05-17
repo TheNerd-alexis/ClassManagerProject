@@ -59,12 +59,12 @@ public class EventDAO {
 			psm = connection.prepareStatement(sql);
 			psm.setString(1, event.getMid());
 			psm.setString(2, event.getEtitle());
-			psm.executeUpdate();
-			return 1;
+			return psm.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		}
 	}
 
@@ -80,12 +80,11 @@ public class EventDAO {
 			psm.setString(3, newEvent.getMid());
 			psm.setString(4, event.getMid());
 			psm.setString(5, event.getEtitle());
-			psm.executeUpdate();
-			return 1;
+			return psm.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (psm != null && !psm.isClosed())
