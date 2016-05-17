@@ -58,14 +58,13 @@ public class ScheduleDAO {
 			pstmt.setString(2, schedule.getSch());
 			pstmt.setDate(3, schedule.getSchDate());
 			pstmt.setString(4, schedule.getSchID());
-			pstmt.executeUpdate();
+			return pstmt.executeUpdate();
 			/** 일정 추가 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 일정 추가 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (pstmt != null && !pstmt.isClosed())
@@ -81,8 +80,8 @@ public class ScheduleDAO {
 	 * 일정 삭제
 	 * 
 	 * @param schedule
-	 * @return 1 = 일정 삭제 성공<br>
-	 *         2 = 일정 삭제 실패<br>
+	 * @return + = 일정 삭제 성공<br>
+	 *         - = 일정 삭제 실패<br>
 	 */
 	public int deleteSchedule(Schedule schedule) {
 		String sql = "DELETE FROM " + DBName + " WHERE schtitle = ? AND schDate = ? AND schID = ?";
@@ -93,14 +92,13 @@ public class ScheduleDAO {
 			pstmt.setString(1, schedule.getSchTitle());
 			pstmt.setDate(2, schedule.getSchDate());
 			pstmt.setString(3, schedule.getSchID());
-			pstmt.executeUpdate();
+			return pstmt.executeUpdate();
 			/** 일정 삭제 성공 시 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 일정 삭제 실패 시 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (pstmt != null && !pstmt.isClosed())
@@ -119,8 +117,8 @@ public class ScheduleDAO {
 	 *            수정할 일정의 내용
 	 * @param schedule
 	 *            원본 일정
-	 * @return 1 = 일정 수정 성공<br>
-	 *         2 = 일정 수정 실패<br>
+	 * @return + = 일정 수정 성공<br>
+	 *         - = 일정 수정 실패<br>
 	 */
 	public int updateSchedule(Schedule newSchedule, Schedule schedule) {
 		String sql = "UPDATE " + DBName + " SET schtitle = ?, sch = ?, schDate = ?, schId = ?"
@@ -137,14 +135,13 @@ public class ScheduleDAO {
 			pstmt.setString(6, schedule.getSch());
 			pstmt.setDate(7, schedule.getSchDate());
 			pstmt.setString(8, schedule.getSchID());
-			pstmt.executeUpdate();
+			return pstmt.executeUpdate();
 			/** 일정 수정 성공 */
-			return 1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			/** 일정 수정 실패 */
-			return 2;
+			return -1;
 		} finally {
 			try {
 				if (pstmt != null && !pstmt.isClosed())
