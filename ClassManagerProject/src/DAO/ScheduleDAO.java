@@ -16,7 +16,7 @@ public class ScheduleDAO {
 	private static ScheduleDAO instance;
 	private static final String DBName = "schedule";
 
-	public ScheduleDAO getInstance(Connection connection) {
+	public static ScheduleDAO getInstance(Connection connection) {
 		if (instance == null)
 			instance = new ScheduleDAO(connection);
 		return instance;
@@ -24,7 +24,7 @@ public class ScheduleDAO {
 
 	private Connection conn;
 
-	ScheduleDAO(Connection connection) {
+	private ScheduleDAO(Connection connection) {
 		this.conn = connection;
 	}
 
