@@ -5,11 +5,18 @@ import java.io.Serializable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Event implements AbstractModel,Serializable {
+public class Event implements AbstractModel<Event>,Serializable {
 	private String mid;
 	private Integer etype;
 	private String etitle;
+	private Integer estatus;
 
+	public Integer getEstatus() {
+		return estatus;
+	}
+	public void setEstatus(Integer estatus) {
+		this.estatus = estatus;
+	}
 	public String getMid() {
 		return mid;
 	}
@@ -30,11 +37,12 @@ public class Event implements AbstractModel,Serializable {
 	}
 
 	@Override
-	public AbstractModel toModel(JSONObject json) {
+	public Event toModel(JSONObject json) {
 		Event event = new Event();
 		event.setMid((String) json.get("MID"));
 		event.setEtype((Integer) json.get("ETYPE"));
 		event.setEtitle((String) json.get("ETITLE"));
+		event.setEstatus((Integer)json.get("ESTATUS"));
 		return event;
 	}
 
@@ -44,7 +52,7 @@ public class Event implements AbstractModel,Serializable {
 		json.put("MID", this.getMid());
 		json.put("ETYPE", this.getEtype());
 		json.put("ETITLE", this.getEtitle());
-		
+		json.put("ESTATUS", this.getEstatus());
 		return json;
 	}
 }

@@ -33,7 +33,7 @@ public class EventDAO {
 	 *         2 = 이벤트 정보 추가 실패<br>
 	 */
 	public int insertEvent(Event event) {
-		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?)";
+		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?, ?)";
 		PreparedStatement psm = null;
 
 		try {

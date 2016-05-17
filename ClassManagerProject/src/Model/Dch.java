@@ -6,7 +6,7 @@ import java.sql.Date;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Dch implements AbstractModel,Serializable {
+public class Dch implements AbstractModel<Dch>,Serializable {
 	private String MID;
 	private Date ATTENDDATE;
 	private Integer ATTENDANCE;
@@ -31,7 +31,7 @@ public class Dch implements AbstractModel,Serializable {
 	}
 
 	@Override
-	public AbstractModel toModel(JSONObject json) {
+	public Dch toModel(JSONObject json) {
 		Dch dch = new Dch();
 		dch.setMID((String) json.get("MID"));
 		dch.setATTENDDATE((Date) json.get("ATTENDDATE"));

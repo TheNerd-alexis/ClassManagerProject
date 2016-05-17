@@ -4,98 +4,104 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import DAO.MemberDAO;
+import Model.AbstractModel;
+import Model.CMMessage;
+import Model.CMResult;
+import Service.MemberService;
 
 public class CMServer {
 
-	static ArrayList<Client> clientList = new ArrayList<Client>();
-	Connection connection = null;
-	
-	public Connection DbConnect(){
-		final String SQLID = "root";
-		final String PASSWORD = "mysql";
-		final String URL = "jdbc:mysql://localhost:3306/classmanager";
-
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		CMServerManager manager = CMServerManager.getInstance();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(URL, SQLID, PASSWORD);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return connection;
-	}
-	
-	public void ClientConnect() {
-		// TODO Auto-generated method stub
-
-		ServerSocket server;
-		try {
+			server = new ServerSocket(7777);
 			while (true) {
-				server = new ServerSocket(5001);
-				Socket tempSocket = server.accept();
-				Client tempClient = new Client(tempSocket);
-				clientList.add(tempClient);
-				Thread tempThread = new Thread(new CMReceiver(tempClient));
-				tempThread.start();
+				Socket socket = server.accept();
+				System.out.println(socket.getInetAddress() + "에서 접속했습니다.");
+				manager.addClient(socket);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+}
 
-	public void CMSender(String msg) {
-		for (int i = 0; i < clientList.size(); i++) {
-			try {
-				clientList.get(i).writer.write(msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				clientList.remove(i);
-			}
-		}
+class CMServerManager {
+	static Map<InetAddress, ServerClient> clients = new ConcurrentHashMap<InetAddress, ServerClient>();
+
+	private static CMServerManager instance;
+
+	public static CMServerManager getInstance() {
+		if (instance == null)
+			instance = new CMServerManager();
+		return instance;
 	}
 
-	class CMReceiver implements Runnable {
-		Client client;
+	public void addClient(Socket socket) throws IOException {
+		ServerClient tempClient = new ServerClient(socket);
+		Thread receiver = new Thread(new ServerReceiver(tempClient));
+		clients.put(socket.getInetAddress(), tempClient);
+		Thread thread = new Thread(receiver);
+		thread.start();
+	}
 
-		CMReceiver(Client client) {
+	class ServerReceiver implements Runnable {
+		ServerClient client;
+
+		public ServerReceiver(ServerClient client) {
 			this.client = client;
 		}
 
-		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+			String msg = null;
 			try {
-				String msg = client.reader.readLine();
-				CMSender(msg);
+				while (true) {
+					CMMessage message = (CMMessage) client.reader.readObject();
+					CMResult result = new CMResult();
+					if (message.getCommand().contains("login")) {
+						System.out.println(message.toString());
+						result.setResult(MemberService.getInstance().login(message.getContent()));
+					}
+					sendMsg(message.getCommand(), result);
+				}
+			} catch (IOException | ClassNotFoundException e) {
+				// removeClient(userID);
+				// // e.printStackTrace();
+			}
+		}
+
+		public void sendMsg(String command, AbstractModel model) {
+			CMMessage message = new CMMessage(command, model);
+			try {
+				System.out.println(message.toString());
+				client.writer.writeObject(message);
+				client.writer.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}
 }
 
-class Client {
+class ServerClient {
+	String userId;
 	Socket socket;
-	// String userID;
-	BufferedReader reader;
-	BufferedWriter writer;
+	ObjectOutputStream writer;
+	ObjectInputStream reader;
 
-	Client(Socket socket) throws IOException {
+	ServerClient(Socket socket) throws IOException {
 		this.socket = socket;
-		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		writer = new ObjectOutputStream(socket.getOutputStream());
+		reader = new ObjectInputStream(socket.getInputStream());
 	}
 }

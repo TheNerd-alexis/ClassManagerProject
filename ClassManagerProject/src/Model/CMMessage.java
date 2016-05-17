@@ -1,48 +1,66 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.json.simple.JSONObject;
+import javax.xml.transform.Result;
 
 import Service.MemberService;
 
-public class CMMessage {
-	private static Map<String, AbstractModel> protocol = new HashMap<String, AbstractModel>();
+public class CMMessage implements Serializable {
+
 	static MemberService memberService;
 
-	private CMMessage() {
-		memberService = MemberService.getInstance();
-		protocol.put("t01", new Member());
-		protocol.put("t02", new Chat());
-		protocol.put("t03", new Dch());
-		protocol.put("t04", new Event());
-		protocol.put("t05", new Friend());
-		protocol.put("t06", new Multi());
-		protocol.put("t07", new Schedule());
+	private String command;
+	private AbstractModel content;
+	private String chat;
+
+	public CMMessage(String command, String chat){
+		this.command = command;
+		this.chat = chat;
+	}
+	
+	public CMMessage(String command, AbstractModel content) {
+		this.command = command;
+		this.content = content;
 	}
 
-	public static JSONObject sendMsg(String command, AbstractModel model) {
-		JSONObject returnMsg = new JSONObject();
-		StringTokenizer token = new StringTokenizer(command, "_");
-		String service = token.nextToken();
-		String modeltype = token.nextToken();
-
-		switch (service) {
-		case "login":
-			returnMsg.put("result", memberService.login(model));
-			break;
-		case "join":
-			returnMsg.put("result", memberService.join(model));
-			break;
-		}
-		return returnMsg;
+	public String getCommand() {
+		return command;
 	}
 
-	public static AbstractModel readMsg(String command, JSONObject json) {
-		StringTokenizer token = new StringTokenizer(command, "_");
-		String service = token.nextToken();
-		String modeltype = token.nextToken();
+	public void setCommand(String command) {
+		this.command = command;
 	}
+
+	public AbstractModel getContent() {
+		return content;
+	}
+
+	public void setContent(AbstractModel content) {
+		this.content = content;
+	}
+
+	@Override
+	public String toString() {
+		return command + "  " + content.toJson().toString();
+	}
+//
+//	public CMMessage doMsg() {
+//		CMResult result = new CMResult();
+//		if (command.equals("login"))
+//			result.setResult(memberService.login(content));
+//		CMMessage returnMsg = new CMMessage(command, result);
+//		return returnMsg;
+//	}
+//
+//	public static void readResult(CMMessage msg) {
+//		String command = msg.getCommand();
+//		if (!(msg.getContent() instanceof CMResult))
+//			return;
+//		CMResult result = (CMResult) msg.getContent();
+//		System.out.println(result.toJson());
+//	}
 }

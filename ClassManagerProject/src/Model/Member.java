@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Member implements AbstractModel,Serializable{
+public class Member implements AbstractModel<Member>,Serializable{
 	private String MID;
 	private String PW;
 	private String SALT;
@@ -58,7 +58,7 @@ public class Member implements AbstractModel,Serializable{
 	}
 
 	@Override
-	public AbstractModel toModel(JSONObject json) {
+	public Member toModel(JSONObject json) {
 		Member member = new Member();
 		member.setMID((String) json.get("MID"));
 		member.setPW((String) json.get("PW"));

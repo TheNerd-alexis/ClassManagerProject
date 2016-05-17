@@ -1,11 +1,12 @@
 package Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Schedule implements AbstractModel{
+public class Schedule implements AbstractModel<Schedule>, Serializable{
 	private String schTitle;
 	private String sch;
 	private Date schDate;
@@ -40,7 +41,7 @@ public class Schedule implements AbstractModel{
 	}
 	
 	@Override
-	public AbstractModel toModel(JSONObject json){
+	public Schedule toModel(JSONObject json){
 		Schedule schedule = new Schedule();
 		schedule.setSchTitle((String)json.get("SchTitle"));
 		schedule.setSch((String)json.get("Sch"));

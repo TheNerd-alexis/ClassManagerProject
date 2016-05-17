@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Multi implements AbstractModel,Serializable{
+public class Multi implements AbstractModel<Multi>,Serializable{
 	private Integer DAY;
 	private Character FCOURSE;
 	private Character FTYPE;
@@ -36,7 +36,7 @@ public class Multi implements AbstractModel,Serializable{
 		FMENU = fMENU;
 	}
 	@Override
-	public AbstractModel toModel(JSONObject json) {
+	public Multi toModel(JSONObject json) {
 		Multi multi = new Multi();
 		multi.setDAY((Integer)json.get("DAY"));
 		multi.setFCOURSE((String)json.get("FCOURSE"));
@@ -54,6 +54,5 @@ public class Multi implements AbstractModel,Serializable{
 		json.put("FMENU", this.getFMENU());
 		
 		return json;
-	}
-	
+	}	
 }
