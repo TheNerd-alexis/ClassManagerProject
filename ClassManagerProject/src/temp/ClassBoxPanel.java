@@ -132,12 +132,12 @@ public class ClassBoxPanel extends JPanel {
 }
 
 class ClassBoxListPanel extends JPanel {
-	JListForm<ClassBoxPanel> classBoxList;
+	CMListPanel<ClassBoxPanel> classBoxList;
 	ClassBoxListPanel() {
 		setLayout(new BorderLayout(0, 0));
 		TitlePanel titlePanel = new TitlePanel("CM","이벤트알림","닫기");
 		add(titlePanel,BorderLayout.NORTH);//1. title panel 들어감
-		classBoxList = new JListForm<ClassBoxPanel>();//<T>가 <EventPanel>로 -> EventPanel 배열이 들어가는 폼
+		classBoxList = new CMListPanel<ClassBoxPanel>();//<T>가 <EventPanel>로 -> EventPanel 배열이 들어가는 폼
 		add(classBoxList);//2. eventPanel 배열 폼 들어감
 	}
 

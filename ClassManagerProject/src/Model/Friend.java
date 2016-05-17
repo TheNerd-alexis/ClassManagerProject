@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Friend implements AbstractModel,Serializable{
+public class Friend implements AbstractModel<Friend>,Serializable{
 	private String MID;
 	private String FID;
 	public String getMID() {
@@ -22,7 +22,7 @@ public class Friend implements AbstractModel,Serializable{
 	}
 
 	@Override
-	public AbstractModel toModel(JSONObject json) {
+	public Friend toModel(JSONObject json) {
 		Friend friend = new Friend();
 		friend.setMID((String)json.get("MID"));
 		friend.setFID((String)json.get("FID"));

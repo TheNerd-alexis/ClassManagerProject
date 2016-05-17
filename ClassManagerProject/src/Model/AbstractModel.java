@@ -1,8 +1,10 @@
 package Model;
 
+import java.io.Serializable;
+
 import org.json.simple.JSONObject;
 
-public interface AbstractModel {
-	public abstract AbstractModel toModel(JSONObject json);
+public interface AbstractModel<T extends AbstractModel> extends Serializable {
+	public abstract T toModel(JSONObject json);
 	public abstract JSONObject toJson();
 }

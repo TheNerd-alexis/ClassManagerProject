@@ -1,8 +1,5 @@
 package DAO;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +19,7 @@ public class MemberDAO {
 
 	public static MemberDAO getInstance(Connection connection) {
 		if (instance == null)
-			new MemberDAO(connection);
+			instance = new MemberDAO(connection);
 		return instance;
 	}
 
@@ -48,22 +45,7 @@ public class MemberDAO {
 	public int insertMember(Member member) {
 		String sql = "INSERT INTO " + DBName + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement statement = null;
-		//
-		// if (member.getMID() == null)
-		// return 3; // id 없음
-		// if (member.getPW() == null)
-		// return 4; // pw 없음
-		// if (member.getSALT() == null)
-		// return 5; // salt 없음
-		// if (member.getMNAME() == null)
-		// return 6; // 이름 없음
-		// if (member.getMCL() == null)
-		// return 7; // 과정 선택 안함
-		// if (member.getPWQ() == null)
-		// return 8; // 비밀번호 찾기 질문 선택 안함
-		// if (member.getPWA() == null)
-		// return 9; // 비밀번호 찾기 답변 선택 안합
-
+		
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, member.getMID());
@@ -110,22 +92,6 @@ public class MemberDAO {
 	public int deleteMember(Member member) {
 		String sql = "DELETE FROM " + DBName + " WHERE mid = ?";
 		PreparedStatement statement = null;
-
-		// 서비스에서 이용할 내용
-		// if (member.getMID() == null)
-		// return 3; // id 없음
-		// if (member.getPW() == null)
-		// return 4; // pw 없음
-		// if (member.getSALT() == null)
-		// return 5; // salt 없음
-		// if (member.getMNAME() == null)
-		// return 6; // 이름 없음
-		// if (member.getMCL() == null)
-		// return 7; // 과정 선택 안함
-		// if (member.getPWQ() == null)
-		// return 8; // 비밀번호 찾기 질문 선택 안함
-		// if (member.getPWA() == null)
-		// return 9; // 비밀번호 찾기 답변 선택 안함
 
 		try {
 			statement = connection.prepareStatement(sql);

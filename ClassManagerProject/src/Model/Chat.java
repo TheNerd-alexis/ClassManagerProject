@@ -6,7 +6,7 @@ import java.sql.Date;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Chat implements AbstractModel,Serializable{
+public class Chat implements AbstractModel<Chat>,Serializable{
 	private String RTITLE;
 	private String JID;
 	private Date COME;
@@ -30,7 +30,7 @@ public class Chat implements AbstractModel,Serializable{
 		this.COME = COME;
 	}
 	@Override
-	public AbstractModel toModel(JSONObject json){
+	public Chat toModel(JSONObject json){
 		Chat chat = new Chat();
 		chat.setRtitle((String) json.get("RTITLE"));
 		chat.setJid((String) json.get("JID"));
@@ -38,6 +38,7 @@ public class Chat implements AbstractModel,Serializable{
 
 		return chat;
 	}
+	
 	@Override
 	public JSONObject toJson(){
 		JSONObject json = new JSONObject();
