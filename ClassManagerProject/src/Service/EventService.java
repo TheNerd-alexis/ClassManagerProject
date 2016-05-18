@@ -25,7 +25,14 @@ public class EventService {
 		for(AbstractModel m : dao.getEventDao().selectEvent(tempEvent)) {
 			resultList.add(m);
 		}
-		result.setResultList( resultList );
+		
+		if (resultList.size() < 1) {
+			result.setResult(-1);
+		}
+		else {
+			result.setResultList( resultList );
+			result.setResult(1);
+		}
 		return result;
 	}
 	
@@ -38,20 +45,33 @@ public class EventService {
 	 */
 	public static CMResult event_add(AbstractModel model) {
 		
-		Event tempEvent = (Event) model;
+		Event event = (Event) model;
 		CMResult result = new CMResult();
 		
-		List<Event> listEvent = dao.getEventDao().selectEvent(tempEvent);
-		
-		if (listEvent.size() > 0) {
-			for(Event el : listEvent) {
-				if(tempEvent.getMid() == el.getMid() && tempEvent.getEtitle().equals(el.getEtitle())) {
-					result.setResult(-1);
-					return result;
+		if (event.getMid() == null) {
+			result.setResult(-2);
+		}
+		else if (event.getEtype() == null) {
+			result.setResult(-3);
+		}
+		else if (event.getEtitle() == null) {
+			result.setResult(-4);
+		}
+		else if (event.getEstatus() == null) {
+			result.setResult(-5);
+		} else {
+			List<Event> listEvent = dao.getEventDao().selectEvent(event);
+			
+			if (listEvent.size() > 0) {
+				for(Event el : listEvent) {
+					if(event.getMid() == el.getMid() && event.getEtitle().equals(el.getEtitle())) {
+						result.setResult(-1);
+						return result;
+					}
 				}
 			}
+			result.setResult( dao.getEventDao().insertEvent(event) );
 		}
-		result.setResult( dao.getEventDao().insertEvent(tempEvent) );
 		return result;
 	}
 	
@@ -65,9 +85,23 @@ public class EventService {
 	 */
 	public static CMResult event_delete(AbstractModel model) {
 		
-		Event tempEvent = (Event) model;
+		Event event = (Event) model;
 		CMResult result = new CMResult();
-		result.setResult( dao.getEventDao().deleteEvent(tempEvent) );
+		
+		if (event.getMid() == null) {
+			result.setResult(-2);
+		}
+		else if (event.getEtype() == null) {
+			result.setResult(-3);
+		}
+		else if (event.getEtitle() == null) {
+			result.setResult(-4);
+		}
+		else if (event.getEstatus() == null) {
+			result.setResult(-5);
+		} else {
+			result.setResult( dao.getEventDao().deleteEvent(event) );
+		}
 		return result;
 	}
 	
@@ -82,8 +116,23 @@ public class EventService {
 	public static CMResult event_edit(AbstractModel newModel, AbstractModel editModel) {
 		Event newEvent = (Event) newModel;
 		Event editEvent = (Event) editModel;
+		
 		CMResult result = new CMResult();
-		result.setResult( dao.getEventDao().updateEvent(newEvent, editEvent) );
+		
+		if (newEvent.getMid() == null) {
+			result.setResult(-2);
+		}
+		else if (newEvent.getEtype() == null) {
+			result.setResult(-3);
+		}
+		else if (newEvent.getEtitle() == null) {
+			result.setResult(-4);
+		}
+		else if (newEvent.getEstatus() == null) {
+			result.setResult(-5);
+		} else {
+			result.setResult( dao.getEventDao().updateEvent(newEvent, editEvent) );
+		}
 		return result;
 	}
 }
