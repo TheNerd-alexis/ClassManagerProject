@@ -18,7 +18,7 @@ public class MultiDAO {
 	private static MultiDAO instance;
 	private static final String DBName = "multi";
 
-	private MultiDAO(Connection connection) {
+	public MultiDAO(Connection connection) {
 		this.conn = connection;
 	}
 
