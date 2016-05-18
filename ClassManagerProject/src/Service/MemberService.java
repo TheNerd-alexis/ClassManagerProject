@@ -48,6 +48,7 @@ public class MemberService {
 	 *         4 = pw 없음<br>
 	 *         5 = id와 pw 일치하지 않음<br>
 	 */
+	// 로그인
 	public int login(AbstractModel model) {
 		Member member = (Member) model;
 		if (member.getMID() == null)
@@ -83,6 +84,7 @@ public class MemberService {
 	 *         8 = 비밀번호 찾기 질문 선택 안함<br>
 	 *         9 = 비밀번호 찾기 답변 선택 안함
 	 */
+	//회원가입
 	public int join(AbstractModel model) {
 		Member member = (Member) model;
 		if (member.getMID() == null)
@@ -102,13 +104,52 @@ public class MemberService {
 
 		return memberDAO.insertMember(member);
 	}
-
+	
+	//중복아이디 체크하는 애
+	
+	public boolean idcheck(){
+		Member member = new Member();
+		member = (Member) memberDAO.selectMember(member);
+		if(member.getMID() == null){
+			return true;//가입가능
+		}else{
+			return false;//가입불가
+		}
+		
+	}
+	
+	
+	//PW찾는 애
+	
+	public int findPW(AbstractModel model){
+		
+		Member member= (Member) model;
+		MemberDAO dao;
+		if( dao.selectMemberOne(member) == null)//데이터 베이스에 접속해 ID 존재여부를 체크하고
+		{
+			return -1;//아이디 존재 안하면 -1 반환
+		}
+		else//존재한다면
+		{
+			if( ?GUI.pwq? == dao.selectMemberOne(member).getPWQ()){	//유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
+				if( ?GUI.pwa? == dao.selectMemberOne(member).getPWA()){ //유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
+					return = 1; // 모두 동일하다면 1반환
+				}else{
+					return = -2; //pwa 동일하지 않으면 -2 반환 
+				}
+			
+	}
+}
+	
+	
+	
+	
+	//멤버리스트 뽑아오는 애 
 	public List<AbstractModel> show(AbstractModel model) {
 		Member member = (Member) model;
 		List<Member> list = memberDAO.selectMember(member);
 		List<AbstractModel> result = new ArrayList<AbstractModel>();
 
-		for (Member m : list) {
 			result.add(m);
 		}
 		return result;
