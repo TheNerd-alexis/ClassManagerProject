@@ -18,7 +18,17 @@ public class Panel016 extends JPanel {
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 		list = new CMListPanel();
-		list.setBounds(8, 122, 393, 613);
+		list.setBounds(11,52,390,692);
+		list.addComponent(new MiniPanel016());
+		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
+		list.addComponent(new MiniPanel016());
+		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
+		list.addComponent(new MiniPanel016());
+		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
+		list.addComponent(new MiniPanel016());
+		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
+		list.addComponent(new MiniPanel016());
+		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
 		list.addComponent(new MiniPanel016());
 		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
 		bgPanel.add(list, BorderLayout.CENTER);
