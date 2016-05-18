@@ -131,15 +131,15 @@ public class MemberService {
 		}
 		else//존재한다면
 		{
-			if( ?GUI.pwq? == dao.selectMemberOne(member).getPWQ()){	//유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
-				if( ?GUI.pwa? == dao.selectMemberOne(member).getPWA()){ //유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
-					return = 1; // 모두 동일하다면 1반환
+			if( member.getPWQ() == dao.selectMemberOne(member).getPWQ()){	//유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
+				if( member.getPWA() == dao.selectMemberOne(member).getPWA()){ //유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
+					return  1; // 모두 동일하다면 1반환
 				}else{
-					return = -2; //pwa 동일하지 않으면 -2 반환 
-				}
+					return -2; //pwa 동일하지 않으면 -2 반환 
+				}}}}
 			
-	}
-}
+			
+
 	
 	
 	
