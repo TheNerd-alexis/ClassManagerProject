@@ -6,36 +6,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import DAO.GetDAO;
 import DAO.MemberDAO;
 import DAO.ScheduleDAO;
 import Model.AbstractModel;
+import Model.CMResult;
 import Model.Member;
 import Model.Schedule;
 
 public class ScheduleService {
-	private Connection connection;
-	private String url = "jdbc:mysql://localhost:3306/classmanager";
-	private String id = "root";
-	private String pw = "mysql";
-	private ScheduleDAO scheduleDAO;
-	private static ScheduleService instance;
-
-	public static ScheduleService getInstance() {
-		if (instance == null)
-			instance = new ScheduleService();
-		return instance;
-	}
-
-	private ScheduleService() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(url, id, pw);
-			scheduleDAO = ScheduleDAO.getInstance(connection);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+	static GetDAO dao = GetDAO.getInstance();
+	
 	/**
 	 * 일정추가
 	 * 
@@ -46,30 +28,33 @@ public class ScheduleService {
 	 *         6 = id 없음<br>
 	 * 
 	 */
-	public int addSchdule(AbstractModel model) {
+	public static CMResult schedul_add(AbstractModel model) {
 		Schedule schedule = (Schedule) model;
+		CMResult result = new CMResult();
 		if (schedule.getSchTitle() == null)
-			return 3; // 일정 제목 없음
+			result.setResult(-1); // 일정 제목 없음
 		if (schedule.getSch() == null)
-			return 4; // 일정 내용 없음
+			result.setResult(-2); // 일정 내용 없음
 		if (schedule.getSchDate() == null)
-			return 5; // 일정 날짜 없음
+			result.setResult(-3); // 일정 날짜 없음
 		if (schedule.getSchTitle() == null)
-			return 6; // 관계자 ID 없음
+			result.setResult(-4); // 관계자 ID 없음
 		
-		return scheduleDAO.insertSchedule(schedule);
-	}
-	
-	public List<AbstractModel> show(AbstractModel model) {
-		Schedule schedule = (Schedule) model;
-		List<Schedule> list = scheduleDAO.selectSchedule(schedule);
-		List<AbstractModel> result = new ArrayList<AbstractModel>();
-
-		for (Schedule s : list) {
-			result.add(s);
-		}
+		result.setResult(dao.schDao().insertSchedule(schedule));
+		
 		return result;
 	}
+	
+//	public List<AbstractModel> show(AbstractModel model) {
+//		Schedule schedule = (Schedule) model;
+//		List<Schedule> list = scheduleDAO.selectSchedule(schedule);
+//		List<AbstractModel> result = new ArrayList<AbstractModel>();
+//
+//		for (Schedule s : list) {
+//			result.add(s);
+//		}
+//		return result;
+//	}
 	
 	/**
 	 * 일정조회
@@ -81,22 +66,39 @@ public class ScheduleService {
 	 * @return
 	 * 
 	 */
-	 public int showPrivateSchdule(AbstractModel model) {//개인일정
+	 public static CMResult PrivateSchdule_show(AbstractModel model) {//개인일정
 		 Schedule schedule = (Schedule) model;
-		 if(schedule.getSchDate() == null) return 0;
-		 if(schedule.getSchID() == null) return 1;
-		 List<Schedule> list = scheduleDAO.selectSchedule(schedule);
+		 CMResult result = new CMResult();
+		 if(schedule.getSchDate() == null) 
+			 result.setResult(-1);
+		 if(schedule.getSchID() == null) 
+			 result.setResult(-2);
+
+		 result.setResult(1);
 		 
-		 return 3;
+		 List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+			for(AbstractModel m :dao.schDao().selectSchedule(schedule)){
+				resultList.add(m);
+			}
+			result.setResultList(resultList);
+			
+			return result;
 	 }
 	 
-	 public int showPublicSchdule(AbstractModel model) {//전체일정
+	 public static CMResult PublicSchdule_show(AbstractModel model) {//전체일정
 		 Schedule schedule = (Schedule) model;
-		 if(schedule.getSchDate() == null) return 0;
+		 CMResult result = new CMResult();
+		 if(schedule.getSchDate() == null) 
+			 result.setResult(-1);
 		 if(!schedule.getSchID().equals("public"))
-			 return 0;
-		 //List<Schedule> list = scheduleDAO.selectSchedule(schedule);
-		 
-		 return 3;
+			 result.setResult(-2);
+		
+		 List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+			for(AbstractModel m :dao.schDao().selectSchedule(schedule)){
+				resultList.add(m);
+			}
+			result.setResultList(resultList);
+			
+			return result;
 	 }
 }
