@@ -14,7 +14,7 @@ public class Panel008 extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	ImageIcon img = new ImageIcon("img/008_resize.jpg");
+	ImageIcon img = new ImageIcon("img/08_hwon.jpg");
 
 	private CMTextField jointxt;
 	private CMTextField searchtxt;
@@ -41,21 +41,29 @@ public class Panel008 extends JPanel {
 		searchtxt.setBounds(48, 131, 238, 29);
 		bgPanel.add(jointxt);
 		bgPanel.add(searchtxt);
+		//여기까지 텍스트 붙임
+		
 		joinBtn.setBounds(308, 65, 51, 31);
 		bgPanel.add(joinBtn);
 		searchBtn.setBounds(306, 133, 49, 26);
 		bgPanel.add(searchBtn);
-		listPanel.setBounds(28, 178, 346, 558);
-		bgPanel.add(listPanel);
-		ClassManagerPanel miniPanel = new ClassManagerPanel(new ImageIcon("img/CheckBoxList.jpg"));
+		//여기까지 버튼 붙임
+		
+		
+		listPanel.setBounds(48, 178, 313, 54);	//리스트 패널 소환 바운드 정함
+		bgPanel.add(listPanel);	//비지패널에 리스트패널 붙임
+		ClassManagerPanel miniPanel = new ClassManagerPanel(new ImageIcon("img/CheckBoxList.jpg"));//이미지올림
 		listPanel.addComponent(miniPanel);
 		
 		nametxt.setBounds(16, 10, 85, 30);
 		miniPanel.add(nametxt);
 		
-		check.setBounds(309, 17, 23, 20);
+		check.setBounds(279, 17, 19, 14);
 		
 		miniPanel.add(check);
+		
+		
+		
 	}
 
 	public static void main(String[] args) {
