@@ -81,8 +81,22 @@ public class ScheduleService {
 	 * @return
 	 * 
 	 */
-	 public int showSchdule(AbstractModel model) {
+	 public int showPrivateSchdule(AbstractModel model) {//개인일정
+		 Schedule schedule = (Schedule) model;
+		 if(schedule.getSchDate() == null) return 0;
+		 if(schedule.getSchID() == null) return 1;
+		 List<Schedule> list = scheduleDAO.selectSchedule(schedule);
 		 
+		 return 3;
+	 }
+	 
+	 public int showPublicSchdule(AbstractModel model) {//전체일정
+		 Schedule schedule = (Schedule) model;
+		 if(schedule.getSchDate() == null) return 0;
+		 if(!schedule.getSchID().equals("public"))
+			 return 0;
+		 //List<Schedule> list = scheduleDAO.selectSchedule(schedule);
 		 
+		 return 3;
 	 }
 }
