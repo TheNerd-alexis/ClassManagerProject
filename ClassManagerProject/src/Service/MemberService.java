@@ -11,6 +11,7 @@ import java.util.List;
 
 import DAO.MemberDAO;
 import Model.AbstractModel;
+import Model.CMResult;
 import Model.Member;
 
 public class MemberService {
@@ -43,30 +44,36 @@ public class MemberService {
 	 * 
 	 * @param member
 	 * @return 1 = 로그인 성공<br>
-	 *         2 = 해당 회원 없음<br>
-	 *         3 = id 없음<br>
-	 *         4 = pw 없음<br>
-	 *         5 = id와 pw 일치하지 않음<br>
+	 *         -2 = id 없음<br>
+	 *         -3 = pw 없음<br>
+	 *         -4 = 해당 회원 없음<br>
+	 *         -5 = id와 pw 일치하지 않음<br>
 	 */
 	// 로그인
-	public int login(AbstractModel model) {
+	public CMResult login(AbstractModel model) {
 		Member member = (Member) model;
+		CMResult result = new CMResult();
+
 		if (member.getMID() == null)
-			return 3; // id 없음
+			return result.setResult(-2); // id 없음
 		if (member.getPW() == null)
-			return 4; // pw 없음
+			return result.setResult(-3); // pw 없음
 
 		Member temp = new Member();
 		temp.setMID(member.getMID());
-		List<Member> result = memberDAO.selectMember(temp);
-		if (result.size()<1)
-			return 2;
+		List<Member> list = memberDAO.selectMember(temp);
 
-		temp = result.get(0);
-		if (!temp.getPW().equals(member.getPW()))
-			return 5;
+		// DB에 일치하는 회원 없음
+		if (list.size() < 1)
+			return result.setResult(-4);
 
-		return 1;
+		temp = list.get(0);
+		// 아이디에 저장된 비밀번호와 입력한 비밀번호가 일치하지 않음
+		if (!temp.getPW().equals(password(member.getPW(), temp.getSALT())))
+			return result.setResult(-5);
+
+		result.setResult(1);
+		return result;
 	}
 
 	/**
@@ -75,169 +82,186 @@ public class MemberService {
 	 * @param member(MID,
 	 *            PW, SALT, MNAME, MCL, PWQ, PWA)
 	 * @return 1 = 회원 정보 추가 성공<br>
-	 *         2 = 회원 정보 추가 실패<br>
-	 *         3 = id 없음<br>
-	 *         4 = pw 없음<br>
-	 *         5 = salt 없음<br>
-	 *         6 = 이름 없음<br>
-	 *         7 = 과정 선택 없음<br>
-	 *         8 = 비밀번호 찾기 질문 선택 안함<br>
-	 *         9 = 비밀번호 찾기 답변 선택 안함
+	 *         -1 = 회원 정보 추가 실패<br>
+	 *         -2 = id 없음<br>
+	 *         -3 = pw 없음<br>
+	 *         -4 = salt 없음<br>
+	 *         -5 = 이름 없음<br>
+	 *         -6 = 과정 선택 없음<br>
+	 *         -7 = 비밀번호 찾기 질문 선택 안함<br>
+	 *         -8 = 비밀번호 찾기 답변 선택 안함
 	 */
-	//회원가입
-	public int join(AbstractModel model) {
+	// 회원가입
+	public CMResult join(AbstractModel model) {
 		Member member = (Member) model;
+		CMResult result = new CMResult();
+
 		if (member.getMID() == null)
-			return 3; // id 없음
+			return result.setResult(-2); // id 없음
 		if (member.getPW() == null)
-			return 4; // pw 없음
-		if (member.getSALT() == null)
-			return 5; // salt 없음
-		if (member.getMNAME() == null)
-			return 6; // 이름 없음
+			return result.setResult(-3); // pw 없음
+		// if (member.getSALT() == null)
+		// return result.setResult(-4); // salt 없음
+		// if (member.getMNAME() == null)
+		// result.setResult(-5); // 이름 없음
 		if (member.getMCL() == null)
-			return 7; // 과정 선택 안함
+			return result.setResult(-6); // 과정 선택 안함
 		if (member.getPWQ() == null)
-			return 8; // 비밀번호 찾기 질문 선택 안함
+			return result.setResult(-7); // 비밀번호 찾기 질문 선택 안함
 		if (member.getPWA() == null)
-			return 9; // 비밀번호 찾기 답변 선택 안함
+			return result.setResult(-8); // 비밀번호 찾기 답변 선택 안함
 
-		return memberDAO.insertMember(member);
-	}
-	
-	//중복아이디 체크하는 애
-	
-	public boolean idcheck(){
-		Member member = new Member();
-		member = (Member) memberDAO.selectMember(member);
-		if(member.getMID() == null){
-			return true;//가입가능
-		}else{
-			return false;//가입불가
-		}
+		String[] pw = password(member.getPW());
+		member.setPW(pw[0]);
+		member.setSALT(pw[1]);
 		
+		result.setResult(memberDAO.insertMember(member));
+		return result;
 	}
-	
-	
-	//PW찾는 애
-	
-	public int findPW(AbstractModel model){
-		
-		Member member= (Member) model;
-		MemberDAO dao;
-		if( dao.selectMemberOne(member) == null)//데이터 베이스에 접속해 ID 존재여부를 체크하고
-		{
-			return -1;//아이디 존재 안하면 -1 반환
-		}
-		else//존재한다면
-		{
-			if( member.getPWQ() == dao.selectMemberOne(member).getPWQ()){	//유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
-				if( member.getPWA() == dao.selectMemberOne(member).getPWA()){ //유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
-					return  1; // 모두 동일하다면 1반환
-				}else{
-					return -2; //pwa 동일하지 않으면 -2 반환 
-				}}}}
-			
-			
 
-	
-	
-	
-	
-	//멤버리스트 뽑아오는 애 
+	// 아이디 중복 체크
+	public CMResult idCheck(AbstractModel model) {
+		Member member = (Member) model;
+		CMResult result = new CMResult();
+		if (member.getMID() == null)
+			return result.setResult(-2); // 아이디 정보 없음
+
+		List<Member> tempList = memberDAO.selectMember(member);
+		if (tempList.size() < 1)
+			return result.setResult(1); // 중복 아이디 없음
+		else
+			return result.setResult(2); // 중복 아이디 있음
+	}
+
+	// PW찾는 애
+	public CMResult findPW(AbstractModel model) {
+		Member member = (Member) model;
+		CMResult result = new CMResult();
+
+		// 데이터 베이스에 접속해 ID 존재여부를 체크하고
+		if (idCheck(member).getResult() == 1)
+			return result.setResult(-2); // 해당 아이디 없음
+
+		// 유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
+		if (member.getPWQ() != memberDAO.selectMember(member).get(0).getPWQ())
+			return result.setResult(-3); // 질문 일치하지 않음
+
+		// 유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
+		if (!member.getPWA().equals(memberDAO.selectMember(member).get(0).getPWA()))
+			return result.setResult(-4); // 답변 일치하지 않음
+
+		return result.setResult(1);
+	}
+
+	public CMResult chagePW(AbstractModel model) {
+		Member member = (Member) model;
+		CMResult result = new CMResult();
+		if (member.getMID() == null)
+			return result.setResult(-2);
+		if (member.getPW() == null)
+			return result.setResult(-3);
+
+		Member orgMember = new Member();
+		orgMember.setMID(member.getMID());
+
+		orgMember = memberDAO.selectMember(orgMember).get(0);
+		result.setResult(memberDAO.updateMember(member, orgMember));
+
+		return result;
+	}
+
+	// 멤버리스트 뽑아오는 애
 	public List<AbstractModel> show(AbstractModel model) {
 		Member member = (Member) model;
 		List<Member> list = memberDAO.selectMember(member);
 		List<AbstractModel> result = new ArrayList<AbstractModel>();
-
+		for (Member m : list) {
 			result.add(m);
 		}
 		return result;
 	}
 
-	static class SecuredPassword {
-		/**
-		 * 비밀번호 암호화 메소드
-		 * 
-		 * @param str
-		 * @return [암호화된 비밀번호, salt]
-		 */
-		public static String[] password(String pw) {
-			String salt = null;
-			String SHA = "";
-			try {
-				MessageDigest sh = MessageDigest.getInstance("SHA-256");
-				salt = byteArrayToHex(SecureRandom.getInstanceStrong().generateSeed(16));
-				pw = salt + pw;
-				sh.update(pw.getBytes());
-				byte byteData[] = sh.digest();
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < byteData.length; i++) {
-					sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-				}
-				SHA = sb.toString();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-				SHA = null;
+	/**
+	 * 비밀번호 암호화 메소드
+	 * 
+	 * @param str
+	 * @return [암호화된 비밀번호, salt]
+	 */
+	public static String[] password(String pw) {
+		String salt = null;
+		String SHA = "";
+		try {
+			MessageDigest sh = MessageDigest.getInstance("SHA-256");
+			salt = byteArrayToHex(SecureRandom.getInstanceStrong().generateSeed(16));
+			pw = salt + pw;
+			sh.update(pw.getBytes());
+			byte byteData[] = sh.digest();
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < byteData.length; i++) {
+				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
 			}
-			String[] result = { SHA, salt };
+			SHA = sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			SHA = null;
+		}
+		String[] result = { SHA, salt };
 
-			return result;
+		return result;
+	}
+
+	/**
+	 * 암호화된 비밀번호 확인 메소드
+	 * 
+	 * @param pw
+	 *            비밀먼호
+	 * @param salt
+	 *            암호화시 사용된 salt
+	 * @return 암호화된 비밀번호
+	 */
+	public static String password(String pw, String salt) {
+		String SHA = "";
+		try {
+			MessageDigest sh = MessageDigest.getInstance("SHA-256");
+			pw = salt + pw;
+			sh.update(pw.getBytes());
+			byte byteData[] = sh.digest();
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < byteData.length; i++) {
+				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			SHA = sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			SHA = null;
+		}
+		return SHA;
+	}
+
+	public static byte[] hexToByteArray(String hex) {
+		if (hex == null || hex.length() == 0) {
+			return null;
 		}
 
-		/**
-		 * 암호화된 비밀번호 확인 메소드
-		 * 
-		 * @param pw
-		 *            비밀먼호
-		 * @param salt
-		 *            암호화시 사용된 salt
-		 * @return 암호화된 비밀번호
-		 */
-		public static String password(String pw, String salt) {
-			String SHA = "";
-			try {
-				MessageDigest sh = MessageDigest.getInstance("SHA-256");
-				pw = salt + pw;
-				sh.update(pw.getBytes());
-				byte byteData[] = sh.digest();
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < byteData.length; i++) {
-					sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-				}
-				SHA = sb.toString();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-				SHA = null;
-			}
-			return SHA;
+		byte[] ba = new byte[hex.length() / 2];
+		for (int i = 0; i < ba.length; i++) {
+			ba[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+		}
+		return ba;
+	}
+
+	public static String byteArrayToHex(byte[] ba) {
+		if (ba == null || ba.length == 0) {
+			return null;
 		}
 
-		public static byte[] hexToByteArray(String hex) {
-			if (hex == null || hex.length() == 0) {
-				return null;
-			}
+		StringBuffer sb = new StringBuffer(ba.length * 2);
+		String hexNumber;
+		for (int x = 0; x < ba.length; x++) {
+			hexNumber = "0" + Integer.toHexString(0xff & ba[x]);
 
-			byte[] ba = new byte[hex.length() / 2];
-			for (int i = 0; i < ba.length; i++) {
-				ba[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
-			}
-			return ba;
+			sb.append(hexNumber.substring(hexNumber.length() - 2));
 		}
-
-		public static String byteArrayToHex(byte[] ba) {
-			if (ba == null || ba.length == 0) {
-				return null;
-			}
-
-			StringBuffer sb = new StringBuffer(ba.length * 2);
-			String hexNumber;
-			for (int x = 0; x < ba.length; x++) {
-				hexNumber = "0" + Integer.toHexString(0xff & ba[x]);
-
-				sb.append(hexNumber.substring(hexNumber.length() - 2));
-			}
-			return sb.toString();
-		}
+		return sb.toString();
 	}
 }
