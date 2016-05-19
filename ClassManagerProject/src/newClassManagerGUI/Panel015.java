@@ -19,6 +19,8 @@ import Model.Schedule;
 public class Panel015 extends JPanel {
 	CMListPanel listPanel;
 	List<AbstractModel> scheduleList;
+	public TitlePanel title;
+	
 	public Panel015() {
 		ImageIcon img = new ImageIcon("img/basic_resize.jpg");
 
@@ -42,6 +44,11 @@ public class Panel015 extends JPanel {
 		listPanel.addComponent(new SchedulePanel(sch.getSchDate(), sch.getSchTitle()));
 		listPanel.addComponent(new SchedulePanel(sch.getSchDate(), sch.getSchTitle(), sch.getSch()));
 		bgPanel.add(listPanel);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+
+		title.setBounds(0, 0, 410, 40);
+		bgPanel.add(title);
 	}
 
 	class SchedulePanel extends ClassManagerPanel {
