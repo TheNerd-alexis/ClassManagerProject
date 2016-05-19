@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 public class Panel016 extends JPanel {
 	ImageIcon img = new ImageIcon("img/basic_resize.jpg");
 	CMListPanel list;
+	public TitlePanel title;
 
 	public Panel016() {
 		setLayout(new BorderLayout(0, 0));
@@ -34,6 +35,11 @@ public class Panel016 extends JPanel {
 		list.clearList();
 		list.addComponent(new MiniPanel016(2, "테스트"));
 		bgPanel.add(list, BorderLayout.CENTER);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+
+		title.setBounds(0, 0, 410, 40);
+		bgPanel.add(title);
 	}
 
 	class MiniPanel016 extends ClassManagerPanel {
