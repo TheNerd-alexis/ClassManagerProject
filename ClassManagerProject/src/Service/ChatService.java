@@ -14,8 +14,8 @@ public class ChatService {
 	static GetDAO dao = GetDAO.getInstance();
 	
 	/* Null Type:
-	 * -100: JID
-	 * -101: RTITLE
+	 * -100: JID 외래키(MID)
+	 * -101: RTITLE(PK)
 	 * */
 	
 	/**
@@ -24,6 +24,7 @@ public class ChatService {
 	 * @return 1: 채팅방 개설 성공
 	 *         0: 채팅방 개설 실패(INSERT 실패)
 	 *        -1: SQL Exception
+	 *        -3: PK 중복
 	 *        -100: JID - NULL
 	 *        -101: RTITLE - NULL
 	 */
@@ -37,6 +38,15 @@ public class ChatService {
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
 		
+		List<Chat> listChat = dao.getChatDao().selectChat(chat);
+		
+		if(listChat.size() > 0) {
+			for(Chat c : listChat) {
+				if(c.getRtitle().equals(chat.getRtitle())) {
+					return result.setResult(-3);
+				}
+			}
+		}
 		return result.setResult(dao.getChatDao().insertChat(chat));
 	}
 
@@ -68,7 +78,7 @@ public class ChatService {
 	 *         0: 채팅방 새로고침 실패(SELECT 실패)
 	 *        -1: Query Exception
 	 *        -2: List<Chat> 조회 실패
-	 *        -100: JID - NULL
+	 *      -100: JID - NULL
 	 */
 	public static CMResult chat_refresh(AbstractModel model){
 		Chat chat = (Chat) model;
