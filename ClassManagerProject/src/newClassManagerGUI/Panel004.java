@@ -17,9 +17,9 @@ import Model.Chat;
 public class Panel004 extends JPanel {
 	ImageIcon img = new ImageIcon("img/004_resize.jpg");
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
+	public TitlePanel title;
 	CMListPanel listPanel;
 	List<AbstractModel> list;
-	public TitlePanel title;
 	ObjectOutputStream writer;
 	
 	public Panel004(ObjectOutputStream writer){
