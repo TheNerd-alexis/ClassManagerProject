@@ -13,12 +13,16 @@ public class Panel010 extends JPanel {
 	
 	ImageIcon img = new ImageIcon("img/011_resize.jpg");
 	private JTextField msgTextField;
-	
+	public TitlePanel title;
 	
 	public Panel010() {
 		setLayout(new BorderLayout(0, 0));
 		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
 		add(bgPanel,BorderLayout.CENTER);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+		title.setBounds(0,0,410,40);
+		bgPanel.add(title);
 		
 		JLabel chatMemberLable = new JLabel("대화상대");
 		chatMemberLable.setBounds(171,60,99,36);
