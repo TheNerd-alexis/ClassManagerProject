@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Panel007 extends JPanel {
-	
+	public TitlePanel title;
 	CMTextField inputFriendTextField; // out
 	CMButton searFriendListBtn; // in
 	
@@ -23,6 +23,10 @@ public class Panel007 extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		ClassManagerPanel bgPanel = new ClassManagerPanel( new ImageIcon("img/007_resize.jpg") );
 		add(bgPanel, BorderLayout.CENTER);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+		title.setBounds(0,0,410,40);
+		bgPanel.add(title);
 		
 		inputFriendTextField = new CMTextField("아이디, 이메일 주소 검 색");
 		inputFriendTextField.setBounds(85,62,171,26);
