@@ -1,6 +1,8 @@
 package newClassManagerGUI;
 
 import java.awt.BorderLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +18,7 @@ import Model.Schedule;
 
 public class Panel015 extends JPanel {
 	CMListPanel listPanel;
-
+	List<AbstractModel> scheduleList;
 	public Panel015() {
 		ImageIcon img = new ImageIcon("img/basic_resize.jpg");
 
@@ -61,6 +63,20 @@ public class Panel015 extends JPanel {
 			titleLabel.setVerticalAlignment(SwingConstants.CENTER);
 			add(dateLabel);
 			add(titleLabel);
+			addFocusListener(new FocusListener(){
+
+				@Override
+				public void focusGained(FocusEvent arg0) {
+					// TODO Auto-generated method stub
+					refreshSchedulList(scheduleList);
+				}
+
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					
+				}
+				
+			});
 		}
 
 		public SchedulePanel(Date date, String title, String content) {
