@@ -25,7 +25,6 @@ public class ChatService {
 	 *         0: 채팅방 개설 실패(INSERT 실패)<br>
 	 *        -1: SQL Exception<br>
 	 *        -2: List<Chat> 조회 실패<br>
-	 *        -3: PK 중복<br>
 	 *        -100: JID - NULL<br>
 	 *        -101: RTITLE - NULL
 	 */
@@ -71,9 +70,6 @@ public class ChatService {
 		
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
-		
-		Chat temp = new Chat();
-		temp.setRtitle(chat.getRtitle());
 		
 		List<Chat> listChat = dao.getChatDao().selectChat(chat);
 		if (listChat.size() < 1)
