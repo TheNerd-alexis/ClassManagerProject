@@ -9,9 +9,12 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,7 +24,7 @@ import Model.Schedule;
 public class Panel014 extends JPanel{
 	
 	CMButton addfbtn;
-	CMButton add2;
+	CMButton addevent;
 	JTextArea memomain;
 	CMTextField titleField;
 	CMTextField timeofsche;
@@ -60,9 +63,9 @@ public class Panel014 extends JPanel{
 		addfbtn.setBounds(297,193,68,28);
 		bgPanel.add(addfbtn);
 		
-		add2 = new CMButton("추가+");
-		add2.setBounds(297,249,68,28);
-		bgPanel.add(add2);
+		addevent = new CMButton("추가+");
+		addevent.setBounds(297,249,68,28);
+		bgPanel.add(addevent);
 		
 		
 		memomain = new JTextArea();
@@ -75,23 +78,57 @@ public class Panel014 extends JPanel{
 
 	
 	public void addListener() {
+		
+		
+		String str;
+		Date date = new Date();
+		
+		String pattern = "(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])";
+		Pattern p = Pattern.compile(pattern);
+		
 		addfbtn.addActionListener(new ActionListener() {
 			
-			String str;
-			Date date;
-			
+		
 			public void actionPerformed(ActionEvent e) {
-				Schedule schedule = new Schedule();
-				schedule.setSchTitle(titleField.getText());
-				
-				this.str = new String(timeofsche.getText());
-				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-				Date to = transFormat.parse(str);
-				
-				schedule.setSchDate(to);
-				schedule.setSch(memomain.getText());
-				
-				
+				// TODO Auto-generated method stub
+				//위치이동
+			}
+		});
+		
+		addevent.addActionListener(new ActionListener() {
+			
+			
+			
+			
+			public void actionPerformed(ActionEvent arg0) {
+				if (timeofsche.getText() == null || timeofsche.getText().equals("YYYY.  MM. DD")){
+					JOptionPane.showMessageDialog(null, "시간을 입력해주세요");
+					timeofsche.requestFocus();
+					
+				}else if(timeofsche.getText().length()!=8 || p.matcher((CharSequence) timeofsche).find()==false){
+					JOptionPane.showMessageDialog(null, "8자리로 맞춰서 써주시기 바립니다.");
+					timeofsche.requestFocus();
+					
+				}else if(memomain.getText() ==null || memomain.getText().equals(null)){
+					JOptionPane.showMessageDialog(null, "8자리로 맞춰서 써주시기 바립니다.");
+					memomain.requestFocus();
+					
+					
+				}else {
+					
+					Schedule schedule = new Schedule();
+					schedule.setSchTitle(titleField.getText());
+					
+					this.str = new String(timeofsche.getText());
+					SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+					date = transFormat.parse("textfield");
+					transFormat.format(date);
+//					Date to = transFormat.parse(str);
+					schedule.setSchDate(date);
+					schedule.setSch(memomain.getText());
+					
+					
+				}
 			}
 		});
 	}
