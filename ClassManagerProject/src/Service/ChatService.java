@@ -19,12 +19,12 @@ public class ChatService {
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
 		if(chat.getJid() == null)
-			result.setResult(-1);
-		if(chat.getRtitle() == null)
-			result.setResult(-2);
-		else 
-			result.setResult(dao.getChatDao().insertChat(chat));
+			return result.setResult(-2);
 		
+		if(chat.getRtitle() == null)
+			return result.setResult(-3);
+		
+		result.setResult(dao.getChatDao().insertChat(chat));
 		return result;
 	}
 
@@ -33,12 +33,11 @@ public class ChatService {
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
 		if(chat.getJid() == null)
-			result.setResult(-1);
+			return result.setResult(-2);
 		if(chat.getRtitle() == null)
-			result.setResult(-2);
-		else
-			result.setResult(dao.getChatDao().deleteChat(chat));
+			return result.setResult(-3);
 		
+		result.setResult(dao.getChatDao().deleteChat(chat));
 		return result;
 	}
 
@@ -46,10 +45,10 @@ public class ChatService {
 	public static CMResult chat_refresh(AbstractModel model){
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
+		
 		if(chat.getJid() == null)
-			result.setResult(-1);//채팅방 id값이 없을 경우 refresh 실패.
-		else
-			result.setResult(1);
+			return result.setResult(-2);//채팅방 id값이 없을 경우 refresh 실패.
+		
 		Chat temp = new Chat();
 		temp.setJid(chat.getJid());
 		
@@ -58,17 +57,16 @@ public class ChatService {
 			resultList.add(m);
 		}
 		result.setResultList(resultList);
-		
-		return result;
+		return result.setResult(1);
 	}
 
 	public static CMResult chat_invited(AbstractModel model){
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
 		if(chat.getRtitle() == null)
-			result.setResult(-1);//채팅방 제목값이 없을 경우 invited 실패.
-		else 
-			result.setResult(1);
+			result.setResult(-2);//채팅방 제목값이 없을 경우 invited 실패.
+		
+		
 		Chat temp = new Chat();
 		temp.setJid(chat.getRtitle());
 	
@@ -77,7 +75,7 @@ public class ChatService {
 			resultList.add(m);
 		}
 		result.setResultList(resultList);
+		return result.setResult(1);
 		
-		return result;
 	}	
 }
