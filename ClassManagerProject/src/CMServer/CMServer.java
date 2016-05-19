@@ -1,22 +1,16 @@
 package CMServer;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import Model.AbstractModel;
 import Model.CMMessage;
-import Model.CMResult;
-import Service.MemberService;
+import Model.Member;
 
 public class CMServer {
 
@@ -38,7 +32,7 @@ public class CMServer {
 }
 
 class CMServerManager {
-	static Map<InetAddress, ServerClient> clients = new ConcurrentHashMap<InetAddress, ServerClient>();
+	static Map<String, ServerClient> clients = new ConcurrentHashMap<String, ServerClient>();
 
 	private static CMServerManager instance;
 
@@ -50,8 +44,7 @@ class CMServerManager {
 
 	public void addClient(Socket socket) throws IOException {
 		ServerClient tempClient = new ServerClient(socket);
-		Thread receiver = new Thread(new ServerReceiver(tempClient));
-		clients.put(socket.getInetAddress(), tempClient);
+		ServerReceiver receiver = new ServerReceiver(tempClient);
 		Thread thread = new Thread(receiver);
 		thread.start();
 	}
@@ -68,12 +61,9 @@ class CMServerManager {
 			try {
 				while (true) {
 					CMMessage message = (CMMessage) client.reader.readObject();
-					CMResult result = new CMResult();
-					if (message.getCommand().contains("login")) {
-						System.out.println(message.toString());
-						result.setResult(MemberService.getInstance().login(message.getContent()));
-					}
-					sendMsg(message.getCommand(), result);
+					if (message.getCommand().equals("login"))
+						clients.put(((Member) message.getContent()).getMID(), client);
+					message.doMsg().sendMsg(client.writer);
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				// removeClient(userID);
@@ -81,13 +71,9 @@ class CMServerManager {
 			}
 		}
 
-		public void sendMsg(String command, AbstractModel model) {
-			CMMessage message = new CMMessage(command, model);
-			try {
-				System.out.println(message.toString());
-				client.writer.writeObject(message);
-				client.writer.flush();
-			} catch (IOException e) {
+		public void sendMsgToCient(String[] destId, CMMessage msg) {
+			for (String id : destId) {
+				msg.sendMsg(clients.get(id).writer);
 			}
 		}
 	}
