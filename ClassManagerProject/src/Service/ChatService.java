@@ -1,44 +1,83 @@
 package Service;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import DAO.ChatDao;
+import DAO.GetDAO;
 import Model.AbstractModel;
+import Model.CMResult;
 import Model.Chat;
 
 
 public class ChatService {
-	private Connection connection;
-	private ChatDao chatDao = ChatDao.getInstance(connection);
-	private Chat chat;
 	
-	public int chat_in(AbstractModel model){
-		Chat chat = (Chat)model;
-		return chatDao.insertChat(chat);			
-	}
+	static GetDAO dao = GetDAO.getInstance();
 
-	public int chat_out(AbstractModel model){
-		Chat chat = (Chat)model;
-		return chatDao.deleteChat(chat);			
-	}
+	
+
+	public static CMResult chat_in(AbstractModel model){
+		Chat chat = (Chat) model;
+		CMResult result = new CMResult();
+		if(chat.getJid() == null)
+			result.setResult(-1);
+		if(chat.getRtitle() == null)
+			result.setResult(-2);
+		else 
+			result.setResult(dao.getChatDao().insertChat(chat));
 		
-	public List<Chat> chat_refresh(AbstractModel model){
-		Chat chat = (Chat)model;
-		return chatDao.selectChat(chat);		
+		return result;
 	}
-	
-	public List<String> chat_invited(AbstractModel model){
-		Chat chat = (Chat)model;
-		List<Chat> chatList = chatDao.selectChat(chat);
-		List<String> invitedList = new ArrayList<String>();
-		for(int i = 0; i < chatList.size(); i++){
-			String invitedId = chatList.get(i).getJid();
-			invitedList.add(invitedId);
-		}
-		return invitedList;			
-	}
-	
-}
 
+
+	public static CMResult chat_out(AbstractModel model){
+		Chat chat = (Chat) model;
+		CMResult result = new CMResult();
+		if(chat.getJid() == null)
+			result.setResult(-1);
+		if(chat.getRtitle() == null)
+			result.setResult(-2);
+		else
+			result.setResult(dao.getChatDao().deleteChat(chat));
+		
+		return result;
+	}
+
+
+	public static CMResult chat_refresh(AbstractModel model){
+		Chat chat = (Chat) model;
+		CMResult result = new CMResult();
+		if(chat.getJid() == null)
+			result.setResult(-1);//채팅방 id값이 없을 경우 refresh 실패.
+		else
+			result.setResult(1);
+		Chat temp = new Chat();
+		temp.setJid(chat.getJid());
+		
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		for(AbstractModel m : dao.getChatDao().selectChat(temp)){
+			resultList.add(m);
+		}
+		result.setResultList(resultList);
+		
+		return result;
+	}
+
+	public static CMResult chat_invited(AbstractModel model){
+		Chat chat = (Chat) model;
+		CMResult result = new CMResult();
+		if(chat.getRtitle() == null)
+			result.setResult(-1);//채팅방 제목값이 없을 경우 invited 실패.
+		else 
+			result.setResult(1);
+		Chat temp = new Chat();
+		temp.setJid(chat.getRtitle());
+	
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		for(AbstractModel m : dao.getChatDao().selectChat(chat)){
+			resultList.add(m);
+		}
+		result.setResultList(resultList);
+		
+		return result;
+	}	
+}
