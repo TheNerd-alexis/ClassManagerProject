@@ -1,27 +1,26 @@
 package Model;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 
-import javax.xml.transform.Result;
+import javax.swing.JOptionPane;
 
 import Service.MemberService;
 
 public class CMMessage implements Serializable {
 
-	static MemberService memberService;
+	static MemberService memberService = MemberService.getInstance();
 
 	private String command;
 	private AbstractModel content;
 	private String chat;
 
-	public CMMessage(String command, String chat){
+	public CMMessage(String command, String chat) {
 		this.command = command;
 		this.chat = chat;
 	}
-	
+
 	public CMMessage(String command, AbstractModel content) {
 		this.command = command;
 		this.content = content;
@@ -47,20 +46,27 @@ public class CMMessage implements Serializable {
 	public String toString() {
 		return command + "  " + content.toJson().toString();
 	}
-//
-//	public CMMessage doMsg() {
-//		CMResult result = new CMResult();
-//		if (command.equals("login"))
-//			result.setResult(memberService.login(content));
-//		CMMessage returnMsg = new CMMessage(command, result);
-//		return returnMsg;
-//	}
-//
-//	public static void readResult(CMMessage msg) {
-//		String command = msg.getCommand();
-//		if (!(msg.getContent() instanceof CMResult))
-//			return;
-//		CMResult result = (CMResult) msg.getContent();
-//		System.out.println(result.toJson());
-//	}
+
+	public void sendMsg(ObjectOutputStream writer) {
+		CMMessage message = new CMMessage(this.command, this.content);
+		try {
+			writer.writeObject(message);
+			writer.flush();
+		} catch (IOException e) {
+		}
+	}
+
+	public CMMessage doMsg() {
+		CMResult result = new CMResult();
+		if (command.contains("login"))
+			result = memberService.login(content);
+		if (command.contains("join"))
+			result = memberService.join(content);
+		if (command.contains("check"))
+			result = memberService.idCheck(content);
+		// System.out.println(content.toJson().toString());
+		CMMessage returnMsg = new CMMessage(command, result);
+
+		return returnMsg;
+	}
 }

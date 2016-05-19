@@ -7,7 +7,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 public class CMResult implements AbstractModel<CMResult>,Serializable {
-	private int result = -1;
+	private int result = -100;
 	private List<AbstractModel> resultList = new ArrayList<AbstractModel>();
 
 	@Override
@@ -23,8 +23,9 @@ public class CMResult implements AbstractModel<CMResult>,Serializable {
 		return result;
 	}
 
-	public void setResult(int result) {
+	public CMResult setResult(int result) {
 		this.result = result;
+		return this;
 	}
 
 	public List<AbstractModel> getResultList() {
