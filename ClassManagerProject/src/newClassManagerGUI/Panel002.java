@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.ObjectOutputStream;
@@ -198,6 +200,24 @@ public class Panel002 extends JPanel {
 				}
 			}
 		});
+		this.setFocusable(true);
+
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				clearForm();
+			}
+		});
+	}
+	
+	public void clearForm(){
+		idField.setText("ID 입력");
+		passwordField1.setText("");
+		passwordField2.setText("");
+		pwCombo.setSelectedIndex(0);
+		pwaField.setText("");
+		classCombo.setSelectedIndex(0);
 	}
 
 	public static void main(String[] args) {
