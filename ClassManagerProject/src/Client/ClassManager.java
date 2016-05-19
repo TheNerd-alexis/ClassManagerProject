@@ -15,7 +15,7 @@ public class ClassManager {
 
 	public ClassManager() {
 		try {
-			socket = new Socket("70.12.109.125", 7777);
+			socket = new Socket("127.0.0.1", 7777);
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null, "서버와의 접속이 불가능합니다.\n프로그램을 종료합니다.");
 			System.exit(0);
