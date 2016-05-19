@@ -3,8 +3,6 @@ package newClassManagerGUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -12,15 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class CMListPanel extends JPanel {
-	JPanel panel = new JPanel();
 
+	CMList panel;
+	
 	CMListPanel() {
 		setLayout(new BorderLayout(0, 0));
 		setOpaque(false);
 		setBorder(null);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setOpaque(false);
-		panel.setBorder(null);
+		panel = new CMList();
 		JScrollPane scroll = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getViewport().setOpaque(false);
@@ -41,6 +38,14 @@ public class CMListPanel extends JPanel {
 		scroll.setBorder(null);
 		add(scroll, BorderLayout.CENTER);
 	}
+	class CMList extends JPanel{
+		CMList(){
+//			JPanel panel = new JPanel();
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setOpaque(false);
+			setBorder(null);
+		}
+	}
 
 	public void addComponent(ClassManagerPanel element) {
 		int width = this.getBounds().width - 20;
@@ -57,5 +62,9 @@ public class CMListPanel extends JPanel {
 
 	public void removeComponent(ClassManagerPanel element) {
 		element.getParent().remove(element);
+	}
+	
+	public void clearList() {
+		panel.removeAll();
 	}
 }

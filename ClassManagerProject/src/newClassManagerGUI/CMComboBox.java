@@ -13,7 +13,7 @@ public class CMComboBox extends JComboBox{
 	public CMComboBox(Object[] items) {
 		super(items);
 		setBackground(Color.WHITE);
-		setOpaque(false);
+//		setOpaque(false);
 		setBorder(null);
 		setFont(defaultFont);
 		setForeground(defaultColor);

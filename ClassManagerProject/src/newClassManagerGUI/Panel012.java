@@ -27,7 +27,7 @@ import javax.swing.Box;
 
 	
 public class Panel012 extends JPanel{
-	Font defaultFont = new Font();
+	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
 	CalendarPanel calendarPanel; 
 	SearchSchedulePanel searchSchedulePanel;
 	ScheduleListPanel scheduleListPanel;
