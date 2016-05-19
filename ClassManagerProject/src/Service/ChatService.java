@@ -13,8 +13,6 @@ public class ChatService {
 	
 	static GetDAO dao = GetDAO.getInstance();
 
-	
-
 	public static CMResult chat_in(AbstractModel model){
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
@@ -24,8 +22,7 @@ public class ChatService {
 		if(chat.getRtitle() == null)
 			return result.setResult(-3);
 		
-		result.setResult(dao.getChatDao().insertChat(chat));
-		return result;
+		return result.setResult(dao.getChatDao().insertChat(chat));
 	}
 
 
@@ -37,8 +34,7 @@ public class ChatService {
 		if(chat.getRtitle() == null)
 			return result.setResult(-3);
 		
-		result.setResult(dao.getChatDao().deleteChat(chat));
-		return result;
+		return result.setResult(dao.getChatDao().deleteChat(chat));
 	}
 
 
