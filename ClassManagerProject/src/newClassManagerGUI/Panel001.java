@@ -16,13 +16,15 @@ import Model.Member;
 public class Panel001 extends JPanel{
 	private ImageIcon img = new ImageIcon("img/001_resize.jpg");
 	private CMButton loginBtn;
-	CMButton joinBtn;
+	public CMButton joinBtn;
 	private CMButton idpwBtn;
 	private CMTextField idField;
 	private CMPasswordField passwordField;
-	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 25);
+	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
+	ObjectOutputStream writer;
 	
 	public Panel001(ObjectOutputStream writer) {
+		this.writer = writer;
 		setLayout(new BorderLayout(0, 0));
 		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
 		setSize(img.getIconWidth(),img.getIconHeight());
@@ -34,21 +36,29 @@ public class Panel001 extends JPanel{
 		bgPanel.add(loginBtn);
 		
 		idField = new CMTextField();
-		idField.setBounds(200,533,145,39);
+		idField.setBounds(213,540,140,39);
+		idField.setFont(defaultFont);
 		bgPanel.add(idField);
 		
 		passwordField = new CMPasswordField();
-		passwordField.setBounds(200,571,145,39);
+		passwordField.setBounds(213,583,140,39);
+		passwordField.setFont(defaultFont);
 		bgPanel.add(passwordField);
 		
-		joinBtn = new CMButton("join");
+		joinBtn = new CMButton("회원가입");
 		joinBtn.setBounds(52,648,153,40);
+		joinBtn.setFont(defaultFont);
 		bgPanel.add(joinBtn);
 		
-		idpwBtn = new CMButton("ID & PW 찾기");
+		idpwBtn = new CMButton("비밀번호 찾기");
 		idpwBtn.setBounds(207,647,149,38);
+		idpwBtn.setFont(defaultFont);
 		bgPanel.add(idpwBtn);
 		
+		addListener();
+	}
+	
+	public void addListener(){
 		loginBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -61,8 +71,8 @@ public class Panel001 extends JPanel{
 		});
 	}
 
-//
-//	public static void main(String[] args) {
-//		ClassManagerPanel.constructGUI(new Panel001());
-//	}
+
+	public static void main(String[] args) {
+		ClassManagerPanel.constructGUI(new Panel001(null));
+	}
 }
