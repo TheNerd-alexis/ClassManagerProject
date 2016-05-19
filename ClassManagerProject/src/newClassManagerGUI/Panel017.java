@@ -1,6 +1,7 @@
 package newClassManagerGUI;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ public class Panel017 extends JPanel {
 		list.addComponent(new MiniPanel017("오늘 치맥 ㄱㄱ?"));
 		bgPanel.add(list,BorderLayout.CENTER);
 		
+		
 	}
 	
 	class MiniPanel017 extends ClassManagerPanel {
@@ -30,17 +32,25 @@ public class Panel017 extends JPanel {
 		public MiniPanel017(){
 			super(new ImageIcon("img/17.jpg"));
 			
-			JLabel heart = new JLabel("n");
-			heart.setBounds(22,16,81,34);
-			heart.setHorizontalAlignment(SwingConstants.RIGHT);
-			heart.setVerticalAlignment(SwingConstants.CENTER);
+			ImageIcon hearts = new ImageIcon("img/hearts.png");
+			JLabel heart = new JLabel(hearts);
+			heart.setBounds(26,17,40,32);
 			add(heart);
-					
-			JLabel thunder = new JLabel("n");
-			thunder.setBounds(110,17,78,34);
-			thunder.setHorizontalAlignment(SwingConstants.RIGHT);
-			thunder.setVerticalAlignment(SwingConstants.CENTER);
+			JLabel nOfHeart = new JLabel("n");
+			nOfHeart.setBounds(22,16,81,34);
+			nOfHeart.setHorizontalAlignment(SwingConstants.RIGHT);
+			nOfHeart.setVerticalAlignment(SwingConstants.CENTER);
+			add(nOfHeart);
+			
+			ImageIcon lightening = new ImageIcon("img/lightening.png");
+			JLabel thunder = new JLabel(lightening);
+			thunder.setBounds(108,18,44,33);
 			add(thunder);
+			JLabel nOfThunder = new JLabel("n");
+			nOfThunder.setBounds(110,17,78,34);
+			nOfThunder.setHorizontalAlignment(SwingConstants.RIGHT);
+			nOfThunder.setVerticalAlignment(SwingConstants.CENTER);
+			add(nOfThunder);
 			
 			CMButton sharing = new CMButton("공유하기");
 			sharing.setBounds(280,44,74,31);
