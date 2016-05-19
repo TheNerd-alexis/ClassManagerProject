@@ -28,6 +28,7 @@ import javax.swing.Box;
 	
 public class Panel012 extends JPanel{
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
+	public TitlePanel title;
 	CalendarPanel calendarPanel; 
 	SearchSchedulePanel searchSchedulePanel;
 	ScheduleListPanel scheduleListPanel;
@@ -37,6 +38,11 @@ public class Panel012 extends JPanel{
 		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
 		setLayout(new BorderLayout(0,0));
 		add(bgPanel, BorderLayout.CENTER);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+		title.setBounds(0,0,410,40);
+		bgPanel.add(title);
+		
 		searchSchedulePanel = new SearchSchedulePanel();
 		calendarPanel = new CalendarPanel(searchSchedulePanel.year, searchSchedulePanel.month);
 		scheduleListPanel = new ScheduleListPanel();
