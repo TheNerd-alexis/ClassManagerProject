@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -15,11 +18,12 @@ import javax.swing.JPasswordField;
 
 import Model.CMMessage;
 import Model.Member;
+import Service.MemberService;
 
 public class Panel002 extends JPanel {
 	private ObjectOutputStream writer;
 	private ImageIcon img = new ImageIcon("img/002_resize.jpg");
-	private CMTextField idField;
+	public CMTextField idField;
 	private CMPasswordField passwordField1;
 	private CMPasswordField passwordField2;
 	private CMComboBox pwCombo;
@@ -27,13 +31,15 @@ public class Panel002 extends JPanel {
 	private CMTextField pwaField;
 	private CMButton confirmBtn;
 	private CMButton idCheckBtn;
+	public TitlePanel title;
+	public Boolean idcheckstate = false;
 
 	private String[] PWQ = { "비밀번호 힌트 질문", "----------------------------------", "당신의 이름은 무엇입니까?", "당신의 고향은 어디입니까?",
 			"당신의 출신 초등학교는 어디입니까?", "가장 선호하는 색깔은 무엇입니까?" };
 
 	private String[] BAN = { "과정명", "----------------------------------", "IOT기반 응용SW개발자", "안드로이드", "SCSA", "기타" };
 
-//	public Panel002() {
+	// public Panel002() {
 	public Panel002(ObjectOutputStream writer) {
 		this.writer = writer;
 		setLayout(new BorderLayout(0, 0));
@@ -41,17 +47,18 @@ public class Panel002 extends JPanel {
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 
-		TitlePanel title = new TitlePanel("CM", "회원가입", "닫기");
-		title.setBounds(0,0,400,40);
+		title = new TitlePanel("CM", "회원가입", "닫기");
+
+		title.setBounds(0, 0, this.getBounds().width + 10, 40);
 		bgPanel.add(title);
-		
+
 		idField = new CMTextField();
 		idField.setText("ID 입력");
 		idField.setBounds(37, 134, 240, 40);
 		bgPanel.add(idField);
-		
+
 		idCheckBtn = new CMButton("중복확인");
-		idCheckBtn.setBounds(284,136,105,40);
+		idCheckBtn.setBounds(284, 136, 105, 40);
 		bgPanel.add(idCheckBtn);
 
 		passwordField1 = new CMPasswordField();
@@ -81,15 +88,24 @@ public class Panel002 extends JPanel {
 		bgPanel.add(confirmBtn);
 		addListener();
 	}
-	
-	
+
 	public void addListener() {
+		idCheckBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Member member = new Member();
+				member.setMID(idField.getText());
+				new CMMessage("check", member).sendMsg(writer);
+			}
+		});
+
 		idField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				CMTextField source = (CMTextField) e.getSource();
-				if (source.getText().equals("ID 입력") || source.getText().isEmpty()) {
+				if (source.getText().equals("ID 입력") || source.getForeground().equals(Color.RED)) {
 					source.setText("");
+					source.setForeground(Color.BLACK);
 				}
 			}
 
@@ -101,7 +117,7 @@ public class Panel002 extends JPanel {
 				}
 			}
 		});
-		
+
 		passwordField1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -123,7 +139,7 @@ public class Panel002 extends JPanel {
 				}
 			}
 		});
-		
+
 		passwordField2.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -145,13 +161,16 @@ public class Panel002 extends JPanel {
 				}
 			}
 		});
-		
+
 		confirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (idField.getText() == null || idField.getText().equals("ID 입력")) {
 					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
 					idField.requestFocus();
+				} else if (idcheckstate == false) {
+					JOptionPane.showMessageDialog(null, "아이디 중복체크를 해주세요.");
+					idCheckBtn.requestFocus();
 				} else if (passwordField1.getPassword().length < 1 || passwordField1.getEchoChar() == (char) 0) {
 					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
 					passwordField1.requestFocus();
@@ -171,7 +190,6 @@ public class Panel002 extends JPanel {
 					Member member = new Member();
 					member.setMID(idField.getText());
 					member.setPW(String.valueOf(passwordField1.getPassword()));
-					member.setSALT(String.valueOf(passwordField1.getPassword()));
 					member.setMCL(classCombo.getSelectedIndex());
 					member.setPWQ(pwCombo.getSelectedIndex());
 					member.setPWA(pwaField.getText());
@@ -181,7 +199,8 @@ public class Panel002 extends JPanel {
 			}
 		});
 	}
-//	public static void main(String[] args) {
-//		ClassManagerPanel.constructGUI(new Panel002());
-//	}
+
+	public static void main(String[] args) {
+		ClassManagerPanel.constructGUI(new Panel002(null));
+	}
 }

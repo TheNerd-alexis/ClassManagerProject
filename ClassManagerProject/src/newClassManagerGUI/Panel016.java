@@ -31,6 +31,8 @@ public class Panel016 extends JPanel {
 		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
 		list.addComponent(new MiniPanel016());
 		list.addComponent(new MiniPanel016(1, "요란한 빈수레 김진호ㅋㅋㅋㅋ"));
+//		list.clearList();
+//		list.addComponent(new MiniPanel016(2, "테스트"));
 		bgPanel.add(list, BorderLayout.CENTER);
 	}
 
