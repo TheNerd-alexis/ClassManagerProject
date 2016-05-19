@@ -9,7 +9,7 @@ public class Member implements AbstractModel<Member>,Serializable{
 	private String MID;
 	private String PW;
 	private String SALT;
-	private String MNAME;
+//	private String MNAME;
 	private Integer MCL;
 	private Integer PWQ;
 	private String PWA;
@@ -23,9 +23,9 @@ public class Member implements AbstractModel<Member>,Serializable{
 	public String getSALT() {
 		return SALT;
 	}
-	public String getMNAME() {
-		return MNAME;
-	}
+//	public String getMNAME() {
+//		return MNAME;
+//	}
 	public Integer getMCL() {
 		return MCL;
 	}
@@ -44,9 +44,9 @@ public class Member implements AbstractModel<Member>,Serializable{
 	public void setSALT(String sALT) {
 		SALT = sALT;
 	}
-	public void setMNAME(String mNAME) {
-		MNAME = mNAME;
-	}
+//	public void setMNAME(String mNAME) {
+//		MNAME = mNAME;
+//	}
 	public void setMCL(Integer mCL) {
 		MCL = mCL;
 	}
@@ -63,7 +63,7 @@ public class Member implements AbstractModel<Member>,Serializable{
 		member.setMID((String) json.get("MID"));
 		member.setPW((String) json.get("PW"));
 		member.setSALT((String) json.get("SALT"));
-		member.setMNAME((String) json.get("MNAME"));
+//		member.setMNAME((String) json.get("MNAME"));
 		member.setMCL((Integer) json.get("MCL"));
 		member.setPWQ((Integer) json.get("PWQ"));
 		member.setPWA((String) json.get("PWA"));
@@ -77,7 +77,7 @@ public class Member implements AbstractModel<Member>,Serializable{
 		json.put("MID", this.getMID());
 		json.put("PW", this.getPW());
 		json.put("SALT", this.getSALT());
-		json.put("MNAME", this.getMNAME());
+//		json.put("MNAME", this.getMNAME());
 		json.put("MCL", this.getMCL());
 		json.put("PWQ", this.getPWQ());
 		json.put("PWA", this.getPWA());
