@@ -114,7 +114,7 @@ public class MemberService {
 		String[] pw = password(member.getPW());
 		member.setPW(pw[0]);
 		member.setSALT(pw[1]);
-		
+
 		result.setResult(memberDAO.insertMember(member));
 		return result;
 	}
@@ -171,13 +171,23 @@ public class MemberService {
 	}
 
 	// 멤버리스트 뽑아오는 애
-	public List<AbstractModel> show(AbstractModel model) {
+	public CMResult show(AbstractModel model) {
 		Member member = (Member) model;
+		if(member.getMID()!=null)
+			member.setMID("%"+member.getMID()+"%");
 		List<Member> list = memberDAO.selectMember(member);
-		List<AbstractModel> result = new ArrayList<AbstractModel>();
+		CMResult result = new CMResult();
+
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		
+		if (list.size() < 1)
+			return result.setResult(-2);
 		for (Member m : list) {
-			result.add(m);
+			resultList.add(m);
 		}
+		result.setResult(1);
+		result.setResultList(resultList);
+
 		return result;
 	}
 
