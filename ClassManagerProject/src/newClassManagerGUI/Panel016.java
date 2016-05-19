@@ -22,7 +22,7 @@ public class Panel016 extends JPanel {
 	ClassManagerPanel bgPanel;
 	CMButton eventContentBtn;
 	JLabel eventTypeLabel;
-
+	TitlePanel title;
 	List<AbstractModel> eventList;
 
 	public Panel016() {
@@ -31,6 +31,11 @@ public class Panel016 extends JPanel {
 		// bgPanel.setBackground();
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
+		
+		title = new TitlePanel("CM", "회원가입", "닫기");
+		title.setBounds(0, 0, this.getBounds().width + 10, 40);
+		bgPanel.add(title);
+		
 		listPanel = new CMListPanel();
 		listPanel.setBounds(11, 52, 390, 692);
 		listPanel.clearList();
