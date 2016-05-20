@@ -1,8 +1,6 @@
 package DAO;
 
-import java.io.ObjectInputStream.GetField;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -113,13 +111,12 @@ public class MultiDAO {
 	}
 
 	public List<Multi> selectMulti(Multi multi) {
-		String sql = "SELECT * FROM " + DBName + " WHERE fcourse LIKE ? AND fmenu LIKE ? AND forder LIKE ?";
+		String sql = "SELECT * FROM " + DBName + " WHERE fcourse LIKE ? AND fmenu LIKE ? AND ftype LIKE ?";
 		if (multi.getDAY() != null)
 			sql += " AND day = ?";
 		PreparedStatement psm = null;
 		ResultSet rs = null;
 		List<Multi> fmenuList = new ArrayList<Multi>();
-
 		try {
 			psm = conn.prepareStatement(sql);
 			psm.setString(1, multi.getFCOURSE() == null ? "%" : multi.getFCOURSE());
@@ -151,4 +148,10 @@ public class MultiDAO {
 		}
 		return fmenuList;
 	}
+
+	// public static void main(String[] args) {
+	// Multi multi = new Multi();
+	// multi.setDAY(5);
+	// GetDAO.getInstance().getMultiDao().selectMulti(multi);
+	// }
 }

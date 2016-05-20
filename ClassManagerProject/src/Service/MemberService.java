@@ -9,36 +9,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import DAO.GetDAO;
 import DAO.MemberDAO;
 import Model.AbstractModel;
 import Model.CMResult;
 import Model.Member;
 
 public class MemberService {
-	private Connection connection;
-	private String url = "jdbc:mysql://localhost:3306/classmanager";
-	private String id = "root";
-	private String pw = "mysql";
-	private MemberDAO memberDAO;
-	private static MemberService instance;
-
-	public static MemberService getInstance() {
-		if (instance == null)
-			instance = new MemberService();
-		return instance;
-	}
-
-	private MemberService() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(url, id, pw);
-			memberDAO = MemberDAO.getInstance(connection);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	static GetDAO dao = GetDAO.getInstance();
+	
 	/**
 	 * 로그인
 	 * 
@@ -50,7 +29,7 @@ public class MemberService {
 	 *         -5 = id와 pw 일치하지 않음<br>
 	 */
 	// 로그인
-	public CMResult login(AbstractModel model) {
+	public static CMResult member_login(AbstractModel model) {
 		Member member = (Member) model;
 		CMResult result = new CMResult();
 
@@ -61,7 +40,7 @@ public class MemberService {
 
 		Member temp = new Member();
 		temp.setMID(member.getMID());
-		List<Member> list = memberDAO.selectMember(temp);
+		List<Member> list = dao.getMemberDao().selectMember(temp);
 
 		// DB에 일치하는 회원 없음
 		if (list.size() < 1)
@@ -92,7 +71,7 @@ public class MemberService {
 	 *         -8 = 비밀번호 찾기 답변 선택 안함
 	 */
 	// 회원가입
-	public CMResult join(AbstractModel model) {
+	public static CMResult member_join(AbstractModel model) {
 		Member member = (Member) model;
 		CMResult result = new CMResult();
 
@@ -115,45 +94,49 @@ public class MemberService {
 		member.setPW(pw[0]);
 		member.setSALT(pw[1]);
 
-		result.setResult(memberDAO.insertMember(member));
+		result.setResult(dao.getMemberDao().insertMember(member));
 		return result;
 	}
 
 	// 아이디 중복 체크
-	public CMResult idCheck(AbstractModel model) {
+	public static CMResult member_idcheck(AbstractModel model) {
 		Member member = (Member) model;
 		CMResult result = new CMResult();
 		if (member.getMID() == null)
 			return result.setResult(-2); // 아이디 정보 없음
 
-		List<Member> tempList = memberDAO.selectMember(member);
-		if (tempList.size() < 1)
+		List<Member> tempList = dao.getMemberDao().selectMember(member);
+		if (tempList.size() < 1) {
 			return result.setResult(1); // 중복 아이디 없음
-		else
+		} else {
 			return result.setResult(2); // 중복 아이디 있음
+		}
 	}
 
-	// PW찾는 애
-	public CMResult findPW(AbstractModel model) {
+	public static CMResult member_pwcheck(AbstractModel model) {
 		Member member = (Member) model;
 		CMResult result = new CMResult();
 
 		// 데이터 베이스에 접속해 ID 존재여부를 체크하고
-		if (idCheck(member).getResult() == 1)
+		if (member_idcheck(member).getResult() == 1)
 			return result.setResult(-2); // 해당 아이디 없음
 
+		Member orgMem = dao.getMemberDao().selectMember(member.setID(member.getMID())).get(0);
+		
+		System.out.println(member.getPWQ());
+		System.out.println(orgMem.getPWQ());
 		// 유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
-		if (member.getPWQ() != memberDAO.selectMember(member).get(0).getPWQ())
+		if (!member.getPWQ().equals(orgMem.getPWQ()))
 			return result.setResult(-3); // 질문 일치하지 않음
 
 		// 유저가 입력한 pwa가 설정한 pwq와 동일한지 확인
-		if (!member.getPWA().equals(memberDAO.selectMember(member).get(0).getPWA()))
+		if (!member.getPWA().equals(orgMem.getPWA()))
 			return result.setResult(-4); // 답변 일치하지 않음
-
+		
 		return result.setResult(1);
 	}
 
-	public CMResult chagePW(AbstractModel model) {
+	public static CMResult member_pwchange(AbstractModel model) {
 		Member member = (Member) model;
 		CMResult result = new CMResult();
 		if (member.getMID() == null)
@@ -164,24 +147,26 @@ public class MemberService {
 		Member orgMember = new Member();
 		orgMember.setMID(member.getMID());
 
-		orgMember = memberDAO.selectMember(orgMember).get(0);
-		result.setResult(memberDAO.updateMember(member, orgMember));
+		String[] pw = password(member.getPW());
+		member.setPW(pw[0]);
+		member.setSALT(pw[1]);
+
+		orgMember = dao.getMemberDao().selectMember(orgMember).get(0);
+		result.setResult(dao.getMemberDao().updateMember(member, orgMember));
 
 		return result;
 	}
 
 	// 멤버리스트 뽑아오는 애
-	public CMResult show(AbstractModel model) {
+	public static CMResult member_show(AbstractModel model) {
 		Member member = (Member) model;
-		if(member.getMID()!=null)
-			member.setMID("%"+member.getMID()+"%");
-		List<Member> list = memberDAO.selectMember(member);
-		CMResult result = new CMResult();
+		if (member.getMID() != null)
+			member.setMID("%" + member.getMID() + "%");
+		List<Member> list = dao.getMemberDao().selectMember(member);
 
-		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		CMResult result = new CMResult();
 		
-		if (list.size() < 1)
-			return result.setResult(-2);
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
 		for (Member m : list) {
 			resultList.add(m);
 		}

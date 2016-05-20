@@ -93,7 +93,4 @@ public class No014 extends JPanel{
 		panel_body.add(panel_3, gbc_panel_3);
 		
 	}
-	
-		
-		
 }

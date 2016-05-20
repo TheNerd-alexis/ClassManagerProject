@@ -25,7 +25,7 @@ public class FriendDAO {
 	 */
 	public static FriendDAO getInstance(Connection connection) {
 		if (instance == null)
-			new FriendDAO(connection);
+			instance = new FriendDAO(connection);
 		return instance;
 	}
 	/**
@@ -46,7 +46,6 @@ public class FriendDAO {
 			/** 친구 정보 입력 성공 */
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			/** 친구 정보 입력 실패 */
 			return -1;
 		} finally {
@@ -85,15 +84,14 @@ public class FriendDAO {
 
 	
 	public List<Friend> selectFriend(Friend friend) {
-		String sql = "SELECT FID FROM " + DBName + "WHERE MID LIKE ? AND FID LIKE ?";
+		String sql = "SELECT * FROM " + DBName + " WHERE MID LIKE ? AND FID LIKE ?";
 		PreparedStatement statement = null;
 		ResultSet temp = null;
 		List<Friend> friendList = new ArrayList<Friend>();
-
 		try {
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, friend.getMID() == null ? "%" : friend.getFID());
-			statement.setString(2, friend.getFID() == null ? "%" : friend.getMID());
+			statement.setString(1, friend.getMID() == null ? "%" : friend.getMID());
+			statement.setString(2, friend.getFID() == null ? "%" : friend.getFID());
 			temp = statement.executeQuery();
 			while (temp.next()) {
 				Friend tempFriend = new Friend();

@@ -48,4 +48,16 @@ public class Chat implements AbstractModel<Chat>,Serializable{
 		
 		return json;
 	}
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return JID;
+	}
+	@Override
+	public Chat setID(String id) {
+		// TODO Auto-generated method stub
+		Chat newInstance = new Chat();
+		newInstance.setJid(id);
+		return newInstance;
+	}
 }

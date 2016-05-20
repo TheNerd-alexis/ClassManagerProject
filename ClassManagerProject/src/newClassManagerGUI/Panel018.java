@@ -5,26 +5,25 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.ObjectOutputStream;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.SwingConstants;
 
 import Model.CMMessage;
 import Model.Member;
 
-
 public class Panel018 extends JPanel {
 	ImageIcon img = new ImageIcon("img/pw_resize.jpg");
-	private CMTextField idField;
-	private CMComboBox qCombo;
-	private CMTextField aField;
+	public CMTextField idField;
+	public CMComboBox qCombo;
+	public CMTextField aField;
 	public CMButton checkBtn;
 	public CMButton confirmBtn;
 	public CMButton changeBtn;
@@ -33,74 +32,69 @@ public class Panel018 extends JPanel {
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
 	public TitlePanel title;
 	ObjectOutputStream writer;
-	
+
 	private String[] PWQ = { "비밀번호 힌트 질문", "----------------------------------", "당신의 이름은 무엇입니까?", "당신의 고향은 어디입니까?",
 			"당신의 출신 초등학교는 어디입니까?", "가장 선호하는 색깔은 무엇입니까?" };
-	
-	public Panel018(ObjectOutputStream writer){
+	public boolean idcheckstate;
+	public boolean pwcheckstate;
+
+	public Panel018(ObjectOutputStream writer) {
 		this.writer = writer;
 		setLayout(new BorderLayout(0, 0));
 		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
-		setSize(img.getIconWidth(),img.getIconHeight());
-		add(bgPanel,BorderLayout.CENTER);
-		
-		title = new TitlePanel("CM", "회원가입", "닫기");
+		setSize(img.getIconWidth(), img.getIconHeight());
+		add(bgPanel, BorderLayout.CENTER);
+
+		title = new TitlePanel("CM", "비밀번호 찾기", "닫기");
 
 		title.setBounds(0, 0, 410, 40);
 		bgPanel.add(title);
-		
+
 		checkBtn = new CMButton("  ");
 		checkBtn.setFont(defaultFont);
-		checkBtn.setBounds(309,166,67,35);
+		checkBtn.setBounds(309, 166, 67, 35);
 		bgPanel.add(checkBtn);
-		
-		idField = new CMTextField();
-		idField.setBounds(75,165,200,39);
+
+		idField = new CMTextField("ID 입력");
+		idField.setBounds(75, 165, 200, 39);
 		idField.setFont(defaultFont);
 		bgPanel.add(idField);
-		
+
 		qCombo = new CMComboBox(PWQ);
-		qCombo.setBounds(73,303,295,30);
+		qCombo.setBounds(73, 303, 295, 30);
 		qCombo.setFont(defaultFont);
 		bgPanel.add(qCombo);
-		
+
 		aField = new CMTextField();
-		aField.setBounds(78,378,200,39);
+		aField.setBounds(72, 386, 298, 24);
 		aField.setFont(defaultFont);
 		bgPanel.add(aField);
-		
+
 		confirmBtn = new CMButton("  ");
 		confirmBtn.setFont(defaultFont);
-		confirmBtn.setBounds(166,439,59,33);
+		confirmBtn.setBounds(166, 439, 59, 33);
 		bgPanel.add(confirmBtn);
-		
+
 		passwordField = new CMPasswordField();
-		passwordField.setBounds(140,573,200,39);
+		passwordField.setBounds(140, 573, 200, 39);
 		passwordField.setFont(defaultFont);
 		bgPanel.add(passwordField);
-		
+
 		passwordField2 = new CMPasswordField();
-		passwordField2.setBounds(140,628,200,39);
+		passwordField2.setBounds(140, 628, 200, 39);
 		passwordField2.setFont(defaultFont);
 		bgPanel.add(passwordField2);
-		
+
 		changeBtn = new CMButton("  ");
 		changeBtn.setFont(defaultFont);
-		changeBtn.setBounds(170,700,56,33);
+		changeBtn.setBounds(170, 700, 56, 33);
 		bgPanel.add(changeBtn);
-		
+
+		addListener();
+
 	}
 
 	public void addListener() {
-		checkBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Member member = new Member();
-				member.setMID(idField.getText());
-				new CMMessage("check", member).sendMsg(writer);
-			}
-		});
-
 		idField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -163,17 +157,17 @@ public class Panel018 extends JPanel {
 				}
 			}
 		});
-		
+
 		checkBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (idField.getText() == null || idField.getText().equals("ID 입력")) {
-					JOptionPane.showMessageDialog(null, "올바른 아이디를 입력해주세요.");
+					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
 					idField.requestFocus();
 				} else {
 					Member member = new Member();
 					member.setMID(idField.getText());
-					new CMMessage("join", member).sendMsg(writer);
+					new CMMessage("member_idcheck", member).sendMsg(writer);
 				}
 			}
 		});
@@ -184,39 +178,67 @@ public class Panel018 extends JPanel {
 				if (qCombo.getSelectedIndex() < 2) {
 					JOptionPane.showMessageDialog(null, "비밀번호 힌트 질문을 선택해주세요.");
 					qCombo.requestFocus();
-				} else if (idField.getText() == null || idField.getText().equals("ID 입력")) {
-						JOptionPane.showMessageDialog(null, "올바른 아이디를 입력해주세요.");
-						idField.requestFocus();
+				} else if (aField.getText() == null) {
+					JOptionPane.showMessageDialog(null, "비밀번호 힌트 답변을 입력해주세요.");
+					idField.requestFocus();
 				} else {
 					Member member = new Member();
 					member.setMID(idField.getText());
+					member.setPWQ(qCombo.getSelectedIndex());
 					member.setPWA(aField.getText());
-					
-					new CMMessage("join", member).sendMsg(writer);
+
+					new CMMessage("member_pwcheck", member).sendMsg(writer);
 				}
 			}
 		});
-		
+
 		changeBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					if (passwordField.getPassword().length < 1 || passwordField.getEchoChar() == (char) 0) {
-						JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
-						passwordField.requestFocus();
-					} else if (passwordField2.getPassword().length < 1 || passwordField2.getEchoChar() == (char) 0) {
-						JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
-						passwordField2.requestFocus();
-					} else {
-						Member member = new Member();
-						member.setMID(idField.getText());
-						member.setPW(String.valueOf(passwordField2.getPassword()));
-						new CMMessage("join", member).sendMsg(writer);
-					}
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (!idcheckstate) {
+					JOptionPane.showMessageDialog(null, "계정을 확인해주세요.");
+					idField.requestFocus();
+				} else if (!pwcheckstate) {
+					JOptionPane.showMessageDialog(null, "비밀번호 찾기 질문과 답변을 확인해주세요.");
+					qCombo.requestFocus();
+				} else if (passwordField.getPassword().length < 1 || passwordField.getEchoChar() == (char) 0) {
+					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
+					passwordField.requestFocus();
+				} else if (passwordField2.getPassword().length < 1 || passwordField2.getEchoChar() == (char) 0) {
+					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
+					passwordField2.requestFocus();
+				} else {
+					Member member = new Member();
+					member.setMID(idField.getText());
+					member.setPW(String.valueOf(passwordField2.getPassword()));
+					new CMMessage("member_pwchange", member).sendMsg(writer);
 				}
+			}
+
+		});
+		this.addComponentListener(new ComponentAdapter(){
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				refreshPanel();
+			}
 			
 		});
 	}
-	
+
+	public void refreshPanel() {
+		idField.setText("ID 입력");
+		idField.setEditable(true);
+		passwordField.setText("");
+		passwordField2.setText("");
+		qCombo.setSelectedIndex(0);
+		aField.setText("");
+		aField.setEditable(true);
+		idcheckstate = false;
+		pwcheckstate = false;
+	}
+
 	public static void main(String[] args) {
 		ClassManagerPanel.constructGUI(new Panel018(null));
 	}

@@ -55,4 +55,16 @@ public class Event implements AbstractModel<Event>,Serializable {
 		json.put("ESTATUS", this.getEstatus());
 		return json;
 	}
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return mid;
+	}
+	@Override
+	public Event setID(String id) {
+		// TODO Auto-generated method stub
+		Event newInstance = new Event();
+		newInstance.setMid(id);
+		return newInstance;
+	}
 }

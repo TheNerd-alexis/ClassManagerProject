@@ -5,11 +5,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import Model.AbstractModel;
 import Model.CMMessage;
+import Model.CMResult;
 import Model.Member;
 
 public class CMServer {
@@ -57,23 +63,59 @@ class CMServerManager {
 		}
 
 		public void run() {
-			String msg = null;
 			try {
 				while (true) {
 					CMMessage message = (CMMessage) client.reader.readObject();
-					if (message.getCommand().equals("login"))
-						clients.put(((Member) message.getContent()).getMID(), client);
-					message.doMsg().sendMsg(client.writer);
+//					System.out.println(message.getCommand());
+//					System.out.println(message.getContent().toJson());
+					returnMsgToClients(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				// removeClient(userID);
-				// // e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 
-		public void sendMsgToCient(String[] destId, CMMessage msg) {
-			for (String id : destId) {
-				msg.sendMsg(clients.get(id).writer);
+		public void refreshToClient(CMMessage message) {
+			List<AbstractModel> temp = ((CMResult) message.doMsg().getContent()).getResultList();
+			Set<String> destId = new HashSet<String>();
+			StringTokenizer token = new StringTokenizer(message.getCommand(), "_");
+			String newCommand = token.nextToken() + "_refresh";
+			for (AbstractModel model : temp) {
+				AbstractModel newContent = message.getContent().setID(model.getID());
+				new CMMessage(newCommand, newContent).doMsg().sendMsg(clients.get(model.getID()).writer);
+			}
+		}
+
+		public void returnMsgToClients(CMMessage msg) {
+			CMMessage resultMsg = msg.doMsg();
+
+			if (resultMsg.getCommand().equals("member_login") && ((CMResult) resultMsg.getContent()).getResult() == 1) {
+				clients.put(((Member) msg.getContent()).getMID(), client);
+			}
+
+			resultMsg.sendMsg(client.writer);
+
+			if (resultMsg.getCommand().contains("add") || resultMsg.getCommand().contains("delete")) {
+				if (((CMResult) resultMsg.getContent()).getResult() > 0) {
+					StringTokenizer token = new StringTokenizer(msg.getCommand(), "_");
+					resultMsg = new CMMessage(token.nextToken() + "_refresh");
+				}
+				if (resultMsg.getDestID() == null) {
+					resultMsg.sendMsg(client.writer);
+					return;
+				}
+				Iterator<String> it = resultMsg.getDestID().iterator();
+//				System.out.println(it);
+				while (it.hasNext()) {
+					String id = it.next();
+//					System.out.println(id);
+					if (id == null)
+						resultMsg.sendMsg(client.writer);
+					else if (!clients.containsKey(id))
+						continue;
+					resultMsg.sendMsg(clients.get(id).writer);
+				}
 			}
 		}
 	}
