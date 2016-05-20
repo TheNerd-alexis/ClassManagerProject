@@ -118,19 +118,10 @@ public class temp_Panel003 extends JPanel {
 		foodMenuPanel.setBounds(32,600,338,120);
 		foodMenuPanel.setLayout(null);
 		bgPanel.add(foodMenuPanel);
-		
-
 	}
 	
-	
-	
 	public static void main(String[] args) {
-		JFrame temp = new JFrame();
-		temp.getContentPane().add(new temp_Panel003(), BorderLayout.CENTER);
-		temp.setVisible(true);
-		temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		temp.pack();
-		temp.setLocationRelativeTo(null);
+		ClassManagerPanel.constructGUI(new temp_Panel003());
 		
 	}
 }

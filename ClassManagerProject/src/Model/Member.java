@@ -84,4 +84,16 @@ public class Member implements AbstractModel<Member>,Serializable{
 
 		return json;
 	}
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return MID;
+	}
+	@Override
+	public Member setID(String id) {
+		// TODO Auto-generated method stub
+		Member newInstance = new Member();
+		newInstance.setMID(id);
+		return newInstance;
+	}
 }

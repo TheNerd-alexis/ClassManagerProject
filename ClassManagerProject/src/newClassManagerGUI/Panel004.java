@@ -2,25 +2,31 @@ package newClassManagerGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Model.AbstractModel;
 import Model.Chat;
+import Model.Member;
 
 public class Panel004 extends JPanel {
 	ImageIcon img = new ImageIcon("img/004_resize.jpg");
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
 	public TitlePanel title;
 	CMListPanel listPanel;
-	List<AbstractModel> list;
+	List<AbstractModel> chatList;
 	ObjectOutputStream writer;
+	public Member member = new Member();
+	public CMButton friendbtn;
+	public CMButton newChatBtn;
 	
 	public Panel004(ObjectOutputStream writer){
 		this.writer = writer;
@@ -28,15 +34,15 @@ public class Panel004 extends JPanel {
 		setLayout(new BorderLayout(0,0));
 		add(bgPanel,BorderLayout.CENTER);
 		
-		title = new TitlePanel("CM", "회원가입", "닫기");
+		title = new TitlePanel("CM", "커뮤니티", "닫기");
 		title.setBounds(0,0,410,40);
 		bgPanel.add(title);
 		
-		CMButton friendbtn = new CMButton("친구");
+		friendbtn = new CMButton("친구");
 		friendbtn.setBounds(8,64,194,49);
 		bgPanel.add(friendbtn);
 		
-		CMButton newChatBtn = new CMButton("채팅방 개설");
+		newChatBtn = new CMButton("채팅방 개설");
 		newChatBtn.setBounds(205,64,194,49);
 		bgPanel.add(newChatBtn);
 		
@@ -44,16 +50,8 @@ public class Panel004 extends JPanel {
 		listPanel.setBounds(-2,130,412,613);
 //		listPanel.addComponent(new ChatPanel("채팅방제목"));
 		bgPanel.add(listPanel);
-
-		addFocusListener(new FocusListener(){
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				refreshChatList(list);
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-			}
+		addComponentListener(new ComponentAdapter(){
+			
 		});
 	}
 
@@ -74,18 +72,42 @@ public class Panel004 extends JPanel {
 			chatTitle.setBounds(10,12,290,40);
 			chatContentBtn.add(chatOutBtn);
 			add(chatContentBtn);
+			
+			chatOutBtn.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					if(JOptionPane.showConfirmDialog(null, title + "에서 나가시겠습니까?")==0){
+						Chat chat = new Chat();
+						chat.setID(member.getMID());
+						chat.setRtitle(title);
+						System.out.println(chat.toJson());
+					}
+				}
+				
+			});
 		}
 	}
 	
-	public void refreshChatList(List<AbstractModel> list) {
+	public void setChatList(List<AbstractModel> list) {
+		this.chatList = list;
+	}
+	
+	public void refreshChatList(){
 		listPanel.clearList();
-		for (AbstractModel model : list) {
+		for (AbstractModel model : chatList) {
 			Chat chat = (Chat) model;
 			listPanel.addComponent(new ChatPanel(chat.getRtitle()));
 		}
+		listPanel.revalidate();
 	}
 	
 	public static void main(String[] args) {
 		ClassManagerPanel.constructGUI(new Panel004(null));
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

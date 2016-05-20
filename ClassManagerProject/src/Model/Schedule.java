@@ -61,4 +61,18 @@ public class Schedule implements AbstractModel<Schedule>, Serializable{
 		
 		return json;
 	}
+
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return schID;
+	}
+
+	@Override
+	public Schedule setID(String id) {
+		// TODO Auto-generated method stub
+		Schedule newInstance = new Schedule();
+		newInstance.setSchID(id);
+		return newInstance;
+	}
 }

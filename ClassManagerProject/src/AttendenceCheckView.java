@@ -241,8 +241,5 @@ public class AttendenceCheckView extends JPanel{
 		gbc_lblNewLabel_11.gridx = 1;
 		gbc_lblNewLabel_11.gridy = 12;
 		joinContentPanel.add(lblNewLabel_11, gbc_lblNewLabel_11);
-		
-		
-
 	}
 }

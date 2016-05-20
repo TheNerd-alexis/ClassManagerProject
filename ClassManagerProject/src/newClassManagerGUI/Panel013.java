@@ -26,7 +26,7 @@ import Model.AbstractModel;
 public class Panel013 extends JPanel {
 
 	JButton btnCheck;
-	TitlePanel titlePanel;
+	public TitlePanel titlePanel;
 
 	private Color bgColor = new Color(255, 254, 239);
 	private Color fontColor = new Color(108, 108, 108);

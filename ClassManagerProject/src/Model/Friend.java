@@ -38,4 +38,16 @@ public class Friend implements AbstractModel<Friend>,Serializable{
 		
 		return json;
 	}
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return FID;
+	}
+	@Override
+	public Friend setID(String id) {
+		// TODO Auto-generated method stub
+		Friend newInstance = new Friend();
+		newInstance.setMID(id);
+		return newInstance;
+	}
 }

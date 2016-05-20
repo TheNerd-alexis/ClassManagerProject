@@ -7,13 +7,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import Model.AbstractModel;
 import Model.Chat;
-import Model.Friend;
 
 public class Panel008 extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +30,8 @@ public class Panel008 extends JPanel {
 	private JCheckBox check;
 	ObjectOutputStream writer;
 
-	private TitlePanel title;
+	public TitlePanel title;
+	List<AbstractModel> listFriend;
 
 	public Panel008(ObjectOutputStream writer) {
 		this.writer = writer;
@@ -50,23 +52,20 @@ public class Panel008 extends JPanel {
 		searchBtn = new CMButton();
 		searchBtn.setIcon(new ImageIcon(
 				new ImageIcon("img/searchIcon.png").getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
-		// nametxt = new CMTextField("남공환");
 		check = new JCheckBox();
 
 		jointxt.setBounds(48, 67, 245, 29);
 		searchtxt.setBounds(47, 133, 250, 29);
 		bgPanel.add(jointxt);
 		bgPanel.add(searchtxt);
-		// 여기까지 텍스트 붙임
 
 		joinBtn.setBounds(313, 64, 56, 31);
 		bgPanel.add(joinBtn);
 		searchBtn.setBounds(313, 133, 49, 26);
 		bgPanel.add(searchBtn);
-		// 여기까지 버튼 붙임
 
-		listPanel.setBounds(48, 178, 313, 54); // 리스트 패널 소환 바운드 정함
-		bgPanel.add(listPanel); // 비지패널에 리스트패널 붙임
+		listPanel.setBounds(48, 178, 313, 54);
+		bgPanel.add(listPanel);
 
 		addListener();
 	}
@@ -121,17 +120,8 @@ public class Panel008 extends JPanel {
 					chat.setRtitle(jointxt.getText());
 			}
 		});
-		searchBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				Friend friend = new Friend();
-				friend.setFID(searchtxt.getText());
-			}
-		});
 	}
-
+	
 	public static void main(String[] args) {
 		ClassManagerPanel.constructGUI(new Panel008(null));
 	}

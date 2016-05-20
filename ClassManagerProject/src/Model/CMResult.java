@@ -2,7 +2,9 @@ package Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
@@ -46,5 +48,17 @@ public class CMResult implements AbstractModel<CMResult>,Serializable {
 		json.put("result", this.result);
 		json.put("resultList", this.resultList);
 		return json;
+	}
+
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CMResult setID(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

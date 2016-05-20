@@ -95,9 +95,12 @@ public class Panel002 extends JPanel {
 		idCheckBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if (idField.getText().equals("ID 입력"))
+					return;
+
 				Member member = new Member();
 				member.setMID(idField.getText());
-				new CMMessage("check", member).sendMsg(writer);
+				new CMMessage("member_check", member).sendMsg(writer);
 			}
 		});
 
@@ -196,7 +199,7 @@ public class Panel002 extends JPanel {
 					member.setPWQ(pwCombo.getSelectedIndex());
 					member.setPWA(pwaField.getText());
 					System.out.println(member.toJson().toString());
-					new CMMessage("join", member).sendMsg(writer);
+					new CMMessage("member_join", member).sendMsg(writer);
 				}
 			}
 		});
@@ -206,12 +209,12 @@ public class Panel002 extends JPanel {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// TODO Auto-generated method stub
-				clearForm();
+				refreshPanel();
 			}
 		});
 	}
-	
-	public void clearForm(){
+
+	public void refreshPanel() {
 		idField.setText("ID 입력");
 		passwordField1.setText("");
 		passwordField2.setText("");

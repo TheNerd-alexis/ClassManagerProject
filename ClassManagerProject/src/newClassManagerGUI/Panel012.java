@@ -39,7 +39,7 @@ public class Panel012 extends JPanel{
 		setLayout(new BorderLayout(0,0));
 		add(bgPanel, BorderLayout.CENTER);
 		
-		title = new TitlePanel("CM", "회원가입", "닫기");
+		title = new TitlePanel("CM", "캘린더", "닫기");
 		title.setBounds(0,0,410,40);
 		bgPanel.add(title);
 		

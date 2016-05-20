@@ -49,4 +49,16 @@ public class Dch implements AbstractModel<Dch>,Serializable {
 
 		return json;
 	}
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return MID;
+	}
+	@Override
+	public Dch setID(String id) {
+		// TODO Auto-generated method stub
+		Dch newInstance = new Dch();
+		newInstance.setMID(id);
+		return newInstance;
+	}
 }
