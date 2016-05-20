@@ -59,7 +59,7 @@ public class DchService {
 	 *        -101: ATTENDATE - NULL<br>
 	 *        -102: ATTENDANCE - NULL
 	 */
-	public CMResult dch_update(AbstractModel newModel, AbstractModel beforeModel) {
+	public static CMResult dch_update(AbstractModel newModel, AbstractModel beforeModel) {
 		Dch newDch = (Dch) newModel;
 		Dch beforeDch = (Dch) beforeModel;
 		CMResult result = new CMResult();
@@ -90,7 +90,7 @@ public class DchService {
 	 *        -1: SQL Exception<br>
 	 *        -2: List<Dch> 조회 실패<br>
 	 */
-	public CMResult getDchList(AbstractModel model, Date startDate, Date endDate) {
+	public static CMResult getDchList(AbstractModel model, Date startDate, Date endDate) {
 		Dch dch = (Dch) model;
 		CMResult result = new CMResult();
 				
