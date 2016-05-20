@@ -10,38 +10,46 @@ import Model.Multi;
 
 public class MultiService {
 	static GetDAO dao = GetDAO.getInstance();
+	
+	/*
+	 * Null Type:
+	 * -100: DAY(PK)
+	 * -101: FCOURSE(PK)
+	 * -102: FTYPE
+	 * -103: FMENU
+	 */
 
 	public static CMResult multi_add(AbstractModel model) {
-		CMResult result = new CMResult();
 		Multi multi = (Multi) model;
-		if(multi.getDAY() == null){
-			result.setResult(-2);
-		}else if(multi.getFCOURSE()==null){
-			result.setResult(-3);
-		}else if(multi.getFMENU() == null){
-			result.setResult(-4);
-		}else if(multi.getFTYPE() == null){
-			result.setResult(-5);
-		}else{
-			result.setResult(dao.getMultiDao().insertMulti(multi));
+		CMResult result = new CMResult();
 		
-		}
-		return result;
+		if (multi.getDAY() == null)
+			return result.setResult(-100);
+		if (multi.getFCOURSE()==null)
+			return result.setResult(-101);
+		if (multi.getFTYPE() == null)
+			return result.setResult(-102);
+		if (multi.getFMENU() == null)
+			return result.setResult(-103);
+			
+		return result.setResult(dao.getMultiDao().insertMulti(multi));
+		
 	}
 
-	public static CMResult multi_refresh(Multi multi) {
+	public static CMResult multi_refresh(AbstractModel model) {
+		Multi multi = (Multi) model;
 		CMResult result = new CMResult();
-		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		
+		List<Multi> multiList = dao.getMultiDao().selectMulti(multi);
 
+		if (multiList.size() < 1)
+			return result.setResult(-2);
+		
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
 		for (AbstractModel T : dao.getMultiDao().selectMulti(multi)) {
 			resultList.add(T);
 		}
-		if (resultList.size() < 1)
-			result.setResult(-1);
-		else {
-			result.setResult(1);
-			result.setResultList(resultList);
-		}
-		return result;
+		result.setResultList(resultList);
+		return result.setResult(1);
 	}
 }
