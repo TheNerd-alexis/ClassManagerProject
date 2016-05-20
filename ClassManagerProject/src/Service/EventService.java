@@ -88,16 +88,16 @@ public class EventService {
 		CMResult result = new CMResult();
 		
 		if (newEvent.getMid() == null)
-			result.setResult(-100);
+			return result.setResult(-100);
 		
 		if (newEvent.getEtitle() == null)
-			result.setResult(-102);
+			return result.setResult(-102);
 		
 		if (editEvent.getMid() == null)
-			result.setResult(-200);
+			return result.setResult(-200);
 		
 		if (editEvent.getEtitle() == null)
-			result.setResult(-201);
+			return result.setResult(-201);
 		
 		return result.setResult( dao.getEventDao().updateEvent(newEvent, editEvent) );
 	}
