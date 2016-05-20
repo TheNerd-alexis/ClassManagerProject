@@ -10,51 +10,54 @@ import Model.Friend;
 
 public class FriendService {
 	static GetDAO dao = GetDAO.getInstance();
+	
+	/*
+	 * Null Type:
+	 * -100: MID (외래키) MID (PK)
+	 * -101: FID (외래키) MID (PK)
+	 */
 
 	public static CMResult friend_add(AbstractModel model) {
 		Friend friend = (Friend) model;
 		CMResult result = new CMResult();
+		
 		if (friend.getMID() == null)
-			result.setResult(-1);
+			return result.setResult(-100);
+		
 		if (friend.getFID() == null)
-			result.setResult(-2);
+			return result.setResult(-101);
 
-		result.setResult(dao.getFriendDao().insertFriend(friend));
-
-		return result;
+		return result.setResult(dao.getFriendDao().insertFriend(friend));
 	}
 
 	public static CMResult friend_delete(AbstractModel model) {
 		Friend friend = (Friend) model;
 		CMResult result = new CMResult();
+		
 		if (friend.getMID() == null)
-			result.setResult(-1);
+			return result.setResult(-100);
+		
 		if (friend.getFID() == null)
-			result.setResult(-2);
+			return result.setResult(-101);
 		
-		result.setResult(1);
-		
-		return result;
+		return result.setResult( dao.getFriendDao().deleteFriend(friend) );
 	}
 
 	public static CMResult friend_find(AbstractModel model) {
 		Friend friend = (Friend) model;
 		CMResult result = new CMResult();
 		
-		if (friend.getMID() == null)
-			result.setResult(-1);
-		if (friend.getFID() == null)
-			result.setResult(-2);
 		
-		result.setResult(1);
+		List<Friend> listFriend = dao.getFriendDao().selectFriend(friend);
+		if (listFriend.size() < 1)
+			return result.setResult(-2);
 		
 		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
-		for(AbstractModel m :dao.getFriendDao().selectFriend(friend)){
+		for(AbstractModel m : listFriend){
 			resultList.add(m);
 		}
 		result.setResultList(resultList);
-		
-		return result;
+		return result.setResult(1);
 	}
 
 }
