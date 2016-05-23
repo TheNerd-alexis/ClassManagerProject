@@ -1,9 +1,11 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class ChatDao {
 			psm = conn.prepareStatement(sql);
 			psm.setString(1, chat.getRtitle());
 			psm.setString(2, chat.getJid());
-			psm.setDate(3, chat.getCome());
+			psm.setDate(3, chat.getCome() == null ? Date.valueOf(LocalDate.now()) : chat.getCome());
 			return psm.executeUpdate();
 			/** DB chat 추가 성공 */
 		} catch (SQLException e) {
@@ -86,7 +88,7 @@ public class ChatDao {
 			psm = conn.prepareStatement(sql);
 			psm.setString(1, chat.getRtitle() == null ? "%" : chat.getRtitle());
 			psm.setString(2, chat.getJid() == null ? "%" : chat.getJid());
-//			System.out.println(psm.toString());
+			// System.out.println(psm.toString());
 			rs = psm.executeQuery();
 			while (rs.next()) {
 				Chat temp = new Chat();

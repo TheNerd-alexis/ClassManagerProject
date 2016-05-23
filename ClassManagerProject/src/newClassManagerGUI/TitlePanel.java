@@ -49,6 +49,20 @@ public class TitlePanel extends JPanel {
 		closeBtn.setForeground(whiteColor);
 		// closeBtn.setBackground(titleColor);
 		closeBtn.setOpaque(false);
+		
+		closeBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				closeBtn.setForeground(Color.ORANGE);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				closeBtn.setForeground(whiteColor);
+			}
+		});
+
 		add(closeBtn);
 	}
 

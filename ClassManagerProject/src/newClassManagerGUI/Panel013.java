@@ -133,7 +133,7 @@ public class Panel013 extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				Dch dch = dayLabel[dayOfWeek - 1].getDch();
-				System.out.println(dayLabel[dayOfWeek - 1].state);
+//				System.out.println(dayLabel[dayOfWeek - 1].state);
 				dch.setATTENDANCE(dayLabel[dayOfWeek - 1].state ? 1 : 0);
 				new CMMessage("dch_update", dch).sendMsg(writer);
 			}

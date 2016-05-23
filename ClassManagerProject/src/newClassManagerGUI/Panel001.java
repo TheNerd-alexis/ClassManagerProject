@@ -1,10 +1,11 @@
 package newClassManagerGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
 
@@ -61,6 +62,16 @@ public class Panel001 extends JPanel {
 	}
 
 	public void addListener() {
+		addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				idField.setText("");
+				passwordField.setText("");
+			}
+		});
+
 		loginBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -69,7 +80,7 @@ public class Panel001 extends JPanel {
 					idField.requestFocus();
 					return;
 				}
-				if (passwordField.getPassword().length<1) {
+				if (passwordField.getPassword().length < 1) {
 					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
 					passwordField.requestFocus();
 					return;
@@ -84,7 +95,7 @@ public class Panel001 extends JPanel {
 	}
 
 	public static void main(String[] args) {
-//		ClassManagerPanel.constructGUI(new Panel001(null));
+		// ClassManagerPanel.constructGUI(new Panel001(null));
 		System.out.println(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 	}
 }

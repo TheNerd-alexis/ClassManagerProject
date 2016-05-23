@@ -46,20 +46,21 @@ public class CMButton extends JButton{
 		setContentAreaFilled(false);
 		setFont(defaultFont);
 		setForeground(defaultColor);
+		setBackground(Color.ORANGE);
 		
-//		addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseEntered(MouseEvent arg0) {
-//				setOpaque(true);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				super.mouseExited(e);
-//				setOpaque(false);
-//			}
-//		});
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				setOpaque(true);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+				setOpaque(false);
+			}
+		});
 	}
 	
 	CMButton(String text){

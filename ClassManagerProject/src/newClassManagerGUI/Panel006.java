@@ -27,22 +27,21 @@ import Model.Member;
 public class Panel006 extends JPanel {
 	// ImageIcon listImg = new ImageIcon("img/6-1.jpg"); // in // need list img
 
-	CMTextField searchTextField; // out
-	JPanel resultFriendPanel; // out
+	private CMTextField searchTextField; // out
 	public TitlePanel title;
-	CMListPanel memberListPanel;
-	CMListPanel friendListPanel;
+	private CMListPanel memberListPanel;
+	private CMListPanel friendListPanel;
 	public List<AbstractModel> memberList = null;
 	public List<AbstractModel> friendList = null;
-	Set<String> friendSet;
-	List<NameCheckPanel> memberComponentList = null;
-	List<NameCheckPanel> friendComponentList = null;
-	CMButton searchBtn;
-	ObjectOutputStream writer;
-	Member member = new Member();
-	CardLayout mainLayout;
+	private Set<String> friendSet;
+	public List<NameCheckPanel> memberComponentList = null;
+	public List<NameCheckPanel> friendComponentList = null;
+	private CMButton searchBtn;
+	private ObjectOutputStream writer;
+	private Member member = new Member();
+	private CardLayout mainLayout;
 
-	public Panel006(ObjectOutputStream writer, CardLayout mainLayout) {
+	public Panel006(ObjectOutputStream writer) {
 		this.writer = writer;
 		setLayout(new BorderLayout(0, 0));
 		ClassManagerPanel bgPanel = new ClassManagerPanel(new ImageIcon("img/007_resize.jpg"));
@@ -82,6 +81,12 @@ public class Panel006 extends JPanel {
 			public void componentShown(ComponentEvent e) {
 				refreshMemberList();
 				refreshFriendList();
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				while (!title.closeBtn.getText().equals("닫기"))
+					title.leftBtn.doClick();
 			}
 		});
 
@@ -161,38 +166,32 @@ public class Panel006 extends JPanel {
 			}
 		});
 
-		title.closeBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (title.closeBtn.getText().equals("-삭제")) {
-					for (NameCheckPanel name : friendComponentList) {
-						if (name.checkBox.isSelected() && name.checkBox.isVisible()) {
-							Friend friend = new Friend();
-							friend.setFID(name.nameLabel.getText());
-							friend.setMID(member.getMID());
-							new CMMessage("friend_delete", friend).sendMsg(writer);
-						}
-					}
-				} else if (title.closeBtn.getText().equals("+추가")) {
-					for (NameCheckPanel mem : memberComponentList) {
-						if (mem.checkBox.isSelected()) {
-							Friend friend = new Friend();
-							friend.setFID(mem.nameLabel.getText());
-							friend.setMID(member.getMID());
-							new CMMessage("friend_add", friend).sendMsg(writer);
-						}
-					}
-				}
-			}
-		});
-
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentHidden(ComponentEvent e) {
-				while (!title.closeBtn.getText().equals("닫기"))
-					title.leftBtn.doClick();
-			}
-		});
+//		title.closeBtn.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				if (title.closeBtn.getText().equals("-삭제")) {
+//					for (NameCheckPanel name : friendComponentList) {
+//						if (name.checkBox.isSelected() && name.checkBox.isVisible()) {
+//							Friend friend = new Friend();
+//							friend.setFID(name.nameLabel.getText());
+//							friend.setMID(member.getMID());
+//							new CMMessage("friend_delete", friend).sendMsg(writer);
+//						}
+//					}
+//				} else if (title.closeBtn.getText().equals("+추가")) {
+//					if(memberComponentList==null||memberComponentList.isEmpty())
+//						return;
+//					for (NameCheckPanel mem : memberComponentList) {
+//						if (mem.checkBox.isSelected()) {
+//							Friend friend = new Friend();
+//							friend.setFID(mem.nameLabel.getText());
+//							friend.setMID(member.getMID());
+//							new CMMessage("friend_add", friend).sendMsg(writer);
+//						}
+//					}
+//				}
+//			}
+//		});
 	}
 
 	public void refreshFriendListPanel() {
@@ -201,7 +200,9 @@ public class Panel006 extends JPanel {
 			for (NameCheckPanel panel : friendComponentList)
 				panel.checkBox.setVisible(false);
 
-		for (NameCheckPanel panel : friendComponentList)
+		List<NameCheckPanel> tempComponentList = friendComponentList;
+		
+		for (NameCheckPanel panel : tempComponentList)
 			friendListPanel.addComponent(panel);
 		friendListPanel.revalidate();
 	}
@@ -210,10 +211,12 @@ public class Panel006 extends JPanel {
 		if (friendList == null || friendList.size() < 1)
 			return;
 
-		friendComponentList = new ArrayList<NameCheckPanel>();
+		List<NameCheckPanel> tempComponentList = new ArrayList<NameCheckPanel>();
 		for (AbstractModel friend : friendList) {
-			friendComponentList.add(new NameCheckPanel(friend.getID()));
+			tempComponentList.add(new NameCheckPanel(friend.getID()));
 		}
+		friendComponentList = tempComponentList;
+		
 		refreshFriendListPanel();
 	}
 

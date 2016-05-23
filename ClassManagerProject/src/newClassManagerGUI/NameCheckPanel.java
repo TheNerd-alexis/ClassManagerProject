@@ -1,19 +1,16 @@
 package newClassManagerGUI;
 
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 public class NameCheckPanel extends ClassManagerPanel {
-	JLabel nameLabel;
-	JCheckBox checkBox;
-
-	// ImageIcon checkBoxIcon = new ImageIcon("img/CheckBox.png");
+	public JLabel nameLabel;
+	public JCheckBox checkBox;
+	public Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
 
 	public NameCheckPanel() {
 
@@ -29,6 +26,7 @@ public class NameCheckPanel extends ClassManagerPanel {
 
 		nameLabel = new JLabel();
 		nameLabel.setBounds(10, 0, 337, 57);
+		nameLabel.setFont(defaultFont);
 		add(nameLabel);
 
 		checkBox = new JCheckBox();
@@ -51,5 +49,4 @@ public class NameCheckPanel extends ClassManagerPanel {
 			return null;
 		}
 	}
-
 }

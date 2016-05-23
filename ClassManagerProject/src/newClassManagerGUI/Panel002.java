@@ -117,8 +117,9 @@ public class Panel002 extends JPanel {
 			@Override
 			public void focusLost(FocusEvent e) {
 				CMTextField source = (CMTextField) e.getSource();
-				if (source.getText().isEmpty()) {
-					source.setText("ID 입력");
+				if (source.getText().length() < 4 || source.getText().length() > 15) {
+					source.setText("양식에 맞지 않습니다");
+					source.setForeground(Color.RED);
 				}
 			}
 		});
@@ -171,16 +172,16 @@ public class Panel002 extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (idField.getText() == null || idField.getText().equals("ID 입력")) {
-					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요.");
+					JOptionPane.showMessageDialog(null, "입력하신 정보를 확인해주세요.");
 					idField.requestFocus();
 				} else if (idcheckstate == false) {
 					JOptionPane.showMessageDialog(null, "아이디 중복체크를 해주세요.");
 					idCheckBtn.requestFocus();
 				} else if (passwordField1.getPassword().length < 1 || passwordField1.getEchoChar() == (char) 0) {
-					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
+					JOptionPane.showMessageDialog(null, "암호란을 확인해주세요.");
 					passwordField1.requestFocus();
 				} else if (passwordField2.getPassword().length < 1 || passwordField2.getEchoChar() == (char) 0) {
-					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요.");
+					JOptionPane.showMessageDialog(null, "암호 확인란을 확인해주세요.");
 					passwordField2.requestFocus();
 				} else if (pwCombo.getSelectedIndex() < 2) {
 					JOptionPane.showMessageDialog(null, "비밀번호 질문을 선택해주세요.");
