@@ -86,6 +86,7 @@ public class ChatDao {
 			psm = conn.prepareStatement(sql);
 			psm.setString(1, chat.getRtitle() == null ? "%" : chat.getRtitle());
 			psm.setString(2, chat.getJid() == null ? "%" : chat.getJid());
+//			System.out.println(psm.toString());
 			rs = psm.executeQuery();
 			while (rs.next()) {
 				Chat temp = new Chat();

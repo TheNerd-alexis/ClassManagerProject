@@ -42,7 +42,7 @@ public class Weather {
 		try {
 			url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon
 					+ "&appid=a03848aabb7cb876cdac4a2710af8f78");
-			System.out.println(url);
+			//System.out.println(url);
 			InputStreamReader isr = new InputStreamReader(url.openConnection().getInputStream());
 
 			JSONParser parser = new JSONParser();

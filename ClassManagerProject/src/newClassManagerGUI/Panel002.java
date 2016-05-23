@@ -198,7 +198,7 @@ public class Panel002 extends JPanel {
 					member.setMCL(classCombo.getSelectedIndex());
 					member.setPWQ(pwCombo.getSelectedIndex());
 					member.setPWA(pwaField.getText());
-					System.out.println(member.toJson().toString());
+//					System.out.println(member.toJson().toString());
 					new CMMessage("member_join", member).sendMsg(writer);
 				}
 			}

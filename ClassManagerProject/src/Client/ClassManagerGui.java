@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -40,7 +43,7 @@ public class ClassManagerGui extends JFrame implements Runnable {
 	private Panel013 dchPanel;
 	private Panel012 schedulePanel;
 	private Panel008 newChatPanel;
-	
+
 	private CardLayout mainLayout = new CardLayout(0, 0);
 	private JPanel basePanel = new JPanel();
 
@@ -52,7 +55,6 @@ public class ClassManagerGui extends JFrame implements Runnable {
 	private List<AbstractModel> multiList;
 	private Member member;
 	private Client receiver;
-	
 
 	public ClassManagerGui(Client receiver) {
 		this.receiver = receiver;
@@ -66,7 +68,7 @@ public class ClassManagerGui extends JFrame implements Runnable {
 		loginPanel = new Panel001(this.receiver.writer);
 		joinPanel = new Panel002(this.receiver.writer);
 		chatPanel = new Panel004(this.receiver.writer);
-		friendPanel = new Panel006(this.receiver.writer);
+		friendPanel = new Panel006(this.receiver.writer, mainLayout);
 		pwFindPanel = new Panel018(this.receiver.writer);
 		dchPanel = new Panel013(this.receiver.writer);
 		mainPanel = new Panel003();
@@ -95,9 +97,15 @@ public class ClassManagerGui extends JFrame implements Runnable {
 		mainPanel.chatButton.addActionListener(new PanelConverter("chatPanel"));
 		mainPanel.schButton.addActionListener(new PanelConverter("schedulePanel"));
 		schedulePanel.title.closeBtn.addActionListener(new PanelConverter("mainPanel"));
-		friendPanel.title.closeBtn.addActionListener(new PanelConverter("mainPanel"));
 		chatPanel.newChatBtn.addActionListener(new PanelConverter("newChatPanel"));
 		newChatPanel.title.closeBtn.addActionListener(new PanelConverter("chatPanel"));
+		friendPanel.title.closeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (mainPanel.title.closeBtn.getText().equals("닫기"))
+					mainLayout.show(getContentPane(), "chatPanel");
+			}
+		});
 	}
 
 	class PanelConverter implements ActionListener {
@@ -125,6 +133,8 @@ public class ClassManagerGui extends JFrame implements Runnable {
 			try {
 				CMMessage msg = (CMMessage) receiver.reader.readObject();
 				System.out.println(msg.getCommand());
+				// if (msg.getContent() != null)
+				// System.out.println(msg.getContent().toJson());
 				readResult(msg);
 			} catch (IOException | ClassNotFoundException e) {
 				JOptionPane.showMessageDialog(null, "서버와의 접속이 종료되었습니다.\n프로그램을 종료합니다.");
@@ -136,8 +146,6 @@ public class ClassManagerGui extends JFrame implements Runnable {
 	public void readResult(CMMessage msg) {
 		String command = msg.getCommand();
 		AbstractModel content = msg.getContent();
-		if (!(content instanceof CMResult))
-			return;
 
 		if (command.equals("member_login")) {
 			if (((CMResult) content).getResult() == 1) {
@@ -148,18 +156,19 @@ public class ClassManagerGui extends JFrame implements Runnable {
 				chatPanel.setMember(member);
 				// System.out.println(new
 				// Friend().setID(member.getID()).toJson());
-				new CMMessage("multi_refresh").sendMsg(receiver.writer);
+				new CMMessage("multi_refresh").sendMsg(receiver.writer);//
 				new CMMessage("friend_refresh", new Friend().setID(member.getID())).sendMsg(receiver.writer);//
 				new CMMessage("event_refresh", new Event().setID(member.getID())).sendMsg(receiver.writer);
-				new CMMessage("schedule_refresh", new Schedule().setID(member.getID())).sendMsg(receiver.writer);
+				new CMMessage("schedule_refresh", new Schedule().setID(member.getID())).sendMsg(receiver.writer);//
 				new CMMessage("chat_refresh", new Chat().setID(member.getID())).sendMsg(receiver.writer);
-				new CMMessage("dch_refresh", new Dch().setID(member.getID())).sendMsg(receiver.writer);
+				new CMMessage("dch_refresh", new Dch().setID(member.getID())).sendMsg(receiver.writer);//
 			} else
 				JOptionPane.showMessageDialog(null, "로그인에 실패했습니다.");
 		}
 		if (command.equals("friend_add")) {
 			if (((CMResult) content).getResult() == 1) {
 				// JOptionPane.showMessageDialog(null, "친구 추가를 성공했습니다.");
+				mainLayout.show(getContentPane(), "friendPanel");
 				new CMMessage("friend_refresh", new Friend().setID(member.getID())).sendMsg(receiver.writer);
 			} else
 				JOptionPane.showMessageDialog(null, "친구 추가를 실패했습니다.");
@@ -167,7 +176,8 @@ public class ClassManagerGui extends JFrame implements Runnable {
 		if (command.equals("friend_delete")) {
 			if (((CMResult) content).getResult() == 1) {
 				// JOptionPane.showMessageDialog(null, "친구 삭제를 성공했습니다.");
-				new CMMessage("friend_refresh", new Friend().setID(member.getID())).sendMsg(receiver.writer);
+				mainLayout.show(getContentPane(), "friendPanel");
+//				new CMMessage("friend_refresh", new Friend().setID(member.getID())).sendMsg(receiver.writer);
 			} else
 				JOptionPane.showMessageDialog(null, "친구 삭제를 실패했습니다.");
 		}
@@ -211,7 +221,6 @@ public class ClassManagerGui extends JFrame implements Runnable {
 				JOptionPane.showMessageDialog(null, "비밀번호를 변경할 수 없습니다.");
 			}
 		}
-
 		if (command.equals("member_join")) {
 			if (((CMResult) content).getResult() == 1) {
 				JOptionPane.showMessageDialog(null, "회원가입에 성공했습니다.");
@@ -227,10 +236,12 @@ public class ClassManagerGui extends JFrame implements Runnable {
 				JOptionPane.showMessageDialog(null, "검색한 회원을 찾을 수 없습니다.");
 			}
 		}
+
 		if (command.contains("refresh")) {
-			if (content == null)
-				msg.sendMsg(receiver.writer);
-			else {
+			// System.out.println(command + " 11111");
+			if (!(content instanceof CMResult)) {
+				new CMMessage(command, content.setID(member.getID())).sendMsg(receiver.writer);//
+			} else {
 				if (command.contains("friend")) {
 					friendPanel.setFriendList(((CMResult) content).getResultList());
 					friendPanel.refreshMemberList();
@@ -238,6 +249,36 @@ public class ClassManagerGui extends JFrame implements Runnable {
 				}
 				if (command.contains("multi")) {
 					mainPanel.setMultiList(((CMResult) content).getResultList());
+				}
+				if (command.contains("dch")) {
+					dchPanel.setDchList(((CMResult) content).getResultList());
+				}
+				if (command.contains("schedule")) {
+					mainPanel.schArea.setText("");
+					SimpleDateFormat dateform = new SimpleDateFormat("yyyy-MM-dd");
+					List<AbstractModel> list = ((CMResult) content).getResultList();
+					for (AbstractModel model : list) {
+						if (model.toJson().get("SchDate").toString().equals(dateform.format(new Date())))
+							mainPanel.schArea.append((String) model.toJson().get("SchTitle") + "\n");
+					}
+					schedulePanel.setCalendarList(((CMResult) content).getResultList());
+				}
+				if (command.contains("chat")) {
+					// List<AbstractModel> list = ((CMResult)
+					// content).getResultList();
+					// for (AbstractModel model : list) {
+					// System.out.println(model.toJson());
+					// }
+					List<AbstractModel> list = ((CMResult) content).getResultList();
+					List<AbstractModel> tempList = new ArrayList<AbstractModel>();
+					for (int i = 1; i < 4; i++) {
+						if (i > list.size())
+							break;
+						tempList.add(list.get(list.size() - i));
+					}
+					mainPanel.setChatList(tempList);
+					// chatPanel.setChatList(((CMResult)content).getResultList());
+					chatPanel.setChatList(list);
 				}
 			}
 		}
