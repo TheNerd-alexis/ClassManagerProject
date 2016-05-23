@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
@@ -22,6 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import Model.AbstractModel;
+import Model.CMMessage;
+import Model.Dch;
+import Model.Member;
 
 public class Panel013 extends JPanel {
 
@@ -35,6 +40,7 @@ public class Panel013 extends JPanel {
 	Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 20);
 	List<AbstractModel> dchList;
 	ObjectOutputStream writer;
+	Member member;
 
 	public Panel013(ObjectOutputStream writer) {
 		this.writer = writer;
@@ -115,35 +121,39 @@ public class Panel013 extends JPanel {
 		noticeArea.setEditable(false);
 		bgPanel.add(noticeArea);
 		for (int i = 0; i < 5; i++) {
-			dayLabel[i] = new CircularLabel(true, day - dayOfWeek + 1 + i);
+			dayLabel[i] = new CircularLabel(false);
+			dayLabel[i].setText(String.valueOf(day - dayOfWeek + 1 + i));
 			dayLabel[i].setBounds(35 + 73 * i, 493, 45, 45);
 			bgPanel.add(dayLabel[i]);
 		}
 
-		// addFocusListener(new FocusListener() {
-		//
-		// @Override
-		// public void focusGained(FocusEvent arg0) {
-		// // TODO Auto-generated method stub
-		// for(int i = 0; i<dchList.size();i++){
-		// if(((Dch)dchList.get(i)).getATTENDDATE().toString().equals(LocalDate.now().toString()))
-		// break;
-		// System.out.println(i);
-		// }
-		// for (int i = 0; i < 5; i++) {
-		// dayLabel[i] = new CircularLabel(true, day - dayOfWeek + 1 + i);
-		// dayLabel[i].setBounds(35 + 73 * i, 493, 45, 45);
-		// bgPanel.add(dayLabel[i]);
-		// }
-		// }
-		//
-		// @Override
-		// public void focusLost(FocusEvent arg0) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// });
+		titlePanel.closeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				Dch dch = dayLabel[dayOfWeek - 1].getDch();
+				System.out.println(dayLabel[dayOfWeek - 1].state);
+				dch.setATTENDANCE(dayLabel[dayOfWeek - 1].state ? 1 : 0);
+				new CMMessage("dch_update", dch).sendMsg(writer);
+			}
+		});
+
+		this.addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				if (dchList == null)
+					return;
+				for (AbstractModel model : dchList) {
+					Dch dch = (Dch) model;
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(dch.getATTENDDATE());
+					dayLabel[cal.get(Calendar.DAY_OF_WEEK) - 2].setDch(dch);
+				}
+			}
+		});
 	}
 
 	class CircularLabel extends JLabel {
@@ -154,25 +164,43 @@ public class Panel013 extends JPanel {
 		ImageIcon img;
 		Boolean state;
 		int day;
+		Dch dch;
 
 		CircularLabel(Boolean state) {
 			super();
 			this.state = state;
 			img = state ? checkImg : uncheckImg;
 			setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+			this.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 
-		CircularLabel(Boolean state, int day) {
-			this(state);
-			this.day = day;
+		CircularLabel(Dch dch) {
+			this(dch.getATTENDANCE() == 1 ? true : false);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(dch.getATTENDDATE());
+			this.day = cal.get(Calendar.DAY_OF_MONTH);
 
 			super.setText(String.valueOf(day));
-			this.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 
 		public void convertImg() {
 			img = state ? checkImg : uncheckImg;
-			repaint();
+			revalidate();
+		}
+
+		public Dch getDch() {
+			return dch;
+		}
+
+		public void setDch(Dch dch) {
+			this.dch = dch;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(dch.getATTENDDATE());
+			state = dch.getATTENDANCE() == 1 ? true : false;
+			convertImg();
+			this.day = cal.get(Calendar.DAY_OF_MONTH);
+
+			super.setText(String.valueOf(day));
 		}
 
 		@Override
@@ -181,6 +209,15 @@ public class Panel013 extends JPanel {
 			arg0.drawImage(img.getImage(), 0, 0, null);
 			super.paintComponent(arg0);
 		}
+	}
+
+	public List<AbstractModel> getDchList() {
+		return dchList;
+	}
+
+	public void setDchList(List<AbstractModel> dchList) {
+		this.dchList = dchList;
+
 	}
 
 	public static void main(String[] args) {

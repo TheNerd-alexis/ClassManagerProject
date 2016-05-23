@@ -66,8 +66,8 @@ class CMServerManager {
 			try {
 				while (true) {
 					CMMessage message = (CMMessage) client.reader.readObject();
-//					System.out.println(message.getCommand());
-//					System.out.println(message.getContent().toJson());
+					// System.out.println(message.getCommand());
+					// System.out.println(message.getContent().toJson());
 					returnMsgToClients(message);
 				}
 			} catch (IOException | ClassNotFoundException e) {
@@ -90,29 +90,30 @@ class CMServerManager {
 		public void returnMsgToClients(CMMessage msg) {
 			CMMessage resultMsg = msg.doMsg();
 
-			if (resultMsg.getCommand().equals("member_login") && ((CMResult) resultMsg.getContent()).getResult() == 1) {
+			if (msg.getCommand().equals("member_login") && ((CMResult) resultMsg.getContent()).getResult() == 1) {
 				clients.put(((Member) msg.getContent()).getMID(), client);
 			}
 
 			resultMsg.sendMsg(client.writer);
 
-			if (resultMsg.getCommand().contains("add") || resultMsg.getCommand().contains("delete")) {
+			if (resultMsg.getCommand().contains("add") || resultMsg.getCommand().contains("delete")
+					|| resultMsg.getCommand().contains("out")) {
+
+				Iterator<String> it = resultMsg.getDestID().iterator();
+
 				if (((CMResult) resultMsg.getContent()).getResult() > 0) {
 					StringTokenizer token = new StringTokenizer(msg.getCommand(), "_");
-					resultMsg = new CMMessage(token.nextToken() + "_refresh");
+					String newCommand = token.nextToken() + "_refresh";
+					AbstractModel newContent = msg.getContent().setID(null);
+					resultMsg = new CMMessage(newCommand, newContent);
+//					System.out.println(resultMsg.getCommand());
+//					System.out.println(resultMsg.getContent().toJson());
 				}
-				if (resultMsg.getDestID() == null) {
-					resultMsg.sendMsg(client.writer);
-					return;
-				}
-				Iterator<String> it = resultMsg.getDestID().iterator();
-//				System.out.println(it);
 				while (it.hasNext()) {
 					String id = it.next();
-//					System.out.println(id);
-					if (id == null)
+					if (id == null) {
 						resultMsg.sendMsg(client.writer);
-					else if (!clients.containsKey(id))
+					} else if (!clients.containsKey(id))
 						continue;
 					resultMsg.sendMsg(clients.get(id).writer);
 				}

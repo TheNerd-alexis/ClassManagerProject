@@ -69,15 +69,13 @@ public class ScheduleService {
 	 public static CMResult PrivateSchdule_show(AbstractModel model) {//개인일정
 		 Schedule schedule = (Schedule) model;
 		 CMResult result = new CMResult();
-		 if(schedule.getSchDate() == null) 
-			 result.setResult(-1);
 		 if(schedule.getSchID() == null) 
 			 result.setResult(-2);
 
 		 result.setResult(1);
 		 
 		 List<AbstractModel> resultList = new ArrayList<AbstractModel>();
-			for(AbstractModel m :dao.schDao().selectSchedule(schedule)){
+			for(AbstractModel m :dao.schDao().selectSchedule(schedule.setID(schedule.getID()))){
 				resultList.add(m);
 			}
 			result.setResultList(resultList);

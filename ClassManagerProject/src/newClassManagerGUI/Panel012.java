@@ -2,65 +2,132 @@ package newClassManagerGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.Ellipse2D;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.BoxLayout;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Component;
-import javax.swing.Box;
 
-	
-public class Panel012 extends JPanel{
+import Model.AbstractModel;
+import Model.Schedule;
+
+public class Panel012 extends JPanel {
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
 	public TitlePanel title;
-	CalendarPanel calendarPanel; 
+	CalendarPanel calendarPanel;
 	SearchSchedulePanel searchSchedulePanel;
-	ScheduleListPanel scheduleListPanel;
+	JTextArea scheduleList;
+	List<AbstractModel> calendarList;
+	Map<Date, List<Schedule>> calendarMap;
+	JButton addSchBtn;
 	
-	public Panel012(){
-		ImageIcon img = new ImageIcon("img/012_resize.jpg");
-		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
-		setLayout(new BorderLayout(0,0));
-		add(bgPanel, BorderLayout.CENTER);
-		
-		title = new TitlePanel("CM", "캘린더", "닫기");
-		title.setBounds(0,0,410,40);
-		bgPanel.add(title);
-		
-		searchSchedulePanel = new SearchSchedulePanel();
-		calendarPanel = new CalendarPanel(searchSchedulePanel.year, searchSchedulePanel.month);
-		scheduleListPanel = new ScheduleListPanel();
-		searchSchedulePanel.setBounds(35,69,340,39);
-		calendarPanel.setBounds(30,125,347,270);
-		scheduleListPanel.setBounds(38,416,333,309);
-		bgPanel.add(searchSchedulePanel);
-		bgPanel.add(scheduleListPanel);
-		bgPanel.add(calendarPanel);
+	public void setCalendarList(List<AbstractModel> calendarList) {
+		this.calendarList = calendarList;
+		calendarMap = new HashMap<Date, List<Schedule>>();
+		for (AbstractModel model : this.calendarList) {
+			if (!calendarMap.containsKey(((Schedule) model).getSchDate())) {
+				List<Schedule> tempList = new ArrayList<Schedule>();
+				calendarMap.put(((Schedule) model).getSchDate(), tempList);
+			}
+			calendarMap.get(((Schedule) model).getSchDate()).add((Schedule) model);
+		}
 	}
 
-	public static void main(String[] args) {
-		ClassManagerPanel.constructGUI(new Panel012());
+	public Panel012() {
+		ImageIcon img = new ImageIcon("img/012_resize.jpg");
+		ClassManagerPanel bgPanel = new ClassManagerPanel(img);
+		setLayout(new BorderLayout(0, 0));
+		add(bgPanel, BorderLayout.CENTER);
+
+		title = new TitlePanel("CM", "캘린더", "닫기");
+		title.setBounds(0, 0, 410, 40);
+		bgPanel.add(title);
+		
+		ImageIcon plusIcon = new ImageIcon(
+				new ImageIcon("img/plusIcon.png").getImage().getScaledInstance(44, 44, java.awt.Image.SCALE_SMOOTH));
+		addSchBtn = new JButton(plusIcon){
+			public boolean contains(int x, int y) {
+				Shape shape = null;
+				if (shape == null || !shape.getBounds().equals(getBounds())) {
+					shape = new Ellipse2D.Float(0, 0, getWidth() - 1, getHeight() - 1);
+				}
+				return shape.contains(x, y);
+			}
+		};
+		addSchBtn.setOpaque(false);
+		addSchBtn.setBorder(null);
+		addSchBtn.setFocusPainted(false);
+		addSchBtn.setContentAreaFilled(false);
+		addSchBtn.setBounds(323,675,44,44);
+//		addSchBtn.addActionListener(new ActionListener(){
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				// TODO Auto-generated method stub
+//				System.out.println("hello");
+//			}
+//			
+//		});
+		
+		bgPanel.add(addSchBtn);
+
+		searchSchedulePanel = new SearchSchedulePanel();
+		calendarPanel = new CalendarPanel(searchSchedulePanel.year, searchSchedulePanel.month);
+		scheduleList = new JTextArea();
+		scheduleList.setOpaque(false);
+		scheduleList.setEditable(false);
+		scheduleList.setFont(defaultFont);
+		scheduleList.setLineWrap(true);
+		JScrollPane scroll = new JScrollPane(scheduleList);
+		scroll.setOpaque(false);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroll.getViewport().setOpaque(false);
+		scroll.getVerticalScrollBar().setOpaque(false);
+		searchSchedulePanel.setBounds(35, 69, 340, 39);
+		calendarPanel.setBounds(30, 125, 347, 270);
+		scroll.setBounds(38, 416, 333, 309);
+		bgPanel.add(searchSchedulePanel);
+		bgPanel.add(scroll);
+		bgPanel.add(calendarPanel);
+		
+		addComponentListener(new ComponentAdapter(){
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				searchSchedulePanel.yearCombo.setSelectedIndex(5);
+				searchSchedulePanel.monthCombo.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
+				int offset = Calendar.getInstance().get(java.util.GregorianCalendar.DAY_OF_WEEK) - 1;
+				int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + offset+5;
+				System.out.println(today+"");
+				calendarPanel.calendar[today/7][today%7].doClick();
+			}
+		});
 	}
-	
+
 	class CalendarPanel extends JPanel {
 		private JTable calendarTable;
-		private JTextField yearField;
 		private CMComboBox monthBox;
 		private JTable table;
 		DayButton[][] calendar = new DayButton[7][7];
@@ -74,7 +141,7 @@ public class Panel012 extends JPanel{
 			private Color bgColor = new Color(255, 254, 239);
 			private Color titleColor = new Color(108, 108, 108);
 			private Color whiteColor = new Color(239, 239, 239);
-			Border emptyBorder= new EmptyBorder(0, 0, 0, 0);
+			Border emptyBorder = new EmptyBorder(0, 0, 0, 0);
 
 			List<String> event = new ArrayList<String>();
 
@@ -85,16 +152,32 @@ public class Panel012 extends JPanel{
 				setOpaque(true);
 				setForeground(titleColor);
 				setBackground(bgColor);
+				addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						Date temp = Date.valueOf(String.format("%04d-%02d-%02d", year, month+1, day));
+						scheduleList.setText("");
+						if (calendarMap.containsKey(temp)) {
+							List<Schedule> list = calendarMap.get(temp);
+							for (Schedule sch : list) {
+								scheduleList.append(sch.getSchTitle()+"\n");
+								if (sch.getSch() != null)
+									scheduleList.append(" - " + sch.getSch()+"\n");
+								scheduleList.append("\n");
+							}
+						}
+					}
+				});
 			}
 
 			DayButton(String dayofweek) {
+				super();
 				setText(dayofweek);
+				setBorder(emptyBorder);
 				setFocusPainted(false);
-
 				setContentAreaFilled(false);
 				setOpaque(true);
-
-				setBorder(emptyBorder);
 				setForeground(whiteColor);
 				setBackground(titleColor);
 			}
@@ -191,7 +274,7 @@ public class Panel012 extends JPanel{
 			}
 		}
 	}
-	
+
 	class SearchSchedulePanel extends JPanel {
 		CMComboBox yearCombo;
 		CMComboBox monthCombo;
@@ -237,40 +320,8 @@ public class Panel012 extends JPanel{
 			add(monthLabel);
 		}
 	}
-	
-	class ScheduleListPanel extends JPanel {
-		JTextArea privateScheduleList;
-		JTextArea publicScheduleList;
-		private Color bgColor = new Color(255, 254, 239);
-		private Color titleColor = new Color(108, 108, 108);
-		private Color borderColor = new Color(234, 232, 222);
-		private Color whiteColor = new Color(239, 239, 239);
-		private JPanel panelPrivate;
-		private JPanel panelPublic;
-
-		ScheduleListPanel() {
-			privateScheduleList = new JTextArea();
-			privateScheduleList.setBackground(bgColor);
-			privateScheduleList.setFont(new Font("나눔고딕코딩", Font.PLAIN, 15));
-			privateScheduleList.setEditable(false);
-			publicScheduleList = new JTextArea();
-			publicScheduleList.setEditable(false);
-			setBorder(new LineBorder(borderColor, 1, true));
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-			panelPrivate = new JPanel();
-			add(panelPrivate);
-			panelPrivate.setLayout(new FlowLayout(FlowLayout.LEFT));
-			JLabel lblPrivate = new JLabel("개인");
-			panelPrivate.add(lblPrivate);
-			add(privateScheduleList);
-
-			panelPublic = new JPanel();
-			add(panelPublic);
-			JLabel lblPublic = new JLabel("전체");
-			panelPublic.setLayout(new FlowLayout(FlowLayout.LEFT));
-			panelPublic.add(lblPublic);
-			add(publicScheduleList);
-		}
-	}
+//	
+//	public static void main(String[] args) {
+//		ClassManagerPanel.constructGUI(new Panel012());
+//	}
 }

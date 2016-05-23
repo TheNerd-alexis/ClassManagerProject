@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class Schedule implements AbstractModel<Schedule>, Serializable{
 	private String schTitle;

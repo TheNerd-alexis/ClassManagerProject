@@ -43,6 +43,7 @@ public class DchDAO {
 		PreparedStatement statement = null;
 
 		try {
+			statement = connection.prepareStatement(sql);
 			statement.setString(1, dch.getMID());
 			statement.setDate(2, dch.getATTENDDATE());
 			statement.setInt(3, dch.getATTENDANCE());
@@ -70,6 +71,7 @@ public class DchDAO {
 		PreparedStatement statement = null;
 
 		try {
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, newDch.getATTENDANCE());
 			statement.setDate(2, newDch.getATTENDDATE());
 			statement.setString(3, newDch.getMID());
@@ -100,11 +102,11 @@ public class DchDAO {
 		List<Dch> result = new ArrayList<Dch>();
 
 		try {
+			statement = connection.prepareStatement(sql);
 			statement.setString(1, dch.getMID());
 			if (dch.getATTENDDATE() != null)
-				statement.setDate(1, dch.getATTENDDATE());
+				statement.setDate(2, dch.getATTENDDATE());
 			temp = statement.executeQuery();
-
 			if (temp.next()) {
 				Dch tempDch = new Dch();
 				tempDch.setMID(temp.getString("MID"));
@@ -114,7 +116,7 @@ public class DchDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		} finally {
 			try {
 				if (statement != null && !statement.isClosed())
@@ -140,8 +142,8 @@ public class DchDAO {
 		PreparedStatement statement = null;
 		ResultSet temp = null;
 		List<Dch> result = new ArrayList<Dch>();
-
 		try {
+			statement = connection.prepareStatement(sql);
 			statement.setString(1, dch.getMID() == null ? "%" : dch.getMID());
 			statement.setDate(2, startDate);
 			statement.setDate(3, endDate);
@@ -187,6 +189,7 @@ public class DchDAO {
 		List<Dch> result = new ArrayList<Dch>();
 
 		try {
+			statement = connection.prepareStatement(sql);
 			statement.setString(1, dch.getMID() == null ? "%" : dch.getMID());
 			statement.setDate(2, startDate);
 			statement.setDate(3, endDate);

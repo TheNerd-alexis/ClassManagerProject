@@ -53,12 +53,12 @@ public class CMResult implements AbstractModel<CMResult>,Serializable {
 	@Override
 	public String getID() {
 		// TODO Auto-generated method stub
-		return null;
+		return "result";
 	}
 
 	@Override
 	public CMResult setID(String id) {
 		// TODO Auto-generated method stub
-		return null;
+		return new CMResult();
 	}
 }

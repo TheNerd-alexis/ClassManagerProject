@@ -14,9 +14,8 @@ public class ChatService {
 	static GetDAO dao = GetDAO.getInstance();
 	
 	/* Null Type:
-	 * -100: JID 외래키(MID)
+	 * -100: JID(PK) 외래키(MID)
 	 * -101: RTITLE(PK)
-	 * -102: COME
 	 * */
 	
 	/**
@@ -25,9 +24,9 @@ public class ChatService {
 	 * @return 1: 채팅방 개설 성공<br>
 	 *         0: 채팅방 개설 실패(INSERT 실패)<br>
 	 *        -1: SQL Exception<br>
+	 *        -2: List<Chat> 조회 실패<br>
 	 *        -100: JID - NULL<br>
 	 *        -101: RTITLE - NULL
-	 *        -102: COME - NULL
 	 */
 	public static CMResult chat_in(AbstractModel model){
 		Chat chat = (Chat) model;
@@ -39,9 +38,16 @@ public class ChatService {
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
 		
-		if(chat.getCome() == null)
-			return result.setResult(-102);
-
+		List<Chat> listChat = dao.getChatDao().selectChat(chat);
+		if (listChat.size() < 1)
+			return result.setResult(-2);
+		
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		
+		for(Chat c : listChat) {
+			resultList.add(c);
+		}
+		result.setResultList(resultList);		
 		return result.setResult(dao.getChatDao().insertChat(chat));
 	}
 
@@ -65,6 +71,16 @@ public class ChatService {
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
 		
+		List<Chat> listChat = dao.getChatDao().selectChat(chat);
+		if (listChat.size() < 1)
+			return result.setResult(-2);
+		
+		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
+		
+		for(Chat c : listChat) {
+			resultList.add(c);
+		}
+		result.setResultList(resultList);		
 		return result.setResult(dao.getChatDao().deleteChat(chat));
 	}
 
@@ -75,12 +91,19 @@ public class ChatService {
 	 *         0: 채팅방 새로고침 실패(SELECT 실패)<br>
 	 *        -1: Query Exception<br>
 	 *        -2: List<Chat> 조회 실패<br>
+	 *      -100: JID - NULL
 	 */
 	public static CMResult chat_refresh(AbstractModel model){
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
-				
-		List<Chat> listChat = dao.getChatDao().selectChat(chat);
+		
+		if(chat.getJid() == null)
+			return result.setResult(-100);
+		
+		Chat temp = new Chat();
+		temp.setJid(chat.getJid());
+		
+		List<Chat> listChat = dao.getChatDao().selectChat(temp);
 		
 		if(listChat.size() < 1)
 			return result.setResult(-2);
@@ -100,16 +123,20 @@ public class ChatService {
 	 *         0: 채팅방 접속자 조회 실패(SELECT 실패)<br>
 	 *        -1: SQL Exception<br>
 	 *        -2: List<Chat> 조회 실패<br>
-	*/
+	 *      -101: RTITLE - NULL
+	 */
 
 	public static CMResult chat_invited(AbstractModel model){
 		Chat chat = (Chat) model;
 		CMResult result = new CMResult();
-				
-		List<Chat> listChat = dao.getChatDao().selectChat(chat );
 		
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
+		
+		Chat temp = new Chat();
+		temp.setRtitle(chat.getRtitle());
+		
+		List<Chat> listChat = dao.getChatDao().selectChat(temp);
 		
 		if (listChat.size() < 1)
 			return result.setResult(-2);

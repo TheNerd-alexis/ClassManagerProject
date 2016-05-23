@@ -35,7 +35,7 @@ public class Panel003 extends JPanel {
 	public TitlePanel title;
 	private JLabel[][] multiMenu;
 	private CMButton[] chatListBtn;
-	private JTextArea schArea;
+	public JTextArea schArea;
 	public CMButton schButton;
 	public CMButton chatButton;
 
@@ -100,7 +100,7 @@ public class Panel003 extends JPanel {
 		bgPanel.add(schButton);
 
 		schArea = new JTextArea();
-		schArea.setBounds(132, 16, 231, 45);
+		schArea.setBounds(132, 10, 231, 45);
 		schArea.setEditable(false);
 		schArea.setFont(font1);
 		schArea.setOpaque(false);
@@ -203,8 +203,8 @@ public class Panel003 extends JPanel {
 
 	public void setChatList(List<AbstractModel> chatList) {
 		this.chatList = chatList;
-		for (int i = 0; i < chatListBtn.length; i++) {
-			chatListBtn[i].setText(((Chat) chatList.get(chatList.size() - i)).getRtitle());
+		for (int i = 0; i <chatList.size() ; i++) {
+			chatListBtn[i].setText(((Chat) chatList.get(i)).getRtitle());
 		}
 	}
 }

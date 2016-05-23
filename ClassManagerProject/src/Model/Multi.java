@@ -72,7 +72,7 @@ public class Multi implements AbstractModel<Multi>, Serializable {
 	@Override
 	public String getID() {
 		// TODO Auto-generated method stub
-		return null;
+		return "multi";
 	}
 
 	@Override
