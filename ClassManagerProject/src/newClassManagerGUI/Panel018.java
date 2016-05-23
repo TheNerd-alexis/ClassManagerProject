@@ -113,7 +113,19 @@ public class Panel018 extends JPanel {
 				}
 			}
 		});
+		
+		aField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				CMTextField source = (CMTextField) e.getSource();
+				if (source.getForeground().equals(Color.RED)) {
+					source.setText("");
+					source.setForeground(Color.BLACK);
+				}
+			}
+		});
 
+		
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {

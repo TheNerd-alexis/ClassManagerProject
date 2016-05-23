@@ -100,7 +100,7 @@ class CMServerManager {
 					|| resultMsg.getCommand().contains("out")) {
 
 				Iterator<String> it = resultMsg.getDestID().iterator();
-
+				
 				if (((CMResult) resultMsg.getContent()).getResult() > 0) {
 					StringTokenizer token = new StringTokenizer(msg.getCommand(), "_");
 					String newCommand = token.nextToken() + "_refresh";

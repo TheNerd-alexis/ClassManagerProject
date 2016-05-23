@@ -20,7 +20,7 @@ public class CMMessage implements Serializable {
 
 	private String command;
 	private AbstractModel content = null;
-	private List<AbstractModel> contentList;
+//	private List<AbstractModel> contentList;
 	private Set<String> destID;
 	private String chat;
 
@@ -54,13 +54,13 @@ public class CMMessage implements Serializable {
 		this.content = content;
 	}
 
-	public List<AbstractModel> getContentList() {
-		return contentList;
-	}
-
-	public void setContentList(List<AbstractModel> contentList) {
-		this.contentList = contentList;
-	}
+//	public List<AbstractModel> getContentList() {
+//		return contentList;
+//	}
+//
+//	public void setContentList(List<AbstractModel> contentList) {
+//		this.contentList = contentList;
+//	}
 
 	@Override
 	public String toString() {
@@ -110,20 +110,24 @@ public class CMMessage implements Serializable {
 		if (command.equals("friend_add")) {
 			result = FriendService.friend_add(content);
 			destID.add(((Friend) content).getFID());
+			destID.add(((Friend) content).getMID());
 		}
 		if (command.equals("friend_delete")) {
 			result = FriendService.friend_delete(content);
 			destID.add(((Friend) content).getFID());
+			destID.add(((Friend) content).getMID());
 		}
 		if (command.equals("friend_refresh")) {
-			result = FriendService.friend_show(content);
+			result = FriendService.friend_find(content);
 			destID.add(((Friend) content).getMID());
 		}
 		if (command.equals("multi_refresh")) {
 			int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
 			if (day < 1 || day > 5)
 				day = 1;
-			result = MultiService.multi_refresh(day);
+			Multi multi = new Multi();
+			multi.setDAY(day);
+			result = MultiService.multi_refresh(multi);
 		}
 		if (command.equals("dch_refresh")) {
 			Calendar cal = Calendar.getInstance();
@@ -155,6 +159,13 @@ public class CMMessage implements Serializable {
 		if (command.equals("chat_out")) {
 			CMResult temp = ChatService.chat_invited(content);
 			result = ChatService.chat_out(content);
+			for (AbstractModel m : temp.getResultList()) {
+				destID.add(((Chat)m).getJid());
+			}
+		}
+		if (command.equals("chat_add")) {
+			result = ChatService.chat_in(content);
+			CMResult temp = ChatService.chat_invited(content);
 			for (AbstractModel m : temp.getResultList()) {
 				destID.add(((Chat)m).getJid());
 			}

@@ -123,8 +123,6 @@ public class MemberService {
 
 		Member orgMem = dao.getMemberDao().selectMember(member.setID(member.getMID())).get(0);
 		
-		System.out.println(member.getPWQ());
-		System.out.println(orgMem.getPWQ());
 		// 유저가 선택한 pwq가 설정한 pwq가 동일한지 확인
 		if (!member.getPWQ().equals(orgMem.getPWQ()))
 			return result.setResult(-3); // 질문 일치하지 않음

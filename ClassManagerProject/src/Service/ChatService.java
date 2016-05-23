@@ -37,17 +37,7 @@ public class ChatService {
 		
 		if(chat.getRtitle() == null)
 			return result.setResult(-101);
-		
-		List<Chat> listChat = dao.getChatDao().selectChat(chat);
-		if (listChat.size() < 1)
-			return result.setResult(-2);
-		
-		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
-		
-		for(Chat c : listChat) {
-			resultList.add(c);
-		}
-		result.setResultList(resultList);		
+				
 		return result.setResult(dao.getChatDao().insertChat(chat));
 	}
 

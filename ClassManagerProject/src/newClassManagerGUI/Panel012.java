@@ -120,7 +120,7 @@ public class Panel012 extends JPanel {
 				searchSchedulePanel.monthCombo.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
 				int offset = Calendar.getInstance().get(java.util.GregorianCalendar.DAY_OF_WEEK) - 1;
 				int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + offset+5;
-				System.out.println(today+"");
+//				System.out.println(today+"");
 				calendarPanel.calendar[today/7][today%7].doClick();
 			}
 		});
