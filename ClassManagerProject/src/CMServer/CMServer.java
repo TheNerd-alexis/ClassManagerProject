@@ -23,6 +23,7 @@ public class CMServer {
 		ServerSocket server = null;
 		CMServerManager manager = CMServerManager.getInstance();
 		try {
+			System.out.println("서버를 시작합니다");
 			server = new ServerSocket(7777);
 			while (true) {
 				Socket socket = server.accept();
@@ -136,7 +137,7 @@ class CMServerManager {
 				if (id == null) {
 					resultMsg.sendMsg(client.writer);
 				} else if (clients.containsKey(id)) {
-					System.out.println(id + " : " + resultMsg.getCommand() + " " + resultMsg.getContent().toJson());
+//					System.out.println(id + " : " + resultMsg.getCommand() + " " + resultMsg.getContent().toJson());
 					resultMsg.sendMsg(clients.get(id).writer);
 				}
 			}
