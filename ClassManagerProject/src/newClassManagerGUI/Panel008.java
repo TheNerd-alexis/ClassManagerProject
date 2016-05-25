@@ -32,21 +32,15 @@ public class Panel008 extends JPanel {
 	private CMTextField searchtxt;
 	private CMButton joinBtn;
 	private CMButton searchBtn;
-	private CMListPanel friendListPanel;
 	private CMTextField nametxt;
 	private JCheckBox check;
 	private ObjectOutputStream writer;
+	public TitlePanel titlePanel;
 	private Set<String> friendSet;
-
-	private Member member = new Member();
-
-	public void setMember(Member member) {
-		this.member = member;
-	}
-
-	public TitlePanel title;
+	private CMListPanel friendListPanel;
 	public List<AbstractModel> friendList = null;
 	public List<NameCheckPanel> friendComponentList = null;
+	private Member member;
 
 	public Panel008(ObjectOutputStream writer) {
 		this.writer = writer;
@@ -55,12 +49,11 @@ public class Panel008 extends JPanel {
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "채팅방 개설", "닫기");
+		titlePanel = new TitlePanel("CM", "채팅방 개설", "닫기");
 
-		title.setBounds(0, 0, this.getBounds().width + 10, 40);
-		bgPanel.add(title);
-
-		friendListPanel = new CMListPanel();
+		titlePanel.setBounds(0, 0, this.getBounds().width + 10, 40);
+		bgPanel.add(titlePanel);
+		
 		jointxt = new CMTextField("개설할 채팅방 제목 입력");
 		searchtxt = new CMTextField("추가할 사람의 아이디 입력");
 		joinBtn = new CMButton("개설");
@@ -69,17 +62,19 @@ public class Panel008 extends JPanel {
 				new ImageIcon("img/searchIcon.png").getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
 		check = new JCheckBox();
 
-		jointxt.setBounds(48, 67, 245, 29);
-		searchtxt.setBounds(47, 133, 250, 29);
+		jointxt.setBounds(48,60,246,30);
+		searchtxt.setBounds(48,125,244,30);
 		bgPanel.add(jointxt);
 		bgPanel.add(searchtxt);
 
-		joinBtn.setBounds(313, 64, 56, 31);
+		joinBtn.setBounds(312,57,54,32);
 		bgPanel.add(joinBtn);
-		searchBtn.setBounds(313, 133, 49, 26);
+		searchBtn.setBounds(312,123,54,32);
 		bgPanel.add(searchBtn);
-
-		friendListPanel.setBounds(20, 187, 370, 537);
+		
+		friendListPanel = new CMListPanel();
+		friendListPanel.setBounds(25,195,364,535);
+		// listPanel.addComponent(new ChatPanel("채팅방제목"));
 		bgPanel.add(friendListPanel);
 
 		addListener();
@@ -151,8 +146,8 @@ public class Panel008 extends JPanel {
 						Chat chat = new Chat();
 						chat.setJid(panel.nameLabel.getText());
 						chat.setRtitle(title);
-						System.out.println(chat.toJson());
-						new CMMessage("chat_add", chat).sendMsg(writer);
+//						System.out.println(chat.toJson());
+						new CMMessage("chat_invite", chat).sendMsg(writer);
 					}
 				}
 			}
@@ -214,8 +209,13 @@ public class Panel008 extends JPanel {
 		jointxt.setForeground(Color.BLACK);
 		searchtxt.setText("추가할 사람의 아이디 입력");
 	}
-	//
-	// public static void main(String[] args) {
-	// ClassManagerPanel.constructGUI(new Panel008(null));
-	// }
+	
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+	
+	 public static void main(String[] args) {
+	 ClassManagerPanel.constructGUI(new Panel008(null));
+	 }
 }

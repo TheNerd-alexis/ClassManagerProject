@@ -3,7 +3,12 @@ package newClassManagerGUI;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,8 +17,12 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import Model.AbstractModel;
+import Model.CMMessage;
 import Model.Chat;
+import Model.Dch;
 import Model.Event;
+import Model.Friend;
+import Model.Member;
 import Model.Multi;
 import Model.Schedule;
 import Service.Weather;
@@ -23,18 +32,18 @@ public class Panel003 extends JPanel {
 	private ImageIcon listImg = new ImageIcon("img/ListPanel01.jpg");
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 25);
 	private Font font1 = new Font("맑은 고딕", Font.PLAIN, 13);
-	private Font font2 = new Font("맑은 고딕", Font.PLAIN, 10);
+	private Font font2 = new Font("맑은 고딕", Font.PLAIN, 11);
 
 	private JPanel weatherImg; // out
 	private JLabel tempLabel; // out
 
-	private CMButton eventNoticeBtn; // out
-	private JLabel eventNoticeLabelCount; // out
-	private JLabel eventTitleLabel; // out
+	public CMButton eventNoticeBtn; // out
+	public JLabel eventNoticeLabelCount; // out
+	public JLabel eventTitleLabel; // out
 
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	private JLabel[][] multiMenu;
-	private CMButton[] chatListBtn;
+	public CMButton[] chatListBtn;
 	public JTextArea schArea;
 	public CMButton schButton;
 	public CMButton chatButton;
@@ -42,28 +51,39 @@ public class Panel003 extends JPanel {
 	private ClassManagerPanel bgPanel;
 	private List<AbstractModel> eventList = null;
 	private List<AbstractModel> todaySchList = null;
-	private List<AbstractModel> chatList = null;
+	private Set<String> chatList = new HashSet<String>();
 	private List<AbstractModel> multiList = null;
+	ObjectOutputStream writer;
+	Member member;
 
-	public Panel003() {
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public Panel003(ObjectOutputStream writer) {
+		this.writer = writer;
 		setLayout(new BorderLayout(0, 0));
 		bgPanel = new ClassManagerPanel(img);
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "", "출석체크");
+		titlePanel = new TitlePanel("CM", "", "출석체크");
 
-		title.setBounds(0, 0, this.getBounds().width + 10, 40);
-		bgPanel.add(title);
+		titlePanel.setBounds(0, 0, this.getBounds().width + 10, 40);
+		bgPanel.add(titlePanel);
 
 		Weather weather = new Weather("126.98", "37.57", 0);
-		String temp = String.format("%.2f도", weather.temp);
+		String temp = String.format("%.2f ℃", weather.temp);
 		weatherImg = new ClassManagerPanel(new ImageIcon(weather.image));
 		weatherImg.setBounds(54, 81, 82, 60);
 		bgPanel.add(weatherImg);
 
 		tempLabel = new JLabel(temp);
-		tempLabel.setBounds(213, 90, 153, 37);
+		tempLabel.setBounds(186, 54, 215, 109);
 		tempLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 		tempLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		bgPanel.add(tempLabel);
@@ -100,9 +120,9 @@ public class Panel003 extends JPanel {
 		bgPanel.add(schButton);
 
 		schArea = new JTextArea();
-		schArea.setBounds(132, 10, 231, 45);
+		schArea.setBounds(132, 10, 235, 50);
 		schArea.setEditable(false);
-		schArea.setFont(font1);
+		schArea.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		schArea.setOpaque(false);
 		schButton.add(schArea);
 
@@ -132,6 +152,21 @@ public class Panel003 extends JPanel {
 		MultiPanel multiPanel = new MultiPanel();
 		multiPanel.setBounds(26, 580, 364, 160);
 		bgPanel.add(multiPanel);
+
+		addComponentListener(new ComponentAdapter() {
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				new CMMessage("multi_refresh").sendMsg(writer);//
+				new CMMessage("friend_refresh", new Friend().setID(member.getID())).sendMsg(writer);//
+				new CMMessage("event_refresh", new Event().setID(member.getID())).sendMsg(writer);
+				new CMMessage("schedule_refresh", new Schedule().setID(member.getID())).sendMsg(writer);//
+				new CMMessage("chat_refresh", new Chat().setID(member.getID())).sendMsg(writer);
+				new CMMessage("dch_refresh", new Dch().setID(member.getID())).sendMsg(writer);//
+				new CMMessage("event_refresh", new Event().setID(member.getID())).sendMsg(writer);//
+			}
+		});
 	}
 
 	class ChatListPanel extends JPanel {
@@ -170,7 +205,7 @@ public class Panel003 extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		ClassManagerPanel.constructGUI(new Panel003());
+		ClassManagerPanel.constructGUI(new Panel003(null));
 	}
 
 	public void setMultiList(List<AbstractModel> resultList) {
@@ -202,9 +237,12 @@ public class Panel003 extends JPanel {
 	}
 
 	public void setChatList(List<AbstractModel> chatList) {
-		this.chatList = chatList;
-		for (int i = 0; i <chatList.size() ; i++) {
-			chatListBtn[i].setText(((Chat) chatList.get(i)).getRtitle());
+		int count = 0;
+		for (AbstractModel chat : chatList) {
+			if (this.chatList.add(((Chat)chat).getRtitle()))
+				chatListBtn[count++].setText(((Chat) chat).getRtitle());
+			if (count > 2)
+				break;
 		}
 	}
 }

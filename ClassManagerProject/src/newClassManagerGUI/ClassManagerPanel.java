@@ -74,6 +74,7 @@ public class ClassManagerPanel extends JPanel {
 		Image resultImg = orgimg.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
 		img = new ImageIcon(resultImg); //Image로 ImageIcon 생성
 		super.setBounds(x, y, width, height);
+		revalidate();
 		repaint();
 	}
 

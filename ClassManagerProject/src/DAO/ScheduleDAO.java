@@ -55,9 +55,9 @@ public class ScheduleDAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, schedule.getSchTitle());
-			pstmt.setString(2, schedule.getSch());
-			pstmt.setDate(3, schedule.getSchDate());
-			pstmt.setString(4, schedule.getSchID());
+			pstmt.setDate(2, schedule.getSchDate());
+			pstmt.setString(3, schedule.getSchID());
+			pstmt.setString(4, schedule.getSch());
 			return pstmt.executeUpdate();
 			/** 일정 추가 성공 */
 		} catch (SQLException e) {
@@ -161,7 +161,8 @@ public class ScheduleDAO {
 	 * @return 일정 목록
 	 */
 	public List<Schedule> selectSchedule(Schedule schedule) {
-//		String sql = "SELECT * FROM " + DBName + " WHERE schtitle LIKE ? AND sch LIKE ? AND schID LIKE ?";
+		// String sql = "SELECT * FROM " + DBName + " WHERE schtitle LIKE ? AND
+		// sch LIKE ? AND schID LIKE ?";
 		String sql = "SELECT * FROM " + DBName + " WHERE schtitle LIKE ? AND schID LIKE ?";
 		if (schedule.getSchDate() != null)
 			sql += " AND schDate = ?";
@@ -171,7 +172,8 @@ public class ScheduleDAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, schedule.getSchTitle() == null ? "%" : schedule.getSchTitle());
-//			pstmt.setString(2, schedule.getSch() == null ? "%" : schedule.getSch());
+			// pstmt.setString(2, schedule.getSch() == null ? "%" :
+			// schedule.getSch());
 			pstmt.setString(2, schedule.getSchID() == null ? "%" : schedule.getSchID());
 			if (schedule.getSchDate() != null)
 				pstmt.setDate(3, schedule.getSchDate());
@@ -211,7 +213,8 @@ public class ScheduleDAO {
 	 * @return
 	 */
 	public List<Schedule> selectScheduleByDate(Schedule schedule, Date startDate, Date endDate) {
-		String sql = "SELECT * FROM " + DBName + " WHERE schtitle LIKE ? AND sch LIKE ? AND schID LIKE ? schDate > ? AND schDate < ?";
+		String sql = "SELECT * FROM " + DBName
+				+ " WHERE schtitle LIKE ? AND sch LIKE ? AND schID LIKE ? schDate > ? AND schDate < ?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Schedule> scheduleList = new ArrayList<Schedule>();

@@ -28,7 +28,7 @@ public class Panel006 extends JPanel {
 	// ImageIcon listImg = new ImageIcon("img/6-1.jpg"); // in // need list img
 
 	private CMTextField searchTextField; // out
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	private CMListPanel memberListPanel;
 	private CMListPanel friendListPanel;
 	public List<AbstractModel> memberList = null;
@@ -47,10 +47,10 @@ public class Panel006 extends JPanel {
 		ClassManagerPanel bgPanel = new ClassManagerPanel(new ImageIcon("img/007_resize.jpg"));
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("관리", "친구", "-삭제");
+		titlePanel = new TitlePanel("관리", "친구", "-삭제");
 
-		title.setBounds(0, 0, 410, 40);
-		bgPanel.add(title);
+		titlePanel.setBounds(0, 0, 410, 40);
+		bgPanel.add(titlePanel);
 		searchTextField = new CMTextField("아이디 검색");
 		searchTextField.setBounds(84, 62, 181, 30);
 		searchTextField.setHorizontalAlignment(JTextField.LEFT);
@@ -85,8 +85,8 @@ public class Panel006 extends JPanel {
 			
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				while (!title.closeBtn.getText().equals("닫기"))
-					title.leftBtn.doClick();
+				while (!titlePanel.closeBtn.getText().equals("닫기"))
+					titlePanel.leftBtn.doClick();
 			}
 		});
 
@@ -117,7 +117,7 @@ public class Panel006 extends JPanel {
 					keyword = "";
 				if (searchTextField.getText().isEmpty())
 					return;
-				if (title.closeBtn.getText().equals("+추가")) {
+				if (titlePanel.closeBtn.getText().equals("+추가")) {
 					memberListPanel.clearList();
 					Member member = new Member();
 					if (!searchTextField.getText().equals("아이디 검색"))
@@ -136,25 +136,25 @@ public class Panel006 extends JPanel {
 			}
 		});
 
-		title.leftBtn.addActionListener(new ActionListener() {
+		titlePanel.leftBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (title.closeBtn.getText().equals("닫기")) {
-					title.closeBtn.setText("-삭제");
+				if (titlePanel.closeBtn.getText().equals("닫기")) {
+					titlePanel.closeBtn.setText("-삭제");
 					if (friendComponentList == null)
 						return;
 					for (int i = 0; i < friendComponentList.size(); i++) {
 						friendComponentList.get(i).checkBox.setVisible(true);
 						friendComponentList.get(i).checkBox.setEnabled(true);
 					}
-				} else if (title.closeBtn.getText().equals("-삭제")) {
-					title.closeBtn.setText("+추가");
+				} else if (titlePanel.closeBtn.getText().equals("-삭제")) {
+					titlePanel.closeBtn.setText("+추가");
 					friendListPanel.setVisible(false);
 					memberListPanel.setVisible(true);
 					memberListPanel.clearList();
-				} else if (title.closeBtn.getText().equals("+추가")) {
-					title.closeBtn.setText("닫기");
+				} else if (titlePanel.closeBtn.getText().equals("+추가")) {
+					titlePanel.closeBtn.setText("닫기");
 					memberListPanel.setVisible(false);
 					friendListPanel.setVisible(true);
 					if (friendComponentList == null)
@@ -196,7 +196,7 @@ public class Panel006 extends JPanel {
 
 	public void refreshFriendListPanel() {
 		friendListPanel.clearList();
-		if (title.closeBtn.getText().equals("닫기"))
+		if (titlePanel.closeBtn.getText().equals("닫기"))
 			for (NameCheckPanel panel : friendComponentList)
 				panel.checkBox.setVisible(false);
 
@@ -227,7 +227,7 @@ public class Panel006 extends JPanel {
 		memberComponentList = null;
 		memberComponentList = new ArrayList<NameCheckPanel>();
 
-		if (title.closeBtn.getText().equals("+추가")) {
+		if (titlePanel.closeBtn.getText().equals("+추가")) {
 			for (AbstractModel m : memberList) {
 				String name = ((Member) m).getMID();
 				if (!friendSet.contains(name) && !member.getID().equals(name)) {

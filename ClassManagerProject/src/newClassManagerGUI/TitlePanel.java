@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
 
 public class TitlePanel extends JPanel {
 
@@ -24,8 +27,8 @@ public class TitlePanel extends JPanel {
 	TitlePanel(String first, String second, String third) {
 		// setBackground(titleColor);
 		setOpaque(false);
-		setLayout(new GridLayout(0, 3, 0, 0));
-
+		setLayout(new BorderLayout(0, 0));
+		
 		leftBtn = new TitleButton(first);
 		leftBtn.setBorder(new EmptyBorder(10, 10, 10, 10));
 		leftBtn.setFont(font);
@@ -34,20 +37,19 @@ public class TitlePanel extends JPanel {
 		// leftBtn.setBackground(titleColor);
 		leftBtn.setOpaque(false);
 		leftBtn.setHorizontalAlignment(SwingConstants.LEFT);
-		add(leftBtn);
+		add(leftBtn,BorderLayout.WEST);
 
 		JLabel lblTitleJoin = new JLabel(second);
 		lblTitleJoin.setFont(font);
 		lblTitleJoin.setForeground(whiteColor);
 		lblTitleJoin.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblTitleJoin);
+		add(lblTitleJoin,BorderLayout.CENTER);
 
 		closeBtn = new TitleButton(third);
 		closeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		closeBtn.setBorder(new EmptyBorder(10, 10, 10, 10));
 		closeBtn.setFont(font);
 		closeBtn.setForeground(whiteColor);
-		// closeBtn.setBackground(titleColor);
 		closeBtn.setOpaque(false);
 		
 		closeBtn.addMouseListener(new MouseAdapter() {
@@ -58,12 +60,11 @@ public class TitlePanel extends JPanel {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
 				closeBtn.setForeground(whiteColor);
 			}
 		});
 
-		add(closeBtn);
+		add(closeBtn,BorderLayout.EAST);
 	}
 
 	public class TitleButton extends JButton {

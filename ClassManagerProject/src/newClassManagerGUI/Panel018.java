@@ -30,7 +30,7 @@ public class Panel018 extends JPanel {
 	private CMPasswordField passwordField;
 	private CMPasswordField passwordField2;
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	ObjectOutputStream writer;
 
 	private String[] PWQ = { "비밀번호 힌트 질문", "----------------------------------", "당신의 이름은 무엇입니까?", "당신의 고향은 어디입니까?",
@@ -45,10 +45,10 @@ public class Panel018 extends JPanel {
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "비밀번호 찾기", "닫기");
+		titlePanel = new TitlePanel("CM", "비밀번호 찾기", "닫기");
 
-		title.setBounds(0, 0, 410, 40);
-		bgPanel.add(title);
+		titlePanel.setBounds(0, 0, 410, 40);
+		bgPanel.add(titlePanel);
 
 		checkBtn = new CMButton("  ");
 		checkBtn.setFont(defaultFont);

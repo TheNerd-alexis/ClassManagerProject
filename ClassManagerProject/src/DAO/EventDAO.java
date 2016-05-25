@@ -10,9 +10,9 @@ import java.util.List;
 import Model.Event;
 
 public class EventDAO {
+	public static EventDAO instance = null;
+	public static final String DBName = "event";
 	private Connection connection;
-	private static EventDAO instance;
-	private static final String DBName = "event";
 
 	private EventDAO(Connection connection) {
 		this.connection = connection;
@@ -23,7 +23,7 @@ public class EventDAO {
 			instance = new EventDAO(connection);
 		return instance;
 	}
-	
+
 	/**
 	 * event DB 자료 추가
 	 * 
@@ -34,6 +34,8 @@ public class EventDAO {
 	 */
 	public int insertEvent(Event event) {
 		String sql = "INSERT INTO " + DBName + " VALUES (?, ?, ?, ?)";
+		if (event.getEstatus() == null)
+			sql = "INSERT INTO " + DBName + "(mid, etype, etitle) VALUES (?, ?, ?)";
 		PreparedStatement psm = null;
 
 		try {
@@ -41,6 +43,8 @@ public class EventDAO {
 			psm.setString(1, event.getMid());
 			psm.setInt(2, event.getEtype());
 			psm.setString(3, event.getEtitle());
+			if (event.getEstatus() != null)
+				psm.setInt(4, event.getEstatus());
 			return psm.executeUpdate();
 			/** 이벤트 정보 입력 성공 */
 		} catch (SQLException e) {
@@ -60,7 +64,7 @@ public class EventDAO {
 			psm.setString(1, event.getMid());
 			psm.setString(2, event.getEtitle());
 			return psm.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,7 +119,8 @@ public class EventDAO {
 				tempEvent.setEtype(rs.getInt("etype"));
 				tempEvent.setEtitle(rs.getString("etitle"));
 				tempEvent.setMid(rs.getString("mid"));
-				result.add(event);
+				tempEvent.setEstatus(rs.getInt("estatus"));
+				result.add(tempEvent);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
