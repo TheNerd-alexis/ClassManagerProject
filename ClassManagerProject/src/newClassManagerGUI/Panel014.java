@@ -313,10 +313,10 @@ public class Panel014 extends JPanel {
 					if (panel.checkBox.isSelected()) {
 						Schedule tempSch = new Schedule();
 						tempSch.setSchID(panel.nameLabel.getText());
-						tempSch.setSchTitle(sch.getSch() + "(" + member.getMID() + "님과 공유된 일정)");
 						tempSch.setSchTitle(sch.getSchTitle());
+						tempSch.setSch(sch.getSch() + "(" + member.getMID() + "님과 공유된 일정)");
 						tempSch.setSchDate(sch.getSchDate());
-						System.out.println(sch.toJson());
+//						System.out.println(tempSch.toJson());
 						new CMMessage("schedule_add", tempSch).sendMsg(writer);
 					}
 				}
