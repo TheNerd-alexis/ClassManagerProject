@@ -67,5 +67,6 @@ public class CMListPanel extends JPanel {
 	public void clearList() {
 		panel.removeAll();
 		revalidate();
+		repaint();
 	}
 }

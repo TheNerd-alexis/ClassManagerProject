@@ -47,8 +47,8 @@ public class ClassManagerFrame extends JFrame {
 		setResizable(false);
 
 		loginPanel.joinBtn.addActionListener(new PanelConverter("joinPanel"));
-		joinPanel.title.closeBtn.addActionListener(new PanelConverter("loginPanel"));
-		chatPanel.title.closeBtn.addActionListener(new PanelConverter("mainPanel"));	}
+		joinPanel.titlePanel.closeBtn.addActionListener(new PanelConverter("loginPanel"));
+		chatPanel.titlePanel.closeBtn.addActionListener(new PanelConverter("mainPanel"));	}
 
 	class PanelConverter implements ActionListener {
 		String dest = "";

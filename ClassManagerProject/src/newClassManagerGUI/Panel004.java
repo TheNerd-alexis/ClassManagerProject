@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -21,9 +24,11 @@ import Model.Member;
 public class Panel004 extends JPanel {
 	ImageIcon img = new ImageIcon("img/004_resize.jpg");
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	CMListPanel listPanel;
 	List<AbstractModel> chatList;
+	Set<String> chatSet;
+	private List<ChatPanel> chatComponentList;
 	ObjectOutputStream writer;
 	private Member member;
 	public CMButton friendbtn;
@@ -35,9 +40,9 @@ public class Panel004 extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "커뮤니티", "닫기");
-		title.setBounds(0, 0, 410, 40);
-		bgPanel.add(title);
+		titlePanel = new TitlePanel("CM", "커뮤니티", "닫기");
+		titlePanel.setBounds(0, 0, 410, 40);
+		bgPanel.add(titlePanel);
 
 		friendbtn = new CMButton("친구");
 		friendbtn.setBounds(8, 64, 194, 49);
@@ -56,7 +61,7 @@ public class Panel004 extends JPanel {
 		});
 	}
 
-	class ChatPanel extends ClassManagerPanel {
+	public class ChatPanel extends ClassManagerPanel {
 		CMButton chatContentBtn;
 		JLabel chatTitle;
 		CMButton chatOutBtn;
@@ -76,7 +81,6 @@ public class Panel004 extends JPanel {
 			add(chatContentBtn);
 
 			chatOutBtn.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
@@ -90,19 +94,33 @@ public class Panel004 extends JPanel {
 				}
 			});
 		}
+
+		public JLabel getChatTitle() {
+			return chatTitle;
+		}
+
+		public void setChatTitle(JLabel chatTitle) {
+			this.chatTitle = chatTitle;
+		}
 	}
 
 	public void setChatList(List<AbstractModel> list) {
-		this.chatList = list;
+		chatSet = new HashSet<String>();
+		setChatComponentList(new ArrayList<ChatPanel>());
+		for (AbstractModel model : list) {
+			if (chatSet.add(((Chat) model).getRtitle()))
+				getChatComponentList().add(new ChatPanel(((Chat) model).getRtitle()));
+		}
 		refreshChatList();
 	}
 
 	public void refreshChatList() {
 		listPanel.clearList();
-		for (AbstractModel model : chatList) {
-			Chat chat = (Chat) model;
-			listPanel.addComponent(new ChatPanel(chat.getRtitle()));
+		List<ChatPanel> tempList = getChatComponentList();
+		for (ChatPanel panel : tempList) {
+			listPanel.addComponent(panel);
 		}
+
 		listPanel.revalidate();
 	}
 
@@ -112,5 +130,13 @@ public class Panel004 extends JPanel {
 
 	public void setMember(Member member) {
 		this.member = member;
+	}
+
+	public List<ChatPanel> getChatComponentList() {
+		return chatComponentList;
+	}
+
+	public void setChatComponentList(List<ChatPanel> chatComponentList) {
+		this.chatComponentList = chatComponentList;
 	}
 }

@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
@@ -34,9 +36,6 @@ public class Panel013 extends JPanel {
 	public TitlePanel titlePanel;
 
 	private Color bgColor = new Color(255, 254, 239);
-	private Color fontColor = new Color(108, 108, 108);
-	private Color borderColor = new Color(234, 232, 222);
-	private Color whiteColor = new Color(239, 239, 239);
 	Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 20);
 	List<AbstractModel> dchList;
 	ObjectOutputStream writer;
@@ -45,7 +44,6 @@ public class Panel013 extends JPanel {
 	public Panel013(ObjectOutputStream writer) {
 		this.writer = writer;
 		ImageIcon img = new ImageIcon("img/013_resize.jpg");
-		setBackground(bgColor);
 		setLayout(new BorderLayout(0, 0));
 
 		Calendar cal = Calendar.getInstance();
@@ -68,10 +66,21 @@ public class Panel013 extends JPanel {
 
 		JLabel monthLabel = new JLabel(String.valueOf(month));
 		monthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		monthLabel.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		monthLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 25));
 		monthLabel.setBounds(115, 86, 42, 29);
 		monthLabel.setForeground(Color.ORANGE);
 		bgPanel.add(monthLabel);
+
+		JLabel[] btnLabel = new JLabel[2];
+		btnLabel[0] = new JLabel("TODAY");
+		btnLabel[1] = new JLabel("출석체크");
+		for (int i = 0; i < btnLabel.length; i++) {
+			btnLabel[i].setFont(new Font("맑은 고딕", Font.BOLD, 25));
+			btnLabel[i].setHorizontalAlignment(SwingConstants.CENTER);
+			btnLabel[i].setForeground(new Color(217, 217, 217));
+			btnLabel[i].setBounds(145, 275 + 30 * i, 113, 30);
+			bgPanel.add(btnLabel[i]);
+		}
 
 		JLabel todayLabel = new JLabel(day + "/" + days[dayOfWeek]);
 		todayLabel.setBounds(26, 188, 77, 44);
@@ -101,21 +110,38 @@ public class Panel013 extends JPanel {
 		checkBtn.setBounds(135, 237, 143, 138);
 		CircularLabel[] dayLabel = new CircularLabel[5];
 
-		checkBtn.addActionListener(new ActionListener() {
+		checkBtn.addMouseListener(new MouseAdapter() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void mouseClicked(MouseEvent arg0) {
 				dayLabel[dayOfWeek - 1].state = !dayLabel[dayOfWeek - 1].state;
 				dayLabel[dayOfWeek - 1].convertImg();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				for (JLabel lbl : btnLabel) {
+					lbl.setForeground(new Color(217, 217, 217));
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				for (JLabel lbl : btnLabel) {
+					lbl.setForeground(Color.ORANGE);
+				}
 			}
 		});
 		bgPanel.add(checkBtn);
 
-		JLabel moneyLabel = new JLabel("416000원");
+		JLabel moneyLabel = new JLabel("416000원(미구현)");
+		moneyLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		moneyLabel.setBounds(133, 625, 229, 20);
 		moneyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		bgPanel.add(moneyLabel);
 		JTextArea noticeArea = new JTextArea();
 		noticeArea.setBounds(31, 671, 342, 62);
+		noticeArea.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		noticeArea.append("국비 지원금 계산 방법\r\n1. 80% 이하 출석시 훈련 수당 \r\n2. 하루 식대 5500원");
 		noticeArea.setOpaque(false);
 		noticeArea.setEditable(false);
@@ -133,7 +159,6 @@ public class Panel013 extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				Dch dch = dayLabel[dayOfWeek - 1].getDch();
-//				System.out.println(dayLabel[dayOfWeek - 1].state);
 				dch.setATTENDANCE(dayLabel[dayOfWeek - 1].state ? 1 : 0);
 				new CMMessage("dch_update", dch).sendMsg(writer);
 			}
@@ -176,6 +201,7 @@ public class Panel013 extends JPanel {
 
 		CircularLabel(Dch dch) {
 			this(dch.getATTENDANCE() == 1 ? true : false);
+			this.dch = dch;
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dch.getATTENDDATE());
 			this.day = cal.get(Calendar.DAY_OF_MONTH);
@@ -189,6 +215,12 @@ public class Panel013 extends JPanel {
 		}
 
 		public Dch getDch() {
+			if (dch == null) {
+				dch = new Dch();
+				dch.setATTENDANCE(state ? 1 : 0);
+				dch.setATTENDDATE(java.sql.Date.valueOf(LocalDate.now()));
+				dch.setMID(member.getMID());
+			}
 			return dch;
 		}
 
@@ -222,5 +254,9 @@ public class Panel013 extends JPanel {
 
 	public static void main(String[] args) {
 		ClassManagerPanel.constructGUI(new Panel013(null));
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

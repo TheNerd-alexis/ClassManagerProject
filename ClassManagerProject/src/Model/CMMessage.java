@@ -11,6 +11,7 @@ import java.util.Set;
 
 import Service.ChatService;
 import Service.DchService;
+import Service.EventService;
 import Service.FriendService;
 import Service.MemberService;
 import Service.MultiService;
@@ -129,6 +130,10 @@ public class CMMessage implements Serializable {
 			multi.setDAY(day);
 			result = MultiService.multi_refresh(multi);
 		}
+		if(command.equals("event_refresh")){
+			result = EventService.event_refresh(content);
+			destID.add(content.getID());
+		}
 		if (command.equals("dch_refresh")) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new java.util.Date());
@@ -144,6 +149,7 @@ public class CMMessage implements Serializable {
 			Date endDate = Date.valueOf(String.format("%4d-%02d-%02d", year, month, lastDay));
 
 			result = DchService.getDchList(new Dch().setID(content.getID()), startDate, endDate);
+			destID.add(((Dch)content).getMID());
 		}
 		if (command.equals("dch_update")) {
 			result = DchService.dch_add(content);
@@ -152,9 +158,11 @@ public class CMMessage implements Serializable {
 		}
 		if (command.equals("schedule_refresh")) {
 			result = ScheduleService.PrivateSchdule_show(content);
+			destID.add(content.getID());
 		}
 		if (command.equals("chat_refresh")) {
 			result = ChatService.chat_refresh((Chat) content);
+			destID.add(content.getID());
 		}
 		if (command.equals("chat_out")) {
 			CMResult temp = ChatService.chat_invited(content);
@@ -170,6 +178,28 @@ public class CMMessage implements Serializable {
 				destID.add(((Chat)m).getJid());
 			}
 		}
+		if (command.equals("chat_invite")) {
+			result = ChatService.chat_in(content);
+			CMResult temp = ChatService.chat_invited(content);
+			for (AbstractModel m : temp.getResultList()) {
+				destID.add(((Chat)m).getJid());
+			}
+		}
+		if (command.equals("schedule_add")) {
+			result = ScheduleService.schedul_add(content);
+			destID.add(content.getID());
+		}
+		if(command.equals("chat_log")){
+			CMResult temp = ChatService.chat_invited(content);
+			for (AbstractModel m : temp.getResultList()) {
+				destID.add(((Chat)m).getJid());
+			}
+			result.setResult(1);
+			result.addToResultList(content);
+		}
+		if(command.equals("event_add")){
+			result = EventService.event_add(content);
+		}
 		CMMessage returnMsg = new CMMessage(command, result);
 		returnMsg.setDestID(destID);
 		return returnMsg;
@@ -180,6 +210,8 @@ public class CMMessage implements Serializable {
 	}
 
 	public Set<String> getDestID() {
+		if(destID==null)
+			destID = new HashSet<String>();
 		return destID;
 	}
 

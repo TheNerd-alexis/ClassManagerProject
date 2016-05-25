@@ -33,7 +33,7 @@ public class Panel002 extends JPanel {
 	private CMTextField pwaField;
 	private CMButton confirmBtn;
 	private CMButton idCheckBtn;
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	public Boolean idcheckstate = false;
 
 	private String[] PWQ = { "비밀번호 힌트 질문", "----------------------------------", "당신의 이름은 무엇입니까?", "당신의 고향은 어디입니까?",
@@ -49,44 +49,43 @@ public class Panel002 extends JPanel {
 		setSize(img.getIconWidth(), img.getIconHeight());
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "회원가입", "닫기");
-
-		title.setBounds(0, 0, this.getBounds().width + 10, 40);
-		bgPanel.add(title);
+		titlePanel = new TitlePanel("CM", "회원가입", "닫기");
+		titlePanel.setBounds(0, 0, this.getBounds().width + 10, 40);
+		bgPanel.add(titlePanel);
 
 		idField = new CMTextField();
 		idField.setText("ID 입력");
-		idField.setBounds(37, 134, 240, 40);
+		idField.setBounds(37, 160, 240, 40);
 		bgPanel.add(idField);
 
 		idCheckBtn = new CMButton("중복확인");
-		idCheckBtn.setBounds(284, 136, 105, 40);
+		idCheckBtn.setBounds(285, 159, 105, 40);
 		bgPanel.add(idCheckBtn);
 
 		passwordField1 = new CMPasswordField();
 		passwordField1.setEchoChar((char) 0);
-		passwordField1.setBounds(130, 269, 240, 29);
+		passwordField1.setBounds(128, 292, 240, 29);
 		bgPanel.add(passwordField1);
 
 		passwordField2 = new CMPasswordField();
 		passwordField2.setEchoChar((char) 0);
-		passwordField2.setBounds(130, 323, 240, 29);
+		passwordField2.setBounds(128, 345, 240, 29);
 		bgPanel.add(passwordField2);
 
 		pwCombo = new CMComboBox(PWQ);
-		pwCombo.setBounds(73, 453, 298, 30);
+		pwCombo.setBounds(70, 475, 301, 31);
 		bgPanel.add(pwCombo);
 
 		pwaField = new CMTextField();
-		pwaField.setBounds(75, 532, 290, 28);
+		pwaField.setBounds(75, 556, 290, 30);
 		bgPanel.add(pwaField);
 
 		classCombo = new CMComboBox(BAN);
-		classCombo.setBounds(116, 616, 257, 32);
+		classCombo.setBounds(116, 638, 257, 32);
 		bgPanel.add(classCombo);
 
 		confirmBtn = new CMButton("등록완료");
-		confirmBtn.setBounds(137, 687, 134, 44);
+		confirmBtn.setBounds(149,700,112,43);
 		bgPanel.add(confirmBtn);
 		addListener();
 	}

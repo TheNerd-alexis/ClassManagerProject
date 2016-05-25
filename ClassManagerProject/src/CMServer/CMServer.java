@@ -5,17 +5,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Model.AbstractModel;
 import Model.CMMessage;
 import Model.CMResult;
+import Model.Chat;
+import Model.Event;
 import Model.Member;
 
 public class CMServer {
@@ -67,6 +66,7 @@ class CMServerManager {
 				while (true) {
 					CMMessage message = (CMMessage) client.reader.readObject();
 					// System.out.println(message.getCommand());
+					// if (message.getContent() != null)
 					// System.out.println(message.getContent().toJson());
 					returnMsgToClients(message);
 				}
@@ -76,45 +76,67 @@ class CMServerManager {
 			}
 		}
 
-		public void refreshToClient(CMMessage message) {
-			List<AbstractModel> temp = ((CMResult) message.doMsg().getContent()).getResultList();
-			Set<String> destId = new HashSet<String>();
-			StringTokenizer token = new StringTokenizer(message.getCommand(), "_");
-			String newCommand = token.nextToken() + "_refresh";
-			for (AbstractModel model : temp) {
-				AbstractModel newContent = message.getContent().setID(model.getID());
-				new CMMessage(newCommand, newContent).doMsg().sendMsg(clients.get(model.getID()).writer);
-			}
-		}
-
 		public void returnMsgToClients(CMMessage msg) {
 			CMMessage resultMsg = msg.doMsg();
 
 			if (msg.getCommand().equals("member_login") && ((CMResult) resultMsg.getContent()).getResult() == 1) {
-				clients.put(((Member) msg.getContent()).getMID(), client);
+				client.userId = ((Member) msg.getContent()).getMID();
+				clients.put(client.userId, client);
 			}
 
-			resultMsg.sendMsg(client.writer);
+			if (client.userId == null || client.userId.isEmpty()) {
+				resultMsg.sendMsg(client.writer);
+				return;
+			}
 
 			if (resultMsg.getCommand().contains("add") || resultMsg.getCommand().contains("delete")
-					|| resultMsg.getCommand().contains("out")) {
-
-				Iterator<String> it = resultMsg.getDestID().iterator();
-				
+					|| resultMsg.getCommand().contains("out")|| resultMsg.getCommand().contains("invite")) {
+				resultMsg.sendMsg(client.writer);
 				if (((CMResult) resultMsg.getContent()).getResult() > 0) {
 					StringTokenizer token = new StringTokenizer(msg.getCommand(), "_");
 					String newCommand = token.nextToken() + "_refresh";
 					AbstractModel newContent = msg.getContent().setID(null);
 					resultMsg = new CMMessage(newCommand, newContent);
-//					System.out.println(resultMsg.getCommand());
-//					System.out.println(resultMsg.getContent().toJson());
+					// System.out.println(resultMsg.getCommand());
+					// System.out.println(resultMsg.getContent().toJson());
+					if(!(msg.getContent()).getID().equals(client.userId)){
+						AbstractModel content = msg.getContent();
+						String command = msg.getCommand();
+						Event event = new Event();
+						event.setMid(content.getID());
+						switch(command){
+						case "friend_add":
+							event.setEtype(0);
+							event.setEtitle(client.userId+"님이 친구에 추가 되었습니다.");
+							break;
+						case "friend_delete":
+							event.setEtype(0);
+							event.setEtitle(client.userId+"님이 친구에서 삭제 되었습니다.");
+							break;
+						case "chat_invite":
+							event.setEtype(0);
+							event.setEtitle(((Chat)content).getRtitle()+" 채팅에 초대 되었습니다.");
+							break;
+						case "schedule_add":
+							event.setEtype(2);
+							event.setEtitle(client.userId+"님이 일정을 공유하였습니다.");
+							break;
+						}
+						event.setEstatus(null);
+						new CMMessage("event_add", event).doMsg();
+					}
 				}
-				while (it.hasNext()) {
-					String id = it.next();
-					if (id == null) {
-						resultMsg.sendMsg(client.writer);
-					} else if (!clients.containsKey(id))
-						continue;
+			}
+			// System.out.println(client.userId);
+			resultMsg.getDestID().add(client.userId);
+
+			Iterator<String> it = resultMsg.getDestID().iterator();
+			while (it.hasNext()) {
+				String id = it.next();
+				if (id == null) {
+					resultMsg.sendMsg(client.writer);
+				} else if (clients.containsKey(id)) {
+					System.out.println(id + " : " + resultMsg.getCommand() + " " + resultMsg.getContent().toJson());
 					resultMsg.sendMsg(clients.get(id).writer);
 				}
 			}

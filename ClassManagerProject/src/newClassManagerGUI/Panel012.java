@@ -36,14 +36,14 @@ import Model.Schedule;
 
 public class Panel012 extends JPanel {
 	private Font defaultFont = new Font("맑은 고딕", Font.PLAIN, 15);
-	public TitlePanel title;
+	public TitlePanel titlePanel;
 	CalendarPanel calendarPanel;
 	SearchSchedulePanel searchSchedulePanel;
 	JTextArea scheduleList;
 	List<AbstractModel> calendarList;
 	Map<Date, List<Schedule>> calendarMap;
-	JButton addSchBtn;
-	
+	public JButton addSchBtn;
+
 	public void setCalendarList(List<AbstractModel> calendarList) {
 		this.calendarList = calendarList;
 		calendarMap = new HashMap<Date, List<Schedule>>();
@@ -62,13 +62,13 @@ public class Panel012 extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		add(bgPanel, BorderLayout.CENTER);
 
-		title = new TitlePanel("CM", "캘린더", "닫기");
-		title.setBounds(0, 0, 410, 40);
-		bgPanel.add(title);
-		
+		titlePanel = new TitlePanel("CM", "캘린더", "닫기");
+		titlePanel.setBounds(0, 0, 410, 40);
+		bgPanel.add(titlePanel);
+
 		ImageIcon plusIcon = new ImageIcon(
 				new ImageIcon("img/plusIcon.png").getImage().getScaledInstance(44, 44, java.awt.Image.SCALE_SMOOTH));
-		addSchBtn = new JButton(plusIcon){
+		addSchBtn = new JButton(plusIcon) {
 			public boolean contains(int x, int y) {
 				Shape shape = null;
 				if (shape == null || !shape.getBounds().equals(getBounds())) {
@@ -81,16 +81,8 @@ public class Panel012 extends JPanel {
 		addSchBtn.setBorder(null);
 		addSchBtn.setFocusPainted(false);
 		addSchBtn.setContentAreaFilled(false);
-		addSchBtn.setBounds(323,675,44,44);
-//		addSchBtn.addActionListener(new ActionListener(){
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				// TODO Auto-generated method stub
-//				System.out.println("hello");
-//			}
-//			
-//		});
-		
+		addSchBtn.setBounds(323, 675, 44, 44);
+
 		bgPanel.add(addSchBtn);
 
 		searchSchedulePanel = new SearchSchedulePanel();
@@ -111,17 +103,20 @@ public class Panel012 extends JPanel {
 		bgPanel.add(searchSchedulePanel);
 		bgPanel.add(scroll);
 		bgPanel.add(calendarPanel);
-		
-		addComponentListener(new ComponentAdapter(){
 
+		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
+				Calendar cal1 = Calendar.getInstance();
+				cal1.setTime(new java.util.Date());
 				searchSchedulePanel.yearCombo.setSelectedIndex(5);
-				searchSchedulePanel.monthCombo.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
-				int offset = Calendar.getInstance().get(java.util.GregorianCalendar.DAY_OF_WEEK) - 1;
-				int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + offset+5;
-//				System.out.println(today+"");
-				calendarPanel.calendar[today/7][today%7].doClick();
+				searchSchedulePanel.monthCombo.setSelectedIndex(cal1.get(Calendar.MONTH));
+
+				java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+				cal.set(cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH), 1);
+				int offset = cal.get(java.util.GregorianCalendar.DAY_OF_WEEK) - 1;
+				int today = cal1.get(Calendar.DAY_OF_MONTH) + offset + 6;
+				calendarPanel.calendar[today / 7][today % 7].doClick();
 			}
 		});
 	}
@@ -156,14 +151,15 @@ public class Panel012 extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						// TODO Auto-generated method stub
-						Date temp = Date.valueOf(String.format("%04d-%02d-%02d", year, month+1, day));
+						Date temp = Date.valueOf(String.format("%04d-%02d-%02d", year, month + 1, day));
 						scheduleList.setText("");
-						if (calendarMap.containsKey(temp)) {
+						if (calendarMap != null && calendarMap.containsKey(temp)) {
 							List<Schedule> list = calendarMap.get(temp);
+							int count = 0;
 							for (Schedule sch : list) {
-								scheduleList.append(sch.getSchTitle()+"\n");
-								if (sch.getSch() != null)
-									scheduleList.append(" - " + sch.getSch()+"\n");
+								scheduleList.append(String.format("[%02d] %s\n", ++count,sch.getSchTitle()));
+								if (sch.getSch() != null && !sch.getSch().isEmpty())
+									scheduleList.append(sch.getSch() + "\n");
 								scheduleList.append("\n");
 							}
 						}
@@ -320,8 +316,8 @@ public class Panel012 extends JPanel {
 			add(monthLabel);
 		}
 	}
-//	
-//	public static void main(String[] args) {
-//		ClassManagerPanel.constructGUI(new Panel012());
-//	}
+
+	public static void main(String[] args) {
+		ClassManagerPanel.constructGUI(new Panel012());
+	}
 }

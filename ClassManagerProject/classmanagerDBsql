@@ -1,0 +1,125 @@
+CREATE TABLE member(
+	MID VARCHAR(30) NOT NULL,
+	PW VARCHAR(64) NOT NULL,
+	SALT VARCHAR(32) NOT NULL,
+	MCL INT NOT NULL,
+	PWQ INT NOT NULL,
+	PWA VARCHAR(100) NOT NULL,
+	PRIMARY KEY(MID));
+	
+CREATE TABLE schedule(
+	SCHTITLE VARCHAR(30) NOT NULL, 
+	SCHDATE DATE NOT NULL, 
+	SCHID VARCHAR(30) NOT NULL,
+	SCH VARCHAR(1000), 
+	PRIMARY KEY(SCHTITLE, SCHDATE, SCHID),
+	FOREIGN KEY(SCHID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE);
+	
+CREATE TABLE chat(
+	RTITLE VARCHAR(100) NOT NULL,
+	JID VARCHAR(30) NOT NULL,
+	COME DATE NOT NULL, 
+	PRIMARY KEY(RTITLE, JID),
+	FOREIGN KEY(JID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE);
+	
+CREATE TABLE multi(
+	DAY INT NOT NULL, 
+	FCOURSE CHAR(1) NOT NULL,
+	FTYPE CHAR(1) NOT NULL,
+	FMENU VARCHAR(20)  NOT NULL, 
+	PRIMARY KEY(DAY, FCOURSE, FTYPE));
+	
+CREATE TABLE friend(
+	MID VARCHAR(30) NOT NULL, 
+	FID VARCHAR(30) NOT NULL, 
+	PRIMARY KEY(MID, FID),
+	FOREIGN KEY(FID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(MID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE);
+	
+CREATE TABLE event(
+	MID VARCHAR(30), 
+	ETYPE INT, 
+	ETITLE VARCHAR(200),
+	ESTATUS INT,
+	PRIMARY KEY(MID, ETITLE),
+	FOREIGN KEY(MID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE);
+	
+CREATE TABLE dch(
+	MID VARCHAR(30) NOT NULL, 
+	ATTENDDATE DATE NOT NULL,
+	ATTENDANCE INT NOT NULL, 
+	PRIMARY KEY(MID, ATTENDDATE),
+	FOREIGN KEY(MID) REFERENCES member(MID) ON UPDATE CASCADE ON DELETE CASCADE);
+	
+INSERT INTO multi VALUES(1, 'a', 'a', '무밥 * 양념장');
+INSERT INTO multi VALUES(1, 'a', 'b', '김칫국');
+INSERT INTO multi VALUES(1, 'a', 'c', '돼지고기강정');
+INSERT INTO multi VALUES(1, 'a', 'd', '알감자조림');
+INSERT INTO multi VALUES(1, 'a', 'e', '치커리유자청무침');
+INSERT INTO multi VALUES(1, 'a', 'f', '깍두기');
+INSERT INTO multi VALUES(1, 'a', 'g', '수정과 / 숭늉');
+INSERT INTO multi VALUES(1, 'b', 'a', '해물덮밥');
+INSERT INTO multi VALUES(1, 'b', 'b', '계란파국');
+INSERT INTO multi VALUES(1, 'b', 'c', '만두강정');
+INSERT INTO multi VALUES(1, 'b', 'd', '치커리유자청무침');
+INSERT INTO multi VALUES(1, 'b', 'e', '짜사이채무침');
+INSERT INTO multi VALUES(1, 'b', 'f', '깍두기');
+INSERT INTO multi VALUES(1, 'b', 'g', '수정과 / 숭늉');
+INSERT INTO multi VALUES(2, 'a', 'a', '오징어삼겹살볶음');
+INSERT INTO multi VALUES(2, 'a', 'b', '차조밥 * 쌀밥');
+INSERT INTO multi VALUES(2, 'a', 'c', '다시마뭇국');
+INSERT INTO multi VALUES(2, 'a', 'd', '호박채전');
+INSERT INTO multi VALUES(2, 'a', 'e', '상추쌈 * 쌈장');
+INSERT INTO multi VALUES(2, 'a', 'f', '배추김치');
+INSERT INTO multi VALUES(2, 'a', 'g', '매실차 / 숭늉');
+INSERT INTO multi VALUES(2, 'b', 'a', '날치알김치볶음밥');
+INSERT INTO multi VALUES(2, 'b', 'b', '미역국');
+INSERT INTO multi VALUES(2, 'b', 'c', '고구마맛탕');
+INSERT INTO multi VALUES(2, 'b', 'd', '숙주미나리나물');
+INSERT INTO multi VALUES(2, 'b', 'e', '상추겉절이');
+INSERT INTO multi VALUES(2, 'b', 'f', '깍두기');
+INSERT INTO multi VALUES(2, 'b', 'g', '매실차 / 숭늉');
+INSERT INTO multi VALUES(3, 'a', 'a', '순두부찌개');
+INSERT INTO multi VALUES(3, 'a', 'b', '흑미밥 * 쌀밥');
+INSERT INTO multi VALUES(3, 'a', 'c', '완자전');
+INSERT INTO multi VALUES(3, 'a', 'd', '버섯채소볶음');
+INSERT INTO multi VALUES(3, 'a', 'e', '부추생채');
+INSERT INTO multi VALUES(3, 'a', 'f', '깍두기');
+INSERT INTO multi VALUES(3, 'a', 'g', '식혜 / 숭늉');
+INSERT INTO multi VALUES(3, 'b', 'a', '의령메밀소바');
+INSERT INTO multi VALUES(3, 'b', 'b', 'MINI쌀밥');
+INSERT INTO multi VALUES(3, 'b', 'c', '찹쌀도너츠');
+INSERT INTO multi VALUES(3, 'b', 'd', '버섯채소볶음');
+INSERT INTO multi VALUES(3, 'b', 'e', '유채나물');
+INSERT INTO multi VALUES(3, 'b', 'f', '포기김치');
+INSERT INTO multi VALUES(3, 'b', 'g', '식혜 / 숭늉');
+INSERT INTO multi VALUES(4, 'a', 'a', '부대찌개 * 라면사리');
+INSERT INTO multi VALUES(4, 'a', 'b', '율무밥 * 쌀밥');
+INSERT INTO multi VALUES(4, 'a', 'c', '스크램블에그');
+INSERT INTO multi VALUES(4, 'a', 'd', '마카로니샐러드');
+INSERT INTO multi VALUES(4, 'a', 'e', '돌나물 * 초장');
+INSERT INTO multi VALUES(4, 'a', 'f', '깍두기');
+INSERT INTO multi VALUES(4, 'a', 'g', '아이스초코 / 숭늉');
+INSERT INTO multi VALUES(4, 'b', 'a', '등심돈가스');
+INSERT INTO multi VALUES(4, 'b', 'b', 'MINI쌀밥');
+INSERT INTO multi VALUES(4, 'b', 'c', '모닝롤빵 * 딸기잼');
+INSERT INTO multi VALUES(4, 'b', 'd', '그린샐러드*키위드레싱');
+INSERT INTO multi VALUES(4, 'b', 'e', '오이피클');
+INSERT INTO multi VALUES(4, 'b', 'f', '배추김치');
+INSERT INTO multi VALUES(4, 'b', 'g', '아이스초코 / 숭늉');
+INSERT INTO multi VALUES(5, 'a', 'a', '닭갈비');
+INSERT INTO multi VALUES(5, 'a', 'b', '수수밥 * 쌀밥');
+INSERT INTO multi VALUES(5, 'a', 'c', '콩나물국');
+INSERT INTO multi VALUES(5, 'a', 'd', '비엔나볶음');
+INSERT INTO multi VALUES(5, 'a', 'e', '삼색겨자냉채');
+INSERT INTO multi VALUES(5, 'a', 'f', '배추김치');
+INSERT INTO multi VALUES(5, 'a', 'g', '율무차 / 숭늉');
+INSERT INTO multi VALUES(5, 'b', 'a', '베트남양지쌀국수');
+INSERT INTO multi VALUES(5, 'b', 'b', 'MINI쌀밥');
+INSERT INTO multi VALUES(5, 'b', 'c', '비엔나볶음');
+INSERT INTO multi VALUES(5, 'b', 'd', '양파초절임');
+INSERT INTO multi VALUES(5, 'b', 'e', '오이피클');
+INSERT INTO multi VALUES(5, 'b', 'f', '배추김치');
+INSERT INTO multi VALUES(5, 'b', 'g', '율무차 / 숭늉');
+
+DELETE FROM multi WHERE FMENU LIKE '%';
