@@ -90,17 +90,20 @@ public class ChatService {
 		if(chat.getJid() == null)
 			return result.setResult(-100);
 		
-		Chat temp = new Chat();
-		temp.setJid(chat.getJid());
+		Chat tmpId = new Chat();
+		tmpId.setJid(chat.getJid());
 		
-		List<Chat> listChat = dao.getChatDao().selectChat(temp);
-		
+		List<Chat> listChat = dao.getChatDao().selectChat(tmpId);
+				
 		if(listChat.size() < 1)
 			return result.setResult(-2);
 		
 		List<AbstractModel> resultList = new ArrayList<AbstractModel>();
-		for(AbstractModel m : listChat){
-			resultList.add(m);
+		for(Chat m : listChat){
+			Chat tmpTitle = new Chat();
+			tmpTitle.setRtitle(m.getRtitle());
+			for(AbstractModel m1 : dao.getChatDao().selectChat(tmpTitle))
+				resultList.add(m1);
 		}
 		result.setResultList(resultList);
 		return result.setResult(1);
