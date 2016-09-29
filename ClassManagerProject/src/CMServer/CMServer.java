@@ -17,6 +17,7 @@ import Model.Chat;
 import Model.Event;
 import Model.Member;
 
+// 클라이언트로부터 연결을 받는 클래스
 public class CMServer {
 
 	public static void main(String[] args) {
@@ -37,6 +38,10 @@ public class CMServer {
 	}
 }
 
+// 실질적인 서버의 역할을 수행
+// 1. 접속자 관리
+// 2. 회원가입, 로그인, 친구 추가, 삭제, 채팅, 일정 등록 등
+// 3. 클라이언트로부터 받은 명령을 구현하는 클래스에 연결하고 결과를 클라이언트에 전송
 class CMServerManager {
 	static Map<String, ServerClient> clients = new ConcurrentHashMap<String, ServerClient>();
 
@@ -145,6 +150,7 @@ class CMServerManager {
 	}
 }
 
+// 서버에 접속한 클라이언트 모델 객체
 class ServerClient {
 	String userId;
 	Socket socket;
